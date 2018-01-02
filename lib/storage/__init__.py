@@ -21,4 +21,4 @@
 # SOFTWARE.
 
 from .storage_engine import StorageEngine
-from lib.storage.mysql.mysql_engine import MySqlEngine
+from .mysql import MySqlEngine

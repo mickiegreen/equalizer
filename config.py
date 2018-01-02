@@ -43,6 +43,12 @@ MYSQL_INFO = {
     'password'      : MYSQL_PASSWORD
 }
 
+#******************************#
+#                              #
+#            Queries           #
+#                              #
+#******************************#
+
 SONG_TABLE = "song"
 SONG_TABLE_PK = "song_id"
 SONG_EXISTS_QUERY = {
@@ -92,6 +98,11 @@ USER_SEARCH_HISTORY_EXISTS_QUERY = {
     "keys"  : ["history_id"]
 }
 
+INSERT_QUERY = "INSERT INTO %s (%s) VALUES (%s)"
+UPDATE_QUERY = "UPDATE %s SET %s WHERE %s=%d"
+REMOVE_QUERY = "DELETE FROM %s WHERE %s=%s"
+TRUNCATE_QUERY = "DELETE FROM %s"
+
 #******************************#
 #                              #
 #         API to MySQL         #
@@ -114,8 +125,35 @@ SSH_PORT = '22'
 SSH_USER = ''
 SSH_PASSWORD = ''
 
+#******************************#
+#                              #
+#           LOGGING            #
+#                              #
+#******************************#
+import logging
+
+LOG_FILE_NAME = 'equalizer.log'
+LOGGER_CONFIG = True
+LOGGING_LEVEL = logging.DEBUG
+
+def __set_logger():
+    import sys
+    logging.basicConfig(filename=LOG_FILE_NAME,
+             filemode='a',
+             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+             datefmt='%H:%M:%S',
+             level=LOGGING_LEVEL)
+    logger = logging.getLogger()
+    stream_handler = logging.StreamHandler(sys.stdout)
+    logger.addHandler(stream_handler)
+
+if LOGGER_CONFIG:
+    __set_logger()
+
+LOGGER = logging.getLogger()
+
 try:
-    from .config_local import *
+    from config_local import *
 except:
     pass
 

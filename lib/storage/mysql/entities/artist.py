@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2017 Michael Green
+# Copyright (c) 2018 Michael Green
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""" Adapter for api implementation """
-class Api(object):
-    def get(self):
-        """ call api """
-        raise NotImplementedError
+from ..abstract_entity import AbstractEntity as Entity
 
-    def info(self):
-        """ get api params (target url, params) as json """
-        raise NotImplementedError
+import equalizer.config as app
 
-    def json(self):
-        """ call api and convert to json """
-        raise NotImplementedError
+class Artist(Entity):
+    """ Artist table entity """
+    def __init__(self, artist_id = 0, artist_name = None, itunes_artist_id = None, **kwargs):
+        super(Artist, self).__init__(
+            table = app.ARTIST_TABLE,
+            primary_key = app.ARTIST_TABLE_PK,
+            select_query = app.ARTIST_EXISTS_QUERY
+        )
+        self.artist_id = artist_id
+        self.artist_name = artist_name
+        self.itunes_artist_id = itunes_artist_id
 
-    def set(self, key, val):
-        """ set parameter """
-        raise NotImplementedError
 
-    def set_url(self, url):
-        """ set api url """
-        raise NotImplementedError
-
-    def get_url(self):
-        """ return the basic url of the request """
-        raise NotImplementedError
-
-    def get_full_url(self):
-        """ return the full url generated for the api """
-        raise NotImplementedError

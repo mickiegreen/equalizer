@@ -5,8 +5,8 @@ import random
 import string
 
 from lib.api.youtube import add_token, search, get
-from lib.storage.entities import Artist, ArtistSong, ArtistSongVideo, \
-    Song, User, UserSearchHistory, YoutubeVideo
+from lib.storage.mysql.entities import Artist, ArtistSong, ArtistSongVideo, \
+    Song, YoutubeVideo
 
 from lib.storage import MySqlEngine
 
@@ -23,25 +23,33 @@ time_parser = lambda x : "'" + str(datetime.datetime.fromtimestamp(x/1000.0).tim
 itunes_date_parser = lambda x : "'" + str(datetime.datetime.strptime(x, '%Y-%m-%dT%H:%M:%SZ')) + "'"
 
 ITUNES_TO_MYSQL = {
-    'artistName'            : {'key' : 'artist_name', 'val' : sql_parser },
-    'artistId'              : {'key' : 'itunes_artist_id', 'val' : sql_parser },
-    'primaryGenreName'      : {'key' : 'genre', 'val' : sql_parser },
-    'country'               : {'key' : 'country', 'val' : sql_parser },
-    'releaseDate'           : {'key' : 'release_date', 'val' : itunes_date_parser },
-    'trackId'               : {'key' : 'itunes_song_id', 'val' : sql_parser },
-    'trackName'             : {'key' : 'song_title', 'val' : sql_parser },
-    'trackTimeMillis'       : {'key' : 'duration', 'val' : time_parser },
-    'duration'              : {'key' : 'release_date', 'val' : time_parser}
+    'artistName'            : 'artist_name',
+    'artistId'              : 'itunes_artist_id',
+    'primaryGenreName'      : 'genre',
+    'country'               : 'country',
+    'releaseDate'           : 'release_date',
+    'trackId'               : 'itunes_song_id',
+    'trackName'             : 'song_title',
+    'trackTimeMillis'       : 'duration',
+    'duration'              : 'release_date',
 }
 
 RECORD_TO_MYSQL = {
-    'views'                     : {'key' : 'views', 'val' : id_parser },
-    'likes'                     : {'key' : 'likes', 'val' : id_parser },
-    'comments'                  : {'key' : 'comments', 'val' : id_parser },
-    'dislikes'                  : {'key' : 'dislikes', 'val' : id_parser },
-    'youtube_video_title'       : {'key' : 'youtube_video_title', 'val' : sql_parser },
-    'favorites'                 : {'key' : 'favorites', 'val' : id_parser },
-    'youtube_video_id'          : {'key' : 'favorites', 'val' : sql_parser },
+    'views'                     : {'key' : 'views',                 'val' : id_parser },
+    'likes'                     : {'key' : 'likes',                 'val' : id_parser },
+    'comments'                  : {'key' : 'comments',              'val' : id_parser },
+    'dislikes'                  : {'key' : 'dislikes',              'val' : id_parser },
+    'youtube_video_title'       : {'key' : 'youtube_video_title',   'val' : sql_parser },
+    'favorites'                 : {'key' : 'favorites',             'val' : id_parser },
+    'youtube_video_id'          : {'key' : 'favorites',             'val' : sql_parser },
+    'artist_name'               : {'key' : 'artist_name',           'val' : sql_parser },
+    'itunes_artist_id'          : {'key' : 'itunes_artist_id',      'val' : sql_parser },
+    'genre'                     : {'key' : 'genre',                 'val' : sql_parser },
+    'country'                   : {'key' : 'country',               'val' : sql_parser },
+    'release_date'              : {'key' : 'release_date',          'val' : itunes_date_parser },
+    'itunes_song_id'            : {'key' : 'itunes_song_id',        'val' : sql_parser },
+    'song_title'                : {'key' : 'song_title',            'val' : sql_parser },
+    'duration'                  : {'key' : 'duration',              'val' : time_parser },
 }
 
 ITUNES_TRACKS = []
@@ -61,7 +69,7 @@ def get_records_name():
     return str(datetime.datetime.now()) + generate_random_str(YOUTUBE_NAME_LENGTH) + '.txt'
 
 def itunes_record_to_mysql(record):
-    rmysql = [{v['key'] : v['val'](record[k]) for k,v in ITUNES_TO_MYSQL.items() if record.get(k, None) != None}]
+    rmysql = [{v : record[k] for k,v in ITUNES_TO_MYSQL.items() if record.get(k, None) != None}]
     if record.get('collectionArtistId', None)!= None \
         and record.get('collectionArtistId', None) != record.get("artistId") :
         rmysql2 = rmysql[0].copy()
@@ -175,22 +183,15 @@ def records_to_mysql(data):
         artist = Artist(**record)
         youtube_video = YoutubeVideo(**record)
 
-        print('here')
         song_id = engine.update_if_exists_else_add(song)
-        print('here2')
         artist_id = engine.update_if_exists_else_add(artist)
-        print('here3')
         video_id = engine.update_if_exists_else_add(youtube_video)
 
         record['song_id'], record['artist_id'], record['video_id'] = song_id, artist_id, video_id
-
-        print('here4')
         artist_song = ArtistSong(**record)
         record['artist_song_id'] = engine.update_if_exists_else_add(artist_song)
-        print('here5')
         artist_song_video = ArtistSongVideo(**record)
         artist_song_video_id = engine.update_if_exists_else_add(artist_song_video)
-        print('here6')
 
 def load_config(config):
     pass

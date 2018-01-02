@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2017 Michael Green
+# Copyright (c) 2018 Michael Green
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""" Adapter for api implementation """
-class Api(object):
-    def get(self):
-        """ call api """
-        raise NotImplementedError
+from ..abstract_entity import AbstractEntity as Entity
+import equalizer.config as app
 
-    def info(self):
-        """ get api params (target url, params) as json """
-        raise NotImplementedError
+class Song(Entity):
+    """ song table entity """
 
-    def json(self):
-        """ call api and convert to json """
-        raise NotImplementedError
-
-    def set(self, key, val):
-        """ set parameter """
-        raise NotImplementedError
-
-    def set_url(self, url):
-        """ set api url """
-        raise NotImplementedError
-
-    def get_url(self):
-        """ return the basic url of the request """
-        raise NotImplementedError
-
-    def get_full_url(self):
-        """ return the full url generated for the api """
-        raise NotImplementedError
+    def __init__(self, song_id = 0, song_title = None, country = None, genre = None,
+                 release_date = None, itunes_song_id = None, duration = None, **kwargs):
+        super(Song, self).__init__(
+            table=app.SONG_TABLE,
+            primary_key=app.SONG_TABLE_PK,
+            select_query=app.SONG_EXISTS_QUERY
+        )
+        self.song_id = song_id
+        self.song_title = song_title
+        self.duration = duration
+        self.country = country
+        self.genre = genre
+        self.release_date = release_date
+        self.itunes_song_id = itunes_song_id

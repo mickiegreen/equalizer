@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2017 Michael Green
+# Copyright (c) 2018 Michael Green
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""" Adapter for api implementation """
-class Api(object):
-    def get(self):
-        """ call api """
-        raise NotImplementedError
+from ..abstract_entity import AbstractEntity as Entity
+import equalizer.config as app
 
-    def info(self):
-        """ get api params (target url, params) as json """
-        raise NotImplementedError
+class YoutubeVideo(Entity):
+    """ youtube video table entity """
 
-    def json(self):
-        """ call api and convert to json """
-        raise NotImplementedError
-
-    def set(self, key, val):
-        """ set parameter """
-        raise NotImplementedError
-
-    def set_url(self, url):
-        """ set api url """
-        raise NotImplementedError
-
-    def get_url(self):
-        """ return the basic url of the request """
-        raise NotImplementedError
-
-    def get_full_url(self):
-        """ return the full url generated for the api """
-        raise NotImplementedError
+    def __init__(self, video_id = 0, likes = None, comments = None,
+            views = None, favorites = None, dislikes = None,
+            youtube_video_id = 0, youtube_video_title = None, **kwargs):
+        super(YoutubeVideo, self).__init__(
+            table=app.YOUTUBE_VIDEO_TABLE,
+            primary_key=app.YOUTUBE_VIDEO_TABLE_PK,
+            select_query=app.YOUTUBE_VIDEO_EXISTS_QUERY
+        )
+        self.video_id = video_id
+        self.likes = likes
+        self.comments = comments
+        self.views = views
+        self.favorites = favorites
+        self.dislikes = dislikes
+        self.youtube_video_id = youtube_video_id
+        self.youtube_video_title = youtube_video_title

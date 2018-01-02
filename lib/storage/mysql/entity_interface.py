@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2017 Michael Green
+# Copyright (c) 2018 Michael Green
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,45 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""" Adapter for api implementation """
-class Api(object):
-    def get(self):
-        """ call api """
-        raise NotImplementedError
+class EntityInterface(object):
+    """ MySQL Entity interface """
 
-    def info(self):
-        """ get api params (target url, params) as json """
+    def table(self):
+        """ entry table name """
         raise NotImplementedError
 
     def json(self):
-        """ call api and convert to json """
+        """ convert object to json """
         raise NotImplementedError
 
-    def set(self, key, val):
-        """ set parameter """
+    def update(self, **kwargs):
+        """ update object attributes """
         raise NotImplementedError
 
-    def set_url(self, url):
-        """ set api url """
+    def copy(self):
+        """ create copy of object """
         raise NotImplementedError
 
-    def get_url(self):
-        """ return the basic url of the request """
+    def primary_key(self):
+        """ return object primary key """
         raise NotImplementedError
 
-    def get_full_url(self):
-        """ return the full url generated for the api """
+    def set_primary_key(self, key):
+        """ set primary key """
+        raise NotImplementedError
+
+    def insert_query(self):
+        """ insert query to execute """
+        raise NotImplementedError
+
+    def select_query(self):
+        """ build select query """
+        raise NotImplementedError
+
+    def update_query(self):
+        """ build update query """
+        raise NotImplementedError
+
+    def remove_query(self):
+        """ build remove query"""
         raise NotImplementedError

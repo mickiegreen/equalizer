@@ -1,10 +1,9 @@
 import unittest
 import json
 
-from lib.api.youtube import add_token
-from lib.api.youtube import YoutubeSearchApi
-from tests.tests_config import LOGGER as logger
-from tests import tests_config as config
+from equalizer.lib.api.youtube import add_token, YoutubeSearchApi
+from equalizer.tests.tests_config import LOGGER as logger
+from equalizer.tests import tests_config as config
 
 class TestYoutubeSearchApi(unittest.TestCase):
     """ testing youtube search api """

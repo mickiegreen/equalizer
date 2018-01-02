@@ -5,4 +5,3 @@ from .song import Song
 from .user import User
 from .user_search_history import UserSearchHistory
 from .youtube_video import YoutubeVideo
-from .entity import Entity

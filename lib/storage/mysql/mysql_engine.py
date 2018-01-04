@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pymysql as MySQLdb
+import MySQLdb
 
 from ..storage_engine import StorageEngine
-from .entity_interface import EntityInterface as Entity
+from entity_interface import EntityInterface as Entity
 from config import LOGGER as logger
 import config as app
 
@@ -55,6 +55,7 @@ class MySqlEngine(StorageEngine):
 
             logger.debug('Getting object from db')
             logger.debug(query)
+            logger.debug(entry)
 
             count = cur.execute(query)
 
@@ -87,6 +88,8 @@ class MySqlEngine(StorageEngine):
         # force entity object
         if not isinstance(entry, Entity):
             raise TypeError("Entry must be of type Entity")
+
+        logger.debug("Adding entry - " + repr(entry))
 
         # add to db
         key = self._execute(entry.insert_query())

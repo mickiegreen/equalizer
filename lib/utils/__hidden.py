@@ -26,11 +26,11 @@ import datetime
 import random
 import string
 
-from lib.api.youtube import add_token, search, get
-from lib.storage.mysql.entities import Artist, ArtistSong, ArtistSongVideo, \
+from equalizer.lib.api.youtube import add_token, search, get
+from equalizer.lib.storage.mysql.entities import Artist, ArtistSong, ArtistSongVideo, \
     Song, YoutubeVideo
 
-from lib.storage import MySqlEngine
+from ..storage.mysql import MySqlEngine
 
 import config as app
 
@@ -101,6 +101,20 @@ def itunes_record_to_mysql(record):
 
     return rmysql
 
+def itunes_llegal(record):
+    keys = ITUNES_TO_MYSQL.keys()
+    for key in keys:
+        if record.get(key, None) == None:
+            return False
+    return True
+
+def record_llegal(record):
+    keys = RECORD_TO_MYSQL.keys()
+    for key in keys:
+        if record.get(key, None) == None:
+            return False
+    return True
+
 def load_itunes_results(limit = 20000):
     """ fetch all itunes data from local folder """
     itunes = []
@@ -118,7 +132,7 @@ def load_itunes_results(limit = 20000):
             if len(itunes) >= limit:
                 break
 
-    return [ rmysql for record in itunes for rmysql in itunes_record_to_mysql(record) ]
+    return [ rmysql for record in itunes for rmysql in itunes_record_to_mysql(record) if itunes_llegal(record)]
 
 def itunes_keywords(result):
     # fetch keywords from itunes record
@@ -200,7 +214,12 @@ def records_to_mysql(data):
 
     engine = MySqlEngine(**app.MYSQL_INFO)
 
+    print(len([record for record in data if record_llegal(record)]))
+
     for record in data:
+        # skip if record misses important data
+        if not record_llegal(record): continue
+
         song = Song(**record)
         artist = Artist(**record)
         youtube_video = YoutubeVideo(**record)

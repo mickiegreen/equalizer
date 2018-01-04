@@ -1,0 +1,42 @@
+machine:
+  pre:
+  # Setting up latest docker and docker-compose.yml
+   - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+   - pip install --upgrade docker-compose==1.10.0
+  services:
+   - docker
+
+general:
+  artifacts:
+    - ".coverage"
+    - "screenshots"
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  override:
+    - docker info
+    - docker-compose version
+    # Load docker cache if exists
+    - if [[ -e ~/docker/image.tar ]]; then docker load -i ~/docker/image.tar; fi
+    # Pulls images if they aren't already cached
+    - docker pull ncrmro/adbase:alpine
+    - docker pull selenium/standalone-chrome-debug:3.0.1-fermium
+    - docker build -t ncrmro/reango .
+    # Setup and save docker cache
+    - mkdir -p ~/docker
+    - docker save ncrmro/adbase:alpine selenium/standalone-chrome-debug:3.0.1-fermium > ~/docker/image.tar
+
+test:
+  pre:
+    - docker-compose -f docker-compose.test.yml run --name selenium_chrome -d selenium_chrome
+  override:
+    - docker-compose -f docker-compose.test.yml run --name reango --no-deps reango
+  post:
+     # docker-compose stop was not stopping containers started with docker-compose run
+     # so using this hackity hack to force stop them all
+     - docker stop $(docker ps -a -q)
+     # get each log separately - docker-compose logs times out, I think it's trying to stream even though the containers are stopped.
+     # depends on the standard naming convention of docker-compose
+     - docker logs selenium_chrome > $CIRCLE_TEST_REPORTS/selenium_chrome.log
+     - docker logs reango > $CIRCLE_TEST_REPORTS/reango.log

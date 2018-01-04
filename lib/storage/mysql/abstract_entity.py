@@ -69,7 +69,7 @@ class AbstractEntity(EntityInterface):
         cols = [k for k in self.json().keys()]
         vals = [str(self.json()[k]) for k in cols if self.json()[k] != None]
 
-        return app.INSERT_QUERY %(self.table(), cols, vals)
+        return app.INSERT_QUERY %(self.table(), ','.join(cols), ','.join(vals))
 
     def select_query(self):
         """ build select query """
@@ -108,47 +108,4 @@ class AbstractEntity(EntityInterface):
     def __repr__(self):
         """ print object as json """
         return json.dumps(self.json(), indent=4, sort_keys=True)
-
-    '''_table = 'untitled'
-    _pk = '_pk_unset'
-    _existsQuery = {'query' : '', 'keys' : ''}
-
-    def __init__(self, **kwargs):
-        raise NotImplementedError
-
-    def table(self):
-        return self._table
-
-    def toMySQL(self):
-        cols = [k for k in self.json().keys()]
-        vals = [str(self.json()[k]) for k in cols if self.json()[k] != None]
-
-        return cols, vals
-
-
-    def existsQuery(self):
-        return self._existsQuery.get('query','') %self.__existsQueryKeys()
-
-    def __existsQueryKeys(self):
-        keys = self._existsQuery.get('keys',[])
-        return tuple(str(getattr(self, key)) for key in keys)
-
-    def get_primary_key(self):
-        return (self._pk, getattr(self, self._pk))
-
-    def set_primary_key(self, primary_key):
-        setattr(self, self._pk, primary_key)
-
-    def copy(self):
-        return self.__class__(**self.json())
-
-    def upgrade(self, record):
-        """ assuming record is the new updated object """
-        k, v = record.get_primary_key()
-        if v != self.get_primary_key()[1]:
-            raise ValueError("object must have the same primary key")
-
-        for k, v in record.json().items():
-            if v != None:
-                setattr(self, k, v)'''
 

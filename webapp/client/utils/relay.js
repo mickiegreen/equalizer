@@ -1,5 +1,5 @@
 import React from 'react';
-import {hasValidJwtToken} from 'modules/auth/jwtUtils';
+import { hasValidJwtToken } from 'modules/auth/jwtUtils';
 import RelayLookupQueryRenderer from './RelayLookupQueryRenderer';
 import Loading from '../components/Loading/Loading';
 

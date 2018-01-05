@@ -117,7 +117,7 @@ GRAPHENE = {
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/',
+        'BUNDLE_DIR_NAME': 'static/bundles/',
         'STATS_FILE': join(BASE_DIR, 'static', 'webpack-stats.json'),
     }
 }

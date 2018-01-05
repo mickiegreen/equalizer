@@ -1,10 +1,10 @@
+import { isAuthenticated } from 'modules/auth/utils';
 import React from 'react';
 import { createFragmentContainer, graphql } from 'react-relay';
 import 'normalize.css/normalize.css';
 import Footer from 'components/Footer/Footer';
 import Nav from '../Nav/Nav';
 import styles from './App.scss';
-import { isAuthenticated } from 'modules/auth/utils';
 import '../../styles/global.scss';
 
 

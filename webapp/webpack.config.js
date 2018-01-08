@@ -116,7 +116,7 @@ module.exports = {
         use: {
           loader: 'css-loader',
           options: {
-            modules: true
+
           }
         }
       })

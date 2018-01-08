@@ -45,6 +45,12 @@ const links = (props: LinksPropType) => {
   if (!props.isAuthenticated) {
     NavLinks = () =>
       <div>
+          <NavLink className='button_login-link' to='/home' >
+              <Button >Home</Button>
+          </NavLink>
+          <NavLink className='button_login-link' to='/equalizer' >
+              <Button >Equalizer</Button>
+          </NavLink>
         <NavLink className='button_signup-link' to='/signup' >
           <Button >Signup</Button>
         </NavLink>

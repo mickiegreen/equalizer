@@ -11,7 +11,7 @@ const routes = [
     childRoutes: [
       {
         path: '/',
-        component: Profile,
+        component: Landing,
         queries: 'queries'
       },
       ...authRoutes,

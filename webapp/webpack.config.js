@@ -30,7 +30,7 @@ const staticResourcesPort = 8000;
 if (process.env.NODE_ENV === 'production') {
     appEntry = [path.join(__dirname, 'client/index.js')];
     devtool = 'source-map';
-    publicPath = '/static/bundles/';
+    publicPath = '/assets/bundles/';
     plugins = [
         stats,
         new webpack.optimize.OccurrenceOrderPlugin(),

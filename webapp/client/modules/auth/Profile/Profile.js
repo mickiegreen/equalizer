@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react';
 import { Grid, Cell, Textfield, Button } from '../../../../node_modules/react-mdl';
+import '../../../../node_modules/react-mdl/extra/material.css';
+import '../../../../node_modules/react-mdl/extra/material.js';
 import Page from '../../../components/Page/Page';
 import RequireAuth from '../Auth';
 import styles from './Profile.scss';
@@ -10,24 +12,24 @@ class Profile extends React.Component {
 
   constructor(props) {
     super(props);
-    const { user } = this.props.viewer;
-    const { email } = user;
+    console.log(props);
+    const { user } = this.props.user;
+    const { email } = this.props.user;
     this.state = {
-      email,
+      email: email,
       password: '',
     };
   }
 
-  handlePasswordChange(e) {
+  handlePasswordChange = (e) => {
     this.setState({ password: e.target.value });
   }
 
-  handleEmailChange(e) {
+  handleEmailChange = (e) => {
     const value = e.target.value;
 
     this.setState({ email: value });
   }
-
 
   render() {
     const { email, street, state, zip } = this.state;

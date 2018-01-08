@@ -38,6 +38,8 @@ def get_storage_engine():
 
 def remove_all_data():
     """ truncate database """
+
+    # TODO - fix not removing
     engine = get_storage_engine()
 
     tables = [

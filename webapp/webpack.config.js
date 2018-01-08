@@ -25,6 +25,7 @@ const stats = new BundleTracker(
 
 const env = process.env;
 const devServerPort = env.WEBPACK_PORT ? env.WEBPACK_PORT : 3000;
+const staticResourcesPort = 8000;
 
 if (process.env.NODE_ENV === 'production') {
     appEntry = [path.join(__dirname, 'client/index.js')];

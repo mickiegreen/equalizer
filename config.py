@@ -318,7 +318,7 @@ SSH_PASSWORD = ''
 
 LOG_FILE_NAME = 'equalizer.log'
 LOGGER_CONFIG = False
-LOGGING_LEVEL = 'INFO'
+LOGGING_LEVEL = 'DEBUG'
 
 __loggers = {}
 

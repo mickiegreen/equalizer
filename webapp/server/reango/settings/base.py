@@ -20,7 +20,7 @@ if exists(env_file):
 
 # Define STATIC_ROOT for the collectstatic command
 STATIC_ROOT = join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
+STATIC_URL = '/assets/'
 MEDIA_ROOT = join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
 # Application definition
@@ -117,7 +117,7 @@ GRAPHENE = {
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'static/bundles/',
+        'BUNDLE_DIR_NAME': 'static/',
         'STATS_FILE': join(BASE_DIR, 'static', 'webpack-stats.json'),
     }
 }

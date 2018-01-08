@@ -22,10 +22,13 @@
 
 from .. import BasicApi
 from .__utils import app
+import logging
+logger = logging.getLogger()
+
 
 class YoutubeSearchApi(BasicApi):
 
-    def __init__(self, keywords = [], **keys):
+    def __init__(self, keywords = [], keys = []):
         params = app.YOUTUBE_SEARCH_PARAMS.copy()
 
         if len(keywords) > 0:
@@ -41,15 +44,18 @@ class YoutubeSearchApi(BasicApi):
     def json(self):
         videos = []
         try:
+            logger.info(self.get_full_url())
             res = self.get()
             data = res['items']
 
             for video in data:
-                video_data = {'youtube_video_id': video['id']['videoId']}
+                video_data = {}
 
-                for k,v in self.keys.items():
-                    video_data[v] = video['snippet'].get(k, None)
-                    if video_data[v] == None: video_data.pop(v)
+                for k in self.keys:
+                    video_data[k] = video['snippet'].get(k, None)
+                    if video_data[k] == None: video_data.pop(k)
+
+                video_data['videoId'] = video['id']['videoId']
 
                 videos.append(video_data)
 

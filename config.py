@@ -26,18 +26,57 @@
 #                              #
 #******************************#
 
+from equalizer.lib.data.parsers import ItunesDatetimeParser, \
+    DurationParser, IntegerParser, IdentityParser
+
 # youtube
-YOUTUBE_FIELDS = []
-
 YOUTUBE_TOKEN = 'AIzaSyATGzqdcCvkr_lV4ocVhagTKDCO6Ng-ods'
+YOUTUBE_OUTPUT_FOLDER = '/home/michael/Projects/equalizer/venv/equalizer/resources/youtube'
+YOUTUBE_UPDATE_ENTRIES = True
+YOUTUBE_VIDEO_LIMIT = 2
+YOUTUBE_ITUNES_PARSE = {
+    # 'release_date'  : DatetimeParser,
+    # 'duration'      : DatetimeParser
+}
 
-YOUTUBE_VIDEO_KEYS = {
-    "viewCount"         : "views",
-    "likeCount"         : "likes",
-    "dislikeCount"      : "dislikes",
-    "favoriteCount"     : "favorites",
-    "commentCount"      : "comments",
-    "title"             : "youtube_video_title"
+YOUTUBE_ITUNES_SEARCH_KEYWORDS = ['artist_name', 'song_title']
+YOUTUBE_SEARCH_REGEX = ['(',')','{','}','<''>', '\"','\'', '\[.*?\]','\n','=','+']
+
+YOUTUBE_TO_MYSQL = {
+    'viewCount'                     : {
+        'key'       : 'views',
+        'parser'    : IntegerParser
+    },
+
+    'likeCount' : {
+        'key'       : 'likes',
+        'parser'    : IntegerParser
+    },
+
+    'commentCount' : {
+        'key'       : 'comments',
+        'parser'    : IntegerParser
+    },
+
+    'dislikeCount' : {
+        'key'       : 'dislikes',
+        'parser'    : IntegerParser
+    },
+
+    'title' : {
+        'key'       : 'youtube_video_title',
+        'parser'    : IdentityParser
+    },
+
+    'favoriteCount' : {
+        'key'       : 'favorites',
+        'parser'    : IntegerParser
+    },
+
+    'videoId' : {
+        'key'       : 'youtube_video_id',
+        'parser'    : IdentityParser
+    },
 }
 
 # itunes
@@ -45,6 +84,64 @@ ITUNES_CATALOG_URL = ''
 ITUNES_FIELDS = []
 ITUNES_LIMIT = 200
 ITUNES_OVERRIDE = True
+ITUNES_OUTPUT_FOLDER = '/home/michael/Projects/equalizer/venv/equalizer/resources/itunes'
+ITUNES_UPDATE_ENTRIES = True
+ITUNES_LIMIT_NUMBER_OF_ENTRIES = 30000
+
+# converting itunes keys to mysql
+ITUNES_TO_MYSQL = {
+    'artistName' : {
+        'key'       : 'artist_name',
+        'parser'    : IdentityParser
+    },
+
+    'artistId' : {
+        'key'       : 'itunes_artist_id',
+        'parser'    : IdentityParser
+    },
+
+    'primaryGenreName' : {
+        'key'       : 'genre',
+        'parser'    : IdentityParser
+    },
+
+    'country' : {
+        'key'       : 'country',
+        'parser'    : IdentityParser
+    },
+
+    'releaseDate' : {
+        'key'       : 'release_date',
+        'parser'    : ItunesDatetimeParser
+    },
+
+    'trackId'            : {
+        'key'       : 'itunes_song_id',
+        'parser'    : IdentityParser
+    },
+
+    'trackName' : {
+        'key'       : 'song_title',
+        'parser'    : IdentityParser
+    },
+
+    'trackTimeMillis' : {
+        'key'       : 'duration',
+        'parser'    : DurationParser
+    },
+}
+
+ITUNES_ADDITIONAL_ENTRIES_TO_MYSQL = [{
+    'collectionArtistName' : {
+        'key'       : 'artist_name',
+        'parser'    : IdentityParser
+    },
+
+    'collectionArtistId' : {
+        'key'       : 'itunes_artist_id',
+        'parser'    : IdentityParser
+    },
+}]
 
 #******************************#
 #                              #
@@ -78,11 +175,34 @@ SONG_EXISTS_QUERY = {
     "keys"  : ["itunes_song_id"]
 }
 
+SONG_REMOVE_ALL_REFERENCES_QUERY = {
+    "query" : \
+        "DELETE s, sa, sav " + \
+        "FROM song s " + \
+        "INNER JOIN artist_song AS sa " + \
+        "INNER JOIN artist_song_video AS sav " + \
+        "WHERE s.song_id=sa.song_id " + \
+        "AND sa.artist_song_id=sav.artist_song_id " + \
+        "AND s.song_id=%s",
+    "keys"  : ["song_id"]
+}
+
 ARTIST_TABLE = "artist"
 ARTIST_TABLE_PK = "artist_id"
 ARTIST_EXISTS_QUERY = {
     "query" : "SELECT * FROM artist WHERE itunes_artist_id=%s",
     "keys"  : ["itunes_artist_id"]
+}
+ARTIST_REMOVE_ALL_REFERENCES_QUERY = {
+    "query" : \
+        "DELETE a, sa, sav " + \
+        "FROM artist a " + \
+        "INNER JOIN artist_song AS sa " + \
+        "INNER JOIN artist_song_video AS sav " + \
+        "WHERE a.artist_id=sa.artist_id " + \
+        "AND sa.artist_song_id=sav.artist_song_id " + \
+        "AND a.artist_id=%s ",
+    "keys"  : ["artist_id"]
 }
 
 ARTIST_SONG_TABLE = "artist_song"
@@ -90,6 +210,15 @@ ARTIST_SONG_TABLE_PK = "artist_song_id"
 ARTIST_SONG_EXISTS_QUERY = {
     "query" : "SELECT * FROM artist_song WHERE artist_id=%s AND song_id=%s",
     "keys"  : ["artist_id", "song_id"]
+}
+ARTIST_SONG_REMOVE_ALL_REFERENCES_QUERY = {
+    "query" : \
+        "DELETE sa, sav " + \
+        "FROM artist_song sa " + \
+        "INNER JOIN artist_song_video AS sav " + \
+        "WHERE sa.artist_song_id=sav.artist_song_id " + \
+        "AND sa.artist_song_id=%s ",
+    "keys"  : ["artist_song_id"]
 }
 
 ARTIST_SONG_VIDEO_TABLE = "artist_song_video"
@@ -105,12 +234,29 @@ YOUTUBE_VIDEO_EXISTS_QUERY = {
     "query" : "SELECT * FROM youtube_video WHERE youtube_video_id=%s",
     "keys"  : ["youtube_video_id"]
 }
+YOUTUBE_VIDEO_REMOVE_ALL_REFERENCES_QUERY = {
+    "query" : \
+        "DELETE v, sav " + \
+        "FROM youtube_video v " + \
+        "INNER JOIN artist_song_video AS sav " + \
+        "WHERE v.video_id=sav.video_id AND v.video_id=%s",
+    "keys"  : ["video_id"]
+}
 
 USER_TABLE = "user"
 USER_TABLE_PK = "user_id"
 USER_EXISTS_QUERY = {
     "query" : "SELECT * FROM user WHERE email=%s",
     "keys"  : ["email"]
+}
+
+USER_REMOVE_ALL_REFERENCES_QUERY = {
+    "query" : \
+        "DELETE u, uh " + \
+        "FROM user u " + \
+        "INNER JOIN user_search_history AS uh " + \
+        "WHERE u.user_id=uh.user_id AND u.user_id=%s",
+    "keys"  : ["user_id"]
 }
 
 USER_SEARCH_HISTORY_TABLE = "user_search_history"
@@ -120,22 +266,39 @@ USER_SEARCH_HISTORY_EXISTS_QUERY = {
     "keys"  : ["history_id"]
 }
 
+JOIN_SONG_VIDEO_ARTIST_VIEW = "join_song_video_artist"
+JOIN_SONG_VIDEO_ARTIST_VIEW_PK = ["video_id", "artist_id", "song_id"]
+JOIN_SONG_VIDEO_ARTIST_EXISTS_QUERY = {
+    "query" : "SELECT * FROM join_song_video_artist WHERE youtube_video_id=%s " + \
+              "AND itunes_artist_id=%s AND itunes_song_id=%s",
+    "keys"  : ["youtube_video_id", "itunes_artist_id", "itunes_song_id"]
+}
+JOIN_SONG_VIDEO_ARTIST_ENTITIES = [SONG_TABLE, ARTIST_TABLE, ARTIST_SONG_TABLE,
+                             ARTIST_SONG_VIDEO_TABLE, YOUTUBE_VIDEO_TABLE]
+
+JOIN_SONG_ARTIST_VIEW = "join_song_artist"
+JOIN_SONG_ARTIST_VIEW_PK = ["artist_id", "song_id"]
+JOIN_SONG_ARTIST_EXISTS_QUERY = {
+    "query" : "SELECT * FROM join_song_artist WHERE itunes_artist_id=%s AND itunes_song_id=%s",
+    "keys"  : ["itunes_artist_id", "itunes_song_id"]
+}
+JOIN_SONG_ARTIST_ENTITIES = [SONG_TABLE, ARTIST_TABLE, ARTIST_SONG_TABLE]
+
+
+JOIN_SONG_ARTIST_NO_VIDEO_VIEW = "join_song_artist_no_videos"
+JOIN_SONG_ARTIST_NO_VIDEO_VIEW_PK = ["itunes_artist_id", "itunes_song_id"]
+JOIN_SONG_ARTIST_NO_VIDEO_EXISTS_QUERY = {
+    "query" : "SELECT * FROM join_song_artist_no_video WHERE itunes_artist_id=%s AND itunes_song_id=%s",
+    "keys"  : ["itunes_artist_id", "itunes_song_id"]
+}
+
+JOIN_SONG_ARTIST_NO_VIDEO_ENTITIES = JOIN_SONG_ARTIST_ENTITIES
+
 INSERT_QUERY = "INSERT INTO %s (%s) VALUES (%s)"
-UPDATE_QUERY = "UPDATE %s SET %s WHERE %s=%d"
+UPDATE_QUERY = "UPDATE %s SET %s WHERE %s=%s"
 REMOVE_QUERY = "DELETE FROM %s WHERE %s=%s"
 TRUNCATE_QUERY = "DELETE FROM %s"
-
-#******************************#
-#                              #
-#         API to MySQL         #
-#                              #
-#******************************#
-
-YOUTUBE_TO_MYSQL = {
-    'videoId'   : 'video_id',
-    'title'     : 'name',
-    'likes'     : 'likes'
-}
+SELECT_ALL_QUERY = "SELECT * FROM %s"
 
 #******************************#
 #                              #
@@ -152,27 +315,43 @@ SSH_PASSWORD = ''
 #           LOGGING            #
 #                              #
 #******************************#
-import logging
 
 LOG_FILE_NAME = 'equalizer.log'
-LOGGER_CONFIG = True
-LOGGING_LEVEL = logging.DEBUG
+LOGGER_CONFIG = False
+LOGGING_LEVEL = 'INFO'
+
+__loggers = {}
 
 def __set_logger():
+    # TODO put logging configurations in __hidden
     import sys
+    import logging
+    from logging import handlers
+    formatter = logging.Formatter(
+        '\n'
+        'TIME    :: [%(asctime)s,%(msecs)d]\n'
+        'FILE    :: [<%(filename)s> at line <%(lineno)d>]\n'
+        'LEVEL   :: [%(levelname)s]\n'
+        'MESSAGE :: %(message)s'
+    )
     logging.basicConfig(filename=LOG_FILE_NAME,
              filemode='a',
-             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
              datefmt='%H:%M:%S',
              level=LOGGING_LEVEL)
-    logger = logging.getLogger()
-    stream_handler = logging.StreamHandler(sys.stdout)
-    logger.addHandler(stream_handler)
+    logger = logging.getLogger(LOG_FILE_NAME)
+    if not logger.handlers:
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setFormatter(formatter)
+        logger.addHandler(stream_handler)
+        fh = handlers.RotatingFileHandler(LOG_FILE_NAME, maxBytes=(104857), backupCount=7)
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+    __loggers['logger'] = logging.getLogger(LOG_FILE_NAME)
 
-if LOGGER_CONFIG:
+if len(__loggers) == 0:
     __set_logger()
 
-LOGGER = logging.getLogger()
+LOGGER = __loggers['logger']
 
 try:
     from config_local import *

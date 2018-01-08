@@ -21,7 +21,10 @@
 # SOFTWARE.
 
 from ..abstract_entity import AbstractEntity as Entity
-import equalizer.config as app
+from ..attributes import PrimaryKey, DatetimeAttribute, \
+    TimedeltaAttribute, VarcharAttribute
+
+import config as app
 
 class Song(Entity):
     """ song table entity """
@@ -31,12 +34,13 @@ class Song(Entity):
         super(Song, self).__init__(
             table=app.SONG_TABLE,
             primary_key=app.SONG_TABLE_PK,
-            select_query=app.SONG_EXISTS_QUERY
+            select_query=app.SONG_EXISTS_QUERY,
+            remove_all_references = app.SONG_REMOVE_ALL_REFERENCES_QUERY
         )
-        self.song_id = song_id
-        self.song_title = song_title
-        self.duration = duration
-        self.country = country
-        self.genre = genre
-        self.release_date = release_date
-        self.itunes_song_id = itunes_song_id
+        self.song_id = PrimaryKey('song_id', song_id)
+        self.song_title = VarcharAttribute('song_title', song_title)
+        self.duration = TimedeltaAttribute('duration', duration)
+        self.country = VarcharAttribute('country', country)
+        self.genre = VarcharAttribute('genre', genre)
+        self.release_date = DatetimeAttribute('release_date', release_date)
+        self.itunes_song_id = VarcharAttribute('itunes_song_id', itunes_song_id)

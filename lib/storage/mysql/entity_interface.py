@@ -23,6 +23,18 @@
 class EntityInterface(object):
     """ MySQL Entity interface """
 
+    def dict(self):
+        """ to dict without dumping value """
+        raise NotImplementedError
+
+    def keys(self):
+        """ keys entry should have """
+        raise NotImplementedError
+
+    def values(self):
+        """ current values of entry """
+        raise NotImplementedError
+
     def table(self):
         """ entry table name """
         raise NotImplementedError
@@ -61,4 +73,30 @@ class EntityInterface(object):
 
     def remove_query(self):
         """ build remove query"""
+        raise NotImplementedError
+
+    def remove_all_references_query(self):
+        """
+        build query that removes entry and all associated entries
+        (i.e. foreign keys references)
+        """
+        raise NotImplementedError
+
+    def select_all_query(self):
+        """ build select * from table query """
+        raise NotImplementedError
+
+    def is_view(self):
+        """ return True if not real table """
+        raise NotImplementedError
+
+    def primary_key_name(self):
+        """ return primary key column name """
+        raise NotImplementedError
+
+    def split_to_real_entities(self):
+        """
+        in case entity isn't standalone (view. etc)
+        return original entities
+        """
         raise NotImplementedError

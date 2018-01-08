@@ -5,3 +5,6 @@ from .song import Song
 from .user import User
 from .user_search_history import UserSearchHistory
 from .youtube_video import YoutubeVideo
+from .join_song_video_artist import JoinSongVideoArtist
+from .join_song_artist import JoinSongArtist
+from .join_song_artist_no_video import JoinSongArtistNoVideo

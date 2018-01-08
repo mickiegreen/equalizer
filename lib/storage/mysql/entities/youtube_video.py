@@ -21,7 +21,8 @@
 # SOFTWARE.
 
 from ..abstract_entity import AbstractEntity as Entity
-import equalizer.config as app
+from ..attributes import PrimaryKey, IntegerAttribute, VarcharAttribute
+import config as app
 
 class YoutubeVideo(Entity):
     """ youtube video table entity """
@@ -32,13 +33,14 @@ class YoutubeVideo(Entity):
         super(YoutubeVideo, self).__init__(
             table=app.YOUTUBE_VIDEO_TABLE,
             primary_key=app.YOUTUBE_VIDEO_TABLE_PK,
-            select_query=app.YOUTUBE_VIDEO_EXISTS_QUERY
+            select_query=app.YOUTUBE_VIDEO_EXISTS_QUERY,
+            remove_all_references = app.YOUTUBE_VIDEO_REMOVE_ALL_REFERENCES_QUERY
         )
-        self.video_id = video_id
-        self.likes = likes
-        self.comments = comments
-        self.views = views
-        self.favorites = favorites
-        self.dislikes = dislikes
-        self.youtube_video_id = youtube_video_id
-        self.youtube_video_title = youtube_video_title
+        self.video_id = PrimaryKey('video_id', video_id)
+        self.likes = IntegerAttribute('likes', likes)
+        self.comments = IntegerAttribute('comments', comments)
+        self.views = IntegerAttribute('views', views)
+        self.favorites = IntegerAttribute('favorites', favorites)
+        self.dislikes = IntegerAttribute('dislikes', dislikes)
+        self.youtube_video_id = VarcharAttribute('youtube_video_id', youtube_video_id)
+        self.youtube_video_title = VarcharAttribute('youtube_video_title', youtube_video_title)

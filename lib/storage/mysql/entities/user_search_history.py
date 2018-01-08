@@ -21,7 +21,10 @@
 # SOFTWARE.
 
 from ..abstract_entity import AbstractEntity as Entity
-import equalizer.config as app
+from ..attributes import PrimaryKey, DatetimeAttribute, \
+    VarcharAttribute, IntegerAttribute
+
+import config as app
 
 class UserSearchHistory(Entity):
     """ user search history table entity """
@@ -32,7 +35,7 @@ class UserSearchHistory(Entity):
             primary_key=app.USER_SEARCH_HISTORY_TABLE_PK,
             select_query=app.USER_SEARCH_HISTORY_EXISTS_QUERY
         )
-        self.history_id = history_id
-        self.user_id = user_id
-        self.params = params
-        self.search_date = search_date
+        self.history_id = PrimaryKey('history_id', history_id)
+        self.user_id = IntegerAttribute('user', user_id)
+        self.params = VarcharAttribute('params', params)
+        self.search_date = DatetimeAttribute('search_date', search_date)

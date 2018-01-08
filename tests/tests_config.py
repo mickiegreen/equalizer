@@ -21,7 +21,7 @@ TEST_RECORDS_TO_MYSQL = [{'genre': 'Hip-Hop/Rap', 'views': '635410', 'youtube_vi
 #           LOGGING            #
 #                              #
 #******************************#
-import logging
+'''import logging
 
 LOG_FILE_NAME = 'unittests.log'
 LOGGER_CONFIG = True
@@ -41,7 +41,10 @@ def __set_logger():
 if LOGGER_CONFIG:
     __set_logger()
 
-LOGGER = logging.getLogger()
+LOGGER = logging.getLogger()'''
+
+
+# from equalizer.config import LOGGER
 
 
 

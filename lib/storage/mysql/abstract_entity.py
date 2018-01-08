@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import json
+from overrides import overrides
 
 from .entity_interface import EntityInterface
 
@@ -29,68 +30,155 @@ import config as app
 class AbstractEntity(EntityInterface):
     """ MySQL Generic entity adapter """
 
-    def __init__(self, table, primary_key, select_query):
+    def __init__(self, table, primary_key, select_query, remove_all_references = None):
         self._table = table
         self._primary_key = primary_key
         self._select_query = select_query
+        self._remove_all_references = remove_all_references
+        self._white_list = ['_table', '_primary_key',
+                            '_select_query',
+                            '_remove_all_references',
+                            '_tables_entities',
+                            '_white_list', 'engine', '_engine']
 
+    @overrides
+    def dict(self):
+        """ to dict without dumping value """
+        return {k : v for k, v in self}
+
+    @overrides
+    def keys(self):
+        """ keys entry should have """
+        return self.json().keys()
+
+    @overrides
+    def values(self):
+        """ current values of entry """
+        return self.json().values()
+
+    @overrides
     def table(self):
         """ return entry table """
         return self._table
 
+    @overrides
     def json(self):
         """ convert object to json """
-        _json = self.__dict__.copy()
-        _json.pop('_table')
-        _json.pop('_primary_key')
-        _json.pop('_select_query')
+        return {k : repr(getattr(self, k)) for k, v in self}
 
-        return _json
-
+    @overrides
     def update(self, **kwargs):
         """ update object attributes """
-        self.__init__(**kwargs)
+        for k, v in kwargs.iteritems():
+             self[k] = v
 
+    @overrides
     def copy(self):
         """ create copy of object """
-        return self.json().copy()
+        return self.__class__(**self.dict())
 
+    @overrides
     def primary_key(self):
         """ return object primary key """
-        return getattr(self, self._primary_key)
+        return self[self._primary_key]
 
+    @overrides
     def set_primary_key(self, key):
         """ set entry primary key """
-        setattr(self, self._primary_key, key)
+        self[self._primary_key] = key
 
+    @overrides
     def insert_query(self):
         """ build insert query """
-
-        cols = [k for k in self.json().keys()]
-        vals = [str(self.json()[k]) for k in cols if self.json()[k] != None]
+        cols = [k for k in self.keys()]
+        vals = [v for v in self.values()]
 
         return app.INSERT_QUERY %(self.table(), ','.join(cols), ','.join(vals))
 
+    @overrides
     def select_query(self):
         """ build select query """
         keys = self._select_query.get('keys', [])
-        keys = tuple(str(getattr(self, key)) for key in keys)
+
+        # getting values int proper format
+        keys = tuple(repr(getattr(self, key)) for key in keys)
+
+        # building string using values
         return self._select_query.get('query', '') % keys
 
+    @overrides
     def update_query(self):
         """ build update query """
 
         # building vals list to set
-        sql_parser = lambda x: '"' + str(x) + '"' if str(x).count('\'') > 0 else "'" + str(x) + "'"
-        vals = ','.join([ str(k) + '=' + sql_parser(v) for k, v in self.json().items() ])
+        vals = ','.join([ k + '=' + repr(getattr(self, k)) for k, v in self ])
 
         # final query
         return app.UPDATE_QUERY %(self.table(), vals, self._primary_key, self.primary_key())
 
+    @overrides
     def remove_query(self):
         """ build remove query"""
+        return app.REMOVE_QUERY %(self.table(), repr(getattr(self, self._primary_key)), self.primary_key())
 
-        return app.REMOVE_QUERY %(self.table(), self._primary_key, str(self.primary_key()))
+    @overrides
+    def remove_all_references_query(self):
+        """
+        build query that removes entry and all associated entries
+        (i.e. foreign keys references)
+        :default - regular remove
+        """
+        if self._remove_all_references == None:
+            return self.remove_query()
+
+        else:
+            keys = self._remove_all_references.get('keys', [])
+            keys = tuple(repr(self[key]) for key in keys)
+            return self._remove_all_references.get('query', '') % keys
+
+    @overrides
+    def select_all_query(self):
+        """ build select * from table query """
+        return app.SELECT_ALL_QUERY %(self.table())
+
+    @overrides
+    def is_view(self):
+        """ return True if not real table """
+        return False
+
+    @overrides
+    def primary_key_name(self):
+        """ return primary key column name """
+        return self._primary_key
+
+    @overrides
+    def split_to_real_entities(self):
+        """
+        in case entity isn't standalone (view. etc)
+        return original entities
+        """
+        return [self]
+
+    def __getitem__(self, item):
+        """ define [] get operator for entity """
+
+        # if item exists and isn't hidden - return it
+        if hasattr(self, item) and item not in self._white_list:
+            return getattr(self, item).value()
+
+        else:
+            return None
+
+    def __setitem__(self, key, value):
+        """ define [] set operator for entity """
+        if hasattr(self, key):
+            getattr(self, key).set(value)
+
+    def __iter__(self):
+        """ iter entity as json """
+        for k, v in self.__dict__.iteritems():
+            if k not in self._white_list:
+                yield (v.key(), v.value())
 
     def __eq__(self, other):
         """ compare two entries """
@@ -100,8 +188,8 @@ class AbstractEntity(EntityInterface):
             return False
 
         # compare each key
-        for k, v in other.json().items():
-            if self.json().get(k, None) != v: return False
+        for k, v in other:
+            if not self[k].equals(v) : return False
 
         return True
 

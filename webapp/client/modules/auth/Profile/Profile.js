@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react';
-import { Grid, Cell, Textfield, Button } from 'react-mdl';
-import Page from '../../../components/Page/PageComponent';
-import RequireAuth from '../RequireAuth/RequireAuth';
+import { Grid, Cell, Textfield, Button } from '../../../../node_modules/react-mdl';
+import Page from '../../../components/Page/Page';
+import RequireAuth from '../Auth';
 import styles from './Profile.scss';
 
 
@@ -91,4 +91,4 @@ class Profile extends React.Component {
 
 }
 
-export default RequireAuth(Profile);
+export default Profile;

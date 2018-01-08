@@ -16,11 +16,11 @@ def add_token(token):
     with open(TOKEN_FILE,'w') as _f:
         _f.write(json.dumps({'key' : token}))
 
-def get(video_id, **keys):
+def get(video_id, keys = []):
     video = VideoDetailsApi(video_id = video_id, keys = keys).json()
     video.update(VideoStatisticsApi(video_id = video_id, keys = keys).json())
 
     return video
 
-def search(keywords, **keys):
-    return YoutubeSearchApi(keywords = keywords, **keys).json()
+def search(keywords, keys = []):
+    return YoutubeSearchApi(keywords = keywords, keys = keys).json()

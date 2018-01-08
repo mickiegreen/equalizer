@@ -20,8 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import MySQLdb
+from overrides import overrides
 
+from mysql_tunnel_connection import MysqlTunnelConnection
 from ..storage_engine import StorageEngine
 from entity_interface import EntityInterface as Entity
 from config import LOGGER as logger
@@ -30,13 +31,31 @@ import config as app
 class MySqlEngine(StorageEngine):
     """ Adapter to connect to MySQL db """
 
-    def __init__(self, host, user, password, schema, port = 3306):
+    def __init__(self, host, user, password, schema, port = 3306,
+                 use_tunnel = False, ssh_port = 22, ssh_host = None,
+                 ssh_user = None, ssh_passwd = None, remote_mysql_port = None,
+                 remote_bind_address = None, local_bind_address = None):
+
         """ MySQL authentication details """
-        self.host = host
-        self.user = user
-        self.password = password
-        self.port = port
-        self.schema = schema
+        self.mysql_auth_info = dict(
+            host = host,
+            user = user,
+            password = password,
+            port = port,
+            schema = schema,
+            use_tunnel = use_tunnel
+        )
+
+        self.ssh_tunnel_info = dict(
+            ssh_host = ssh_host,
+            ssh_port = ssh_port,
+            ssh_user = ssh_user,
+            ssh_passwd = ssh_passwd,
+            remote_bind_address = remote_bind_address,
+            remote_mysql_port = remote_mysql_port,
+            local_bind_address = local_bind_address,
+            use_tunnel = use_tunnel
+        )
 
     def get(self, entry):
         """
@@ -50,12 +69,13 @@ class MySqlEngine(StorageEngine):
             raise TypeError("Entry must be of type Entity")
 
         # fetch entry from db
-        with self._connect() as cur:
+        with self._connect() as conn:
+            cur = conn.cursor()
             query = entry.select_query()
 
             logger.debug('Getting object from db')
-            logger.debug(query)
             logger.debug(entry)
+            logger.debug(query)
 
             count = cur.execute(query)
 
@@ -82,6 +102,11 @@ class MySqlEngine(StorageEngine):
 
         return entries
 
+    def exists(self, entry):
+        """ return true of object exists """
+        entry_copy = entry.copy()
+        return self.get(entry_copy) == -1
+
     def add(self, entry):
         """add new entry to database and return new key"""
 
@@ -91,7 +116,18 @@ class MySqlEngine(StorageEngine):
 
         logger.debug("Adding entry - " + repr(entry))
 
-        # add to db
+        # if view add all entities to db
+        if entry.is_view():
+
+            # let view do his thing
+            setattr(entry, 'engine', self)
+            key = entry.insert_query()
+            delattr(entry, 'engine')
+
+            # return view key
+            return key
+
+        # not view - just insert
         key = self._execute(entry.insert_query())
 
         # update entry
@@ -162,6 +198,24 @@ class MySqlEngine(StorageEngine):
         # return removed entry
         return data
 
+    @overrides
+    def remove_safe(self, entry):
+        """ remove all entry references """
+
+        # force entity object
+        if not isinstance(entry, Entity):
+            raise TypeError("Entry must be of type Entity")
+
+        # if entry is view - let it do its thing
+        if entry.is_view():
+            setattr(entry, 'engine', self)
+            entry.remove_all_references_query()
+            delattr(entry, 'engine')
+
+        # if regular entity - execute query
+        else:
+            self._execute(entry.remove_all_references_query())
+
     def remove_all(self, entries):
         """
         remove list of entries
@@ -186,7 +240,10 @@ class MySqlEngine(StorageEngine):
             raise TypeError("Entry must be of type Entity")
 
         # update entry
-        self._execute(entry.update_query())
+        for real_entity in entry.split_to_real_entities():
+            self._execute(real_entity.update_query())
+
+        return entry.primary_key()
 
     def update_all(self, entries):
         """ update all entries (list) """
@@ -204,12 +261,15 @@ class MySqlEngine(StorageEngine):
         if not isinstance(entry, Entity):
             raise TypeError("Entry must be of type Entity")
 
-        key = self.get(entry)
+        # make copy to avoid override
+        entry_copy = entry.copy()
+        key = self.get(entry_copy)
 
         # if not exist add it
         if key == -1: return self.add(entry)
 
         # else update entry and return key
+        entry.set_primary_key(key)
         self.update(entry)
         return entry.primary_key()
 
@@ -225,7 +285,7 @@ class MySqlEngine(StorageEngine):
             conn = cur.connection
 
             logger.debug("Execute query:")
-            logger.debug(query)
+            logger.info(query)
             logger.debug(conn.__dict__)
 
             try:
@@ -245,14 +305,42 @@ class MySqlEngine(StorageEngine):
         #TODO implement
         pass
 
+    def fetch_all_like_entry(self, entry):
+        """ build select * from table query """
+
+        if not isinstance(entry, Entity):
+            raise TypeError("entry nust be of type entity")
+
+        # fetching all entries from database
+        with self._connect() as conn:
+            cur = conn.cursor()
+
+            # executing query
+            query = entry.select_all_query()
+            cur.execute(query)
+
+            data = []
+
+            # getting data
+            for row in cur.fetchall():
+
+                # creating new object for each entry in table
+                new_data = entry.__class__(**self._toJson(cur.description, row))
+
+                # adding to final data
+                data.append(new_data)
+
+        return data
+
     def _execute(self, query):
         """ execute query """
 
         # connect to db
-        with self._connect() as cur:
+
+        with self._connect() as conn:
 
             # getting connection object
-            conn = cur.connection
+            cur = conn.cursor()
 
             logger.debug("Execute query:")
             logger.debug(query)
@@ -265,25 +353,25 @@ class MySqlEngine(StorageEngine):
                 conn.commit()
 
                 # return last_id
-                return cur.lastrowid
+                return int(cur.lastrowid)
 
             except Exception as e:
                 # rollback if error
                 conn.rollback()
+                logger.error(query)
                 logger.error(e)
 
         return -1
 
     def _connect(self):
-        """ return connect to database """
-        return MySQLdb.connect(
-            host=self.host,
-            user=self.user,
-            passwd=self.password,
-            db=self.schema,
-            port=self.port
-        )
+        """ return connection to database """
+        vars = self.ssh_tunnel_info.copy()
+        vars.update(self.mysql_auth_info)
+        return MysqlTunnelConnection(**vars)
 
     def _toJson(self, desc, _tuple):
         """ tuple from select query to json """
+        f = lambda x: int(x) if type(x) in [long, int] else x
+        _tuple = [f(val) for val in _tuple ]
+
         return dict(zip([_desc[0] for _desc in desc], _tuple))

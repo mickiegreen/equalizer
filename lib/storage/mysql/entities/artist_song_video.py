@@ -21,19 +21,19 @@
 # SOFTWARE.
 
 from ..abstract_entity import AbstractEntity as Entity
+from ..attributes import PrimaryKey, IntegerAttribute
 
-import equalizer.config as app
+import config as app
 
 class ArtistSongVideo(Entity):
     """ artist_song_video table entity"""
     def __init__(self, artist_song_video_id = 0,
-                 artist_song_id = None, video_id = None, **kwargs):
+                 artist_song_id = 0, video_id = 0, **kwargs):
         super(ArtistSongVideo, self).__init__(
             table=app.ARTIST_SONG_VIDEO_TABLE,
             primary_key=app.ARTIST_SONG_VIDEO_TABLE_PK,
-            select_query=app.ARTIST_SONG_VIDEO_EXISTS_QUERY
+            select_query=app.ARTIST_SONG_VIDEO_EXISTS_QUERY,
         )
-
-        self.artist_song_video_id = artist_song_video_id
-        self.artist_song_id = artist_song_id
-        self.video_id = video_id
+        self.artist_song_video_id = PrimaryKey('artist_song_video_id', artist_song_video_id)
+        self.artist_song_id = IntegerAttribute('artist_song_id', artist_song_id)
+        self.video_id = IntegerAttribute('video_id', video_id)

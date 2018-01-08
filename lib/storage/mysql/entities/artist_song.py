@@ -20,8 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from overrides import overrides
+
 from ..abstract_entity import AbstractEntity as Entity
-import equalizer.config as app
+import config as app
+from ..attributes import PrimaryKey, IntegerAttribute
 
 class ArtistSong(Entity):
     """ artist_song table entry """
@@ -30,8 +33,9 @@ class ArtistSong(Entity):
         super(ArtistSong, self).__init__(
             table=app.ARTIST_SONG_TABLE,
             primary_key=app.ARTIST_SONG_TABLE_PK,
-            select_query=app.ARTIST_SONG_EXISTS_QUERY
+            select_query=app.ARTIST_SONG_EXISTS_QUERY,
+            remove_all_references = app.ARTIST_REMOVE_ALL_REFERENCES_QUERY
         )
-        self.artist_song_id = artist_song_id
-        self.artist_id = artist_id
-        self.song_id = song_id
+        self.artist_song_id = PrimaryKey('artist_song_id', artist_song_id)
+        self.artist_id = IntegerAttribute('artist_id', artist_id)
+        self.song_id = IntegerAttribute('song_id', song_id)

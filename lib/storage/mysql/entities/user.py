@@ -21,7 +21,9 @@
 # SOFTWARE.
 
 from ..abstract_entity import AbstractEntity as Entity
-import equalizer.config as app
+from ..attributes import PrimaryKey, VarcharAttribute
+
+import config as app
 
 class User(Entity):
     """ user table entity """
@@ -32,7 +34,8 @@ class User(Entity):
             primary_key=app.USER_TABLE_PK,
             select_query=app.USER_EXISTS_QUERY
         )
-        self.user_id = user_id
-        self.name = name
-        self.email = email
-        self.passwd = passwd
+
+        self.user_id = PrimaryKey('user_id', user_id)
+        self.name = VarcharAttribute('name', name)
+        self.email = VarcharAttribute('email', email)
+        self.passwd = VarcharAttribute('passwd', passwd)

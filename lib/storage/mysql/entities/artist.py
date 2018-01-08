@@ -21,8 +21,9 @@
 # SOFTWARE.
 
 from ..abstract_entity import AbstractEntity as Entity
+from ..attributes import PrimaryKey, VarcharAttribute
 
-import equalizer.config as app
+import config as app
 
 class Artist(Entity):
     """ Artist table entity """
@@ -30,10 +31,11 @@ class Artist(Entity):
         super(Artist, self).__init__(
             table = app.ARTIST_TABLE,
             primary_key = app.ARTIST_TABLE_PK,
-            select_query = app.ARTIST_EXISTS_QUERY
+            select_query = app.ARTIST_EXISTS_QUERY,
+            remove_all_references = app.ARTIST_REMOVE_ALL_REFERENCES_QUERY
         )
-        self.artist_id = artist_id
-        self.artist_name = artist_name
-        self.itunes_artist_id = itunes_artist_id
+        self.artist_id = PrimaryKey('artist_id', artist_id)
+        self.artist_name = VarcharAttribute('artist_name', artist_name)
+        self.itunes_artist_id = VarcharAttribute('itunes_artist_id', itunes_artist_id)
 
 

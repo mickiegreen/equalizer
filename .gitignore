@@ -1,5 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 
+*.log
+*.log.[0-9]*
+*.git.old/*
+
 ### Other
 assets/bundles
 .idea

@@ -2,7 +2,7 @@ from ..basic_api import BasicApi
 from .__utils import app
 
 class VideoStatisticsApi(BasicApi):
-    def __init__(self, video_id, **keys):
+    def __init__(self, video_id, keys = []):
         params = app.YOUTUBE_VIDEO_STATISTICS_PARAMS.copy()
         params['id'] = video_id
 
@@ -11,7 +11,7 @@ class VideoStatisticsApi(BasicApi):
             params = params
         )
 
-        self.keys = keys.get('keys')
+        self.keys = keys
 
     def json(self):
         statistics = {}
@@ -23,9 +23,9 @@ class VideoStatisticsApi(BasicApi):
             for video in data:
                 statistics['youtube_video_id'] = video['id']
 
-                for k, v in self.keys.items():
-                    statistics[v] = video['statistics'].get(k, None)
-                    if statistics[v] == None: statistics.pop(v)
+                for k in self.keys:
+                    statistics[k] = video['statistics'].get(k, None)
+                    if statistics[k] == None: statistics.pop(k)
 
         except:
             # TODO handle error

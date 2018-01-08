@@ -3,6 +3,7 @@ import Landing from 'components/Landing/Landing';
 import Vertical from 'components/Vertical/Vertical';
 import authRoutes from './auth';
 import pollsRoutes from './polls';
+import Profile from 'modules/auth/Profile/Profile';
 
 const routes = [
   {
@@ -10,7 +11,7 @@ const routes = [
     childRoutes: [
       {
         path: '/',
-        component: Vertical,
+        component: Profile,
         queries: 'queries'
       },
       ...authRoutes,

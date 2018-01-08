@@ -47,6 +47,10 @@ class StorageEngine(object):
         """ remove entry from relation """
         raise NotImplementedError
 
+    def remove_safe(self, entry):
+        """ remove all entry references from relation """
+        raise NotImplementedError
+
     def remove_all(self, entries):
         """ remove list of entries """
         raise NotImplementedError
@@ -69,4 +73,8 @@ class StorageEngine(object):
 
     def live_update(self, relation, override = True):
         """ add more entries to relation """
+        raise NotImplementedError
+
+    def fetch_all_like_entry(self, entry):
+        """ return all objects of type as entry """
         raise NotImplementedError

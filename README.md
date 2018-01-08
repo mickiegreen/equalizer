@@ -22,6 +22,46 @@ from github as our infrastructure:
    This infra has been adapted to our needs.
 2. all other libraries are listed in requirements.txt
 
+## Pre installation
+1. Python2.7 - This project has been built and tested with Python2.7.14
+3. pip
+2. yarn package manager
+4. virtualenv
+5. mysql server running
+
+### setup dev
+1. setup virtualenv
+```
+virtualenv env_name
+```
+
+2. activate virtualenv
+```
+source env_name/bin/activate 
+```
+3. install python required packages
+```
+pip install -r requirements
+```
+4. set up webapp dependencies
+```
+cd webapp
+yarn
+```
+5. start webpack (webpack port configured to 3000)
+```
+yarn start
+```
+
+6. start django (configured to port 8000)
+```
+python manage.py migrate
+python manage.py runserver
+```
+7. test server is up at 
+
+    http://localhost:8000
+
 ## Youtube & Itunes fields used from the Api:
 ```
 duration # itunes
@@ -36,6 +76,10 @@ artist_name # itunes
 video_title # youtube
 ```
 
-# TODOS
+# TODOs
+1. build htmls
+2. develop request handlers
+3. css design
+4. docs
 
 

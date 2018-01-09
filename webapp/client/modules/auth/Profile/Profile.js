@@ -12,11 +12,10 @@ class Profile extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     const { user } = this.props.user;
     const { email } = this.props.user;
     this.state = {
-      email: email,
+      email,
       password: '',
     };
   }

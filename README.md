@@ -82,4 +82,16 @@ video_title # youtube
 3. css design
 4. docs
 
+## University servers
+```
+virtualenv equalizer
+source equalizer/bin/activate.csh
+git clone https://github.com/mickiegreen/EqualizerProject
+cd EqualizerProject
+pip install -r requirements.txt
+cd webapp
+python manage.py migrate
+python manage.py runserver delta-tomcat-vm:40743
+```
+
 

@@ -194,7 +194,7 @@ class YoutubeDataHandler(AbstractDataHandler):
         """
 
         # getting itunes data from table where no youtube data found
-        data = self.engine.fetch_all_like_entry(JoinSongArtistNoVideo())[:200]
+        data = self.engine.fetch_all_like_entry(JoinSongArtistNoVideo())
 
         results = []
 

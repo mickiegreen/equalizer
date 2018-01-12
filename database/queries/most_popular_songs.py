@@ -12,7 +12,7 @@ MOST_POPULAR_SONGS = {
                'GROUP BY id) rating_table '                
                'JOIN youtube_video  as main_table ON rating_table.id = main_table.youtube_video_id '
                'ORDER BY rating  desc'
-               'limit 1) as a ',
+               'limit 10) as a ',
     'args': ['release_date'],
     'mode'  : 'select',
     'default' : random.randint(1905,2018)

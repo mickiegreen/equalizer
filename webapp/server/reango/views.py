@@ -84,7 +84,6 @@ class GenericView(View):
 class LoginView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        print 'loginView'
         return super(LoginView, self).get(request, query=app.USER_LOGIN, *args, **kwargs)
 
 
@@ -97,8 +96,12 @@ class SignUpView(GenericView):
 class MostHatedSongView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        print("inside mostHated")
         return super(MostHatedSongView, self).get(request, query=app.MOST_HATED_SONGS, *args, **kwargs)
+
+class DislikeSongsView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(DislikeSongsView, self).get(request, query=app.DISLIKES_SONGS, *args, **kwargs)
 
 
 class MostPopularSongsView(GenericView):
@@ -106,10 +109,15 @@ class MostPopularSongsView(GenericView):
         """ executing login request """
         return super(MostPopularSongsView, self).get(request, query=app.MOST_POPULAR_SONGS, *args, **kwargs)
 
-class SelectGenre(GenericView) :
+class SelectGenreView(GenericView) :
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(SelectGenre, self).get(request, query=app.SELECT_GENRE, *args, **kwargs)
+        return super(SelectGenreView, self).get(request, query=app.SELECT_GENRE, *args, **kwargs)
+
+class LongestArtistSongView(GenericView) :
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(LongestArtistSongView, self).get(request, query=app.LONGEST_ARTIST_SONG, *args, **kwargs)
 
 
 class PopularGenreSongsView(GenericView):
@@ -117,10 +125,10 @@ class PopularGenreSongsView(GenericView):
         """ executing login request """
         return super(PopularGenreSongsView, self).get(request, query=app.POPULAR_GENRE_SONGS, *args, **kwargs)
 
-class Equalizer(GenericView):
+class EqualizerView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(Equalizer, self).get(request, query=app.EQUALIZER, *args, **kwargs)
+        return super(EqualizerView, self).get(request, query=app.EQUALIZER, *args, **kwargs)
 
 
 class HatedGenreSongView(GenericView):

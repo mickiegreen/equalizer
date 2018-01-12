@@ -12,7 +12,7 @@ POPULAR_GENRE_SONGS = {
                 'Limit 1 ) as genre_table) '
                 'group by video_id '
                 'Order by  rating DESC '
-                'limit  1) as  loved_song ',
+                'limit  10) as  loved_song ',
 
     'mode': 'select'
 

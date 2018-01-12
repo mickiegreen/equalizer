@@ -13,7 +13,7 @@ MOST_HATED_SONGS = {
                'GROUP BY id) rating_table '                
                'JOIN youtube_video  as main_table ON rating_table.id = main_table.youtube_video_id '
                'ORDER BY rating  '
-               'limit 1 ) as a',
+               'limit 10 ) as a ',
 
     'args': ['release_date'],
     'mode'  : 'select',

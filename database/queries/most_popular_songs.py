@@ -1,10 +1,17 @@
-USER_HISTORY_SAVE = {
-    'query' : 'UPDATE user_search_history '
-              'SET is_favorite=1 '
-              'WHERE history_id=%d',
-    'params': ['history_id'],
-    'mode'  : ['update'],
-    'default':{
-        'user_name' : ''
-    }
+MOST_POPULAR_SONGS = {
+    'query' :  'SELECT youtube_video_id, youtube_video_title '
+               'FROM SELECT youtube_video_id, youtube_video_title '
+               'FROM('
+               'SELECT youtube_video_title as title,youtube_video_id as id ,'
+               ' sum(0.3*views+0.5*likes+0.2*comments) AS rating'
+               'FROM join_song_video_artist'
+               'WHERE country IN(select country from song where YEAR(release_date) = "%s")' 
+               'GROUP BY id) rating_table'                
+               'JOIN youtube_video  as main_table ON rating_table.id = main_table.youtube_video_id'
+               'ORDER BY rating ASC '
+               'limit 1',
+    'params': ['release_date'],
+    'mode'  : ['select'],
+
+
 }

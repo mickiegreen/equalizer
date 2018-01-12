@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
-from views import LoginView, SignUpView
+from views import LoginView, SignUpView, RelevantArtistView, HatedGenreSongView, PopularGenreSongsView, MostPopularSongsView, MostHatedSongView
 
 urlpatterns = [
     url(r'^resources/users/login', LoginView.as_view()),
@@ -27,4 +27,10 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^graphql', csrf_exempt(GraphQLView.as_view(graphiql=True))),
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
+    url(r'^resources/video/', MostHatedSongView.as_view()),
+    url(r'^resources/video/', MostPopularSongsView.as_view()),
+    url(r'^resources/video/', PopularGenreSongsView.as_view()),
+    url(r'^resources/video/', HatedGenreSongView.as_view()),
+    url(r'^resources/video/', RelevantArtistView.as_view()),
+
 ]

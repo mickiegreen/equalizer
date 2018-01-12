@@ -78,12 +78,45 @@ class GenericView(View):
 
         return HttpResponse(json.dumps(response), content_type='application/json')
 
+
 class LoginView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
         return super(LoginView, self).get(request, query=app.USER_LOGIN, *args, **kwargs)
 
+
 class SignUpView(GenericView):
     def post(self, request, *args, **kwargs):
         """ executing login request """
         return super(SignUpView, self).post(request, query=app.USER_SIGN_UP, *args, **kwargs)
+
+
+class MostHatedSongView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(MostHatedSongView, self).get(request, query=app.MOST_HATED_SONGS, *args, **kwargs)
+
+
+class MostPopularSongsView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(MostPopularSongsView, self).get(request, query=app.MOST_POPULAR_SONGS, *args, **kwargs)
+
+
+class PopularGenreSongsView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(PopularGenreSongsView, self).get(request, query=app.POPULAR_GENRE_SONGS, *args, **kwargs)
+
+
+class HatedGenreSongView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(HatedGenreSongView, self).get(request, query=app.HATED_GENRE_SONGS, *args, **kwargs)
+
+
+class RelevantArtistView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(RelevantArtistView, self).get(request, query=app.RELEVANT_ARTIST_SONGS, *args, **kwargs)
+

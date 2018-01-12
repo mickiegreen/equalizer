@@ -12,8 +12,8 @@ RELEVANT_ARTIST_SONGS = {
                 
                 'where YEAR(CURDATE())-YEAR(release_date) <= 5 '
                 
-                'group by artist_id) '
-                
+                'group by artist_id) AS x '
+            
                 'group by youtube_video_id '
                 
                 'limit 10 ',

@@ -1,4 +1,4 @@
-# EqualizerProject
+# Equalizer
 This repo contains final project of databases course.
 Aims in creating an equalizer interface for searches
 such that enable the searcher to "balance" the weights

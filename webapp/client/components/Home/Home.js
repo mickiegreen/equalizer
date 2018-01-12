@@ -9,11 +9,30 @@ import SignupUserMutation from '../../modules/auth/mutations/Signup';
 import { authenticatedRoute } from '../../modules/auth/utils';
 import styles from '../../modules/auth/Auth.scss';
 import "../../../node_modules/video-react/styles/scss/video-react.scss";
+import './Home.css';
 
 function isLoginCheck(props) {
     return props.router.match.path === '/login';
 }
 
+const FormStyle = {
+    'display'   : 'inline-block !important',
+    'width'     : '20%',
+}
+
+const LoginStyle = {
+    'float'     : 'left'
+}
+
+const SignUpStyle = {
+    'float'     : 'right'
+}
+
+const background_home={
+    'backgroundImage' : "url(" + '../../../static/admin/img/background_home.jpg' + ")"
+
+}
+//backgroundImage: `url(${'../../../static/admin/img/background_home.jpg'})`
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -71,7 +90,7 @@ class Login extends React.Component {
         //const isLogin = isLoginCheck(this.props);
 
         return (
-            <form id={'Login'} onSubmit={this.submitForm} className={styles.form}>
+            <form id={'Login'} onSubmit={this.submitForm} className={styles.form} style={{FormStyle, LoginStyle}} >
                 <div className={styles.formContainer} >
                     <Textfield
                         id='email'
@@ -169,7 +188,7 @@ class SignUp extends React.Component {
         //const isLogin = isLoginCheck(this.props);
 
         return (
-            <form id={'Sign up'} onSubmit={this.submitForm} className={styles.form}>
+            <form id={'Sign up'} onSubmit={this.submitForm} className={styles.form} style={{FormStyle,SignUpStyle}} >
                 <div className={styles.formContainer} >
                     <Textfield
                         id='email'
@@ -275,7 +294,8 @@ class Home extends React.Component {
         return (
             <Page
                 heading={'Equalizer'}
-                style={{ display: 'flex', justifyContent: 'center' }}
+                display={'flex'} justifyContent={'center'}
+                id={'homepage'}
             >
               <Login/>
                 <SignUp/>

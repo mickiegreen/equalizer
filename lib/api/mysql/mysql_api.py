@@ -41,9 +41,13 @@ class MysqlApi(object):
         :param query: query object to execute
         """
 
+        print 'here2'
+
         q_params = default.copy()
         q_params.update(params)
         params = q_params
+
+        print params
 
         if mode not in ['select', 'update', 'insert', 'delete']:
             raise ValueError("Mode must be string with values "
@@ -118,6 +122,7 @@ class MysqlApi(object):
 
                 # getting data
                 for row in cursor.fetchall():
+                    print row
 
                     # creating json
                     data.append(dict(zip([_desc[0] for _desc in cursor.description], row)))

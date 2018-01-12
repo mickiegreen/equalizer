@@ -47,6 +47,7 @@ class GenericView(View):
 
         # fetching params from request
         params = self.params_to_dict(request.GET)
+        print(params ,"my params ")
 
         # execute query
         mysql_api = MysqlApi(engine=engine)
@@ -70,6 +71,7 @@ class GenericView(View):
 
     def get(self, request, query, *args, **kwargs):
         response = self.get_resource(request, query, *args, **kwargs)
+        print response
 
         return HttpResponse(json.dumps(response), content_type='application/json')
 
@@ -82,6 +84,7 @@ class GenericView(View):
 class LoginView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
+        print 'loginView'
         return super(LoginView, self).get(request, query=app.USER_LOGIN, *args, **kwargs)
 
 
@@ -94,6 +97,7 @@ class SignUpView(GenericView):
 class MostHatedSongView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
+        print("inside mostHated")
         return super(MostHatedSongView, self).get(request, query=app.MOST_HATED_SONGS, *args, **kwargs)
 
 
@@ -107,6 +111,11 @@ class PopularGenreSongsView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
         return super(PopularGenreSongsView, self).get(request, query=app.POPULAR_GENRE_SONGS, *args, **kwargs)
+
+class Equalizer(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(Equalizer, self).get(request, query=app.EQUALIZER, *args, **kwargs)
 
 
 class HatedGenreSongView(GenericView):

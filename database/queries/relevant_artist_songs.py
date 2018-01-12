@@ -15,7 +15,6 @@ RELEVANT_ARTIST_SONGS = {
                 'group by  artist_id)'
                 
                 'group by youtube_video_id'
-                
                 'limit 10',
 
 

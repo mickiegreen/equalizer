@@ -87,3 +87,9 @@ class SignUpView(GenericView):
     def post(self, request, *args, **kwargs):
         """ executing login request """
         return super(SignUpView, self).post(request, query=app.USER_SIGN_UP, *args, **kwargs)
+
+class MostHatedSongView(GenericView):
+    def post(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(SignUpView, self).post(request, query=app, *args, **kwargs)
+

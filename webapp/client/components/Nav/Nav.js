@@ -10,6 +10,7 @@ import ToolbarSection from 'react-mdc-web/lib/Toolbar/ToolbarSection';
 import ToolbarTitle from 'react-mdc-web/lib/Toolbar/ToolbarTitle';
 import ToolbarRow from 'react-mdc-web/lib/Toolbar/ToolbarRow';
 import Button from 'react-mdc-web/lib/Button/Button';
+import Input from 'react-mdc-web/lib/Textfield/Input';
 import Icon from 'react-mdc-web/lib/Icon/Icon';
 import styles from './Nav.scss';
 import { logoutViewer, getUserName } from 'modules/auth/jwtUtils';
@@ -79,9 +80,8 @@ const MobileDrawer = (props: NavPropsType) =>
     {...props}
   >
     <DrawerHeader>
-
       <DrawerHeaderContent>
-        <HomeLink className='button_home-link' title={props.title} />
+          <HomeLink className='button_home-link' title={props.title} />
       </DrawerHeaderContent>
     </DrawerHeader>
     <DrawerContent>
@@ -126,6 +126,11 @@ class Nav extends React.Component {
                 />
               </Button>
             </ToolbarSection>
+              <ToolbarSection >
+                  <ToolbarTitle className={styles.title} >
+                  </ToolbarTitle>
+                  <div><Input /></div>
+              </ToolbarSection>
             <ToolbarSection align='end' >
               <Links
                 isAuthenticated={isAuthenticated}

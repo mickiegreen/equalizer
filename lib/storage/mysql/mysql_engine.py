@@ -24,9 +24,9 @@ from overrides import overrides
 
 from mysql_tunnel_connection import MysqlTunnelConnection
 from ..storage_engine import StorageEngine
-from entity_interface import EntityInterface as Entity
-from config import LOGGER as logger
-import config as app
+from entities import AbstractEntity as Entity
+import logging
+logger = logging.getLogger()
 
 class MySqlEngine(StorageEngine):
     """ Adapter to connect to MySQL db """
@@ -273,11 +273,11 @@ class MySqlEngine(StorageEngine):
         self.update(entry)
         return entry.primary_key()
 
-    def truncate(self):
+    def truncate(self, entry):
         """ remove all entries from storage """
 
         # TODO fix query to truncate tables
-        query = app.TRUNCATE_QUERY
+        query = ''
 
         with self._connect() as cur:
 
@@ -331,6 +331,10 @@ class MySqlEngine(StorageEngine):
                 data.append(new_data)
 
         return data
+
+    def connection(self):
+        """ return new object connection """
+        return self._connect()
 
     def _execute(self, query):
         """ execute query """

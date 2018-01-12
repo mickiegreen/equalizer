@@ -24,7 +24,7 @@ from overrides import overrides
 import datetime
 
 from abstract_attribute import AbstractAttribute
-from equalizer.lib.data.parsers import DatetimeParser
+from equalizer.lib.parsers import DatetimeParser
 
 class DatetimeAttribute(AbstractAttribute):
     """ abstract attribute object """

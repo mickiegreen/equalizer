@@ -8,7 +8,7 @@ import styles from './App.scss';
 import '../../styles/global.scss';
 
 
-const title = 'Reango';
+const title = 'Equalizer';
 
 let App = (props: { children: Object }) =>
   <div className={styles.root} >

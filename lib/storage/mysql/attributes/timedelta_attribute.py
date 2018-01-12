@@ -24,7 +24,7 @@ from overrides import overrides
 import datetime
 
 from abstract_attribute import AbstractAttribute
-from equalizer.lib.data.parsers import TimeParser, DurationParser
+from equalizer.lib.parsers import DurationParser
 
 class TimedeltaAttribute(AbstractAttribute):
     """ abstract attribute object """

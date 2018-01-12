@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from graphene import AbstractType, Field, String
 
-from users.jwt_util import get_token_user_id
+from ..jwt_util import get_token_user_id
 from .definitions import Viewer
 
 

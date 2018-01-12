@@ -6,14 +6,19 @@ import '../../../../node_modules/react-mdl/extra/material.js';
 import Page from '../../../components/Page/Page';
 import RequireAuth from '../Auth';
 import styles from './Profile.scss';
+import { getUserName } from '../jwtUtils';
 
 
 class Profile extends React.Component {
 
   constructor(props) {
     super(props);
-    const { user } = this.props.user;
-    const { email } = this.props.user;
+    //const { user } = this.props.user;
+    //const { email } = this.props.user;
+      //const { user } = getUserName();
+      //const { email } = getUserName();
+      const { user } = 'Michael';
+      const { email } = 'michael.green@gmail.com';
     this.state = {
       email,
       password: '',

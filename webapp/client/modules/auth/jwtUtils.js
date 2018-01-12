@@ -1,10 +1,23 @@
 const tokenName = 'jwtToken';
+const userName = 'jwtUserName';
 
 export function setToken(token) {
   // Used when login or sign up mutation returns a jwt token successfully
   localStorage.setItem(tokenName, token);
-  window.location.replace('/polls');
-  window.location.reload();
+  window.location.replace('/equalizer');
+  //window.location.reload();
+}
+
+export function setUserName(myUserName) {
+    // Used when login or sign up mutation returns a jwt token successfully
+    localStorage.setItem(userName, myUserName);
+    //window.location.reload();
+}
+
+export function getUserName() {
+    // Used when login or sign up mutation returns a jwt token successfully
+    return localStorage.getItem(userName);
+    //window.location.reload();
 }
 
 export function logoutViewer() {
@@ -36,7 +49,7 @@ function isTokenExpired(parsedToken) {
 export function hasValidJwtToken() {
   let token = localStorage.getItem(tokenName);
   let parsedToken = '';
-  if (token) {
+  /*if (token) {
     parsedToken = parseJwt(token);
     if (isTokenExpired(parsedToken)) {
       localStorage.removeItem(tokenName);
@@ -44,6 +57,6 @@ export function hasValidJwtToken() {
       window.location.reload();
       token = null;
     }
-  }
+  }*/
   return { token, parsedToken };
 }

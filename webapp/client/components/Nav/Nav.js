@@ -12,7 +12,9 @@ import ToolbarRow from 'react-mdc-web/lib/Toolbar/ToolbarRow';
 import Button from 'react-mdc-web/lib/Button/Button';
 import Icon from 'react-mdc-web/lib/Icon/Icon';
 import styles from './Nav.scss';
-import { logoutViewer } from 'modules/auth/jwtUtils';
+import { logoutViewer, getUserName } from 'modules/auth/jwtUtils';
+import { AcountDropdown } from '../AccountDropdown/AccountDropdown';
+import AccountDropdown from "components/AccountDropdown/AccountDropdown";
 
 type NavPropsType = { title: string, isAuthenticated: boolean, isAdmin: boolean }
 
@@ -28,29 +30,37 @@ const AdminLink = () =>
 
 type LinksPropType = { isAuthenticated: NavPropsType.isAuthenticated, isAdmin: NavPropsType.isAdmin };
 
+const user={'name' : 'michael', 'avatar_url' : 'http://localhost:8000'};
+
 const links = (props: LinksPropType) => {
   let NavLinks;
   if (props.isAuthenticated) {
     NavLinks = () =>
       <div>
-        <NavLink className='button_polls-link' to='/polls' >
-          <Button >Polls</Button>
-        </NavLink>
+          {/*<NavLink className='button_login-link' to='/search' >
+              <Button >Search Results</Button>
+          </NavLink>*/}
+          <div style={{display: 'inline-block'}}>
+              <AccountDropdown user={user}/>
+          </div>
+          {/*<NavLink className='button_polls-link' >
+              <Button >{getUserName()} Profile</Button>
+        </NavLink>*/}
         {props.isAdmin ? <AdminLink /> : null}
-        <NavLink className='button_signout-link' to='#' >
+          {/*<NavLink className='button_signout-link' to='#' >
           <Button onClick={() => logoutViewer()} >Sign out</Button>
-        </NavLink>
+        </NavLink>*/}
       </div>;
   }
   if (!props.isAuthenticated) {
     NavLinks = () =>
       <div>
-          <NavLink className='button_login-link' to='/home' >
+          {/*<NavLink className='button_login-link' to='/home' >
               <Button >Home</Button>
           </NavLink>
           <NavLink className='button_login-link' to='/equalizer' >
               <Button >Equalizer</Button>
-          </NavLink>
+          </NavLink>*/}
         <NavLink className='button_signup-link' to='/signup' >
           <Button >Signup</Button>
         </NavLink>

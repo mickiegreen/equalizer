@@ -23,7 +23,7 @@
 from overrides import overrides
 
 from abstract_attribute import AbstractAttribute
-from equalizer.lib.data.parsers import IntegerParser
+from equalizer.lib.parsers import IntegerParser
 
 class MultiplePrimaryKey(AbstractAttribute):
     """ multiple primary key attribute object """

@@ -1,5 +1,6 @@
 import { ConnectionHandler } from 'relay-runtime';
-import { setToken } from '../jwtUtils';
+import { setToken, setUserName } from '../jwtUtils';
+import {hasValidJwtToken} from "modules/auth/jwtUtils";
 
 const {
   commitMutation,
@@ -29,18 +30,43 @@ const mutation = graphql`
     }
 `;
 
+const tokenName = 'jwtToken';
+
 function Login(environment, input: {email: string, password: string}) {
-  commitMutation(
+    return fetch(`/resources/users/login?email=${encodeURIComponent(input.email)}&password=${encodeURIComponent(input.password)}`, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+            authorization: `Bearer ${hasValidJwtToken().token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+    }).then(
+        response => {
+            if (response.ok) {
+                response.json().then(json => {
+                    //console.log(json);
+                    if(json.content.data[0].login > 0){
+                        setToken(json.content.data[0].user_id);
+                        setUserName(json.content.data[0].user_name);
+                    }
+                });
+            }
+        }
+    );
+  /*commitMutation(
     environment,
     {
       mutation,
+
       onCompleted: response =>
-        setToken(response.login.authFormPayload.tokens.token),
+      {setToken(response.login.authFormPayload.tokens.token); console.log(response)},
       variables: {
         input
-      }
+      },
+        onError: error => console.log(error)
     },
-  );
+  );*/
 }
 
 export default Login;

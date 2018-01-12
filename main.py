@@ -21,12 +21,12 @@
 # SOFTWARE.
 
 from equalizer.lib.storage.mysql import MySqlEngine
-from equalizer.lib.storage.mysql.entities import \
+from equalizer.database.structure import \
     JoinSongArtist, ArtistSongVideo, Artist, ArtistSong, \
     Song, JoinSongVideoArtist, JoinSongArtistNoVideo, YoutubeVideo
 
-from equalizer.lib.data import ItunesDataHandler
-from equalizer.lib.data import YoutubeDataHandler
+from database.data import ItunesDataHandler
+from database.data import YoutubeDataHandler
 
 from equalizer import config as app
 

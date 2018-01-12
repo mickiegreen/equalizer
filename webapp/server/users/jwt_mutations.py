@@ -1,7 +1,7 @@
 from graphene import relay, String, Field
 
 from .jwt_schema import TokenUnion, TokensSuccess, TokenError
-from .jwt_util import login_user
+from jwt_util import login_user
 from .schema import Viewer
 
 

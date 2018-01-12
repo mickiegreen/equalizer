@@ -23,7 +23,7 @@
 from overrides import overrides
 
 from abstract_attribute import AbstractAttribute
-from equalizer.lib.data.parsers import StringParser
+from equalizer.lib.parsers import StringParser
 
 class VarcharAttribute(AbstractAttribute):
     """ abstract attribute object """

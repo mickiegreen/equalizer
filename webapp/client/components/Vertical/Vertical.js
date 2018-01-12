@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Slider from 'react-rangeslider'
 import '../../styles/slider.scss'
 import Page from '../../components/Page/Page'
+import Button from 'react-mdc-web/lib/Button/Button';
 
 const equalizerSlider = {
     display: 'inline-block',
@@ -18,7 +19,9 @@ class Vertical extends React.Component {
         super(props);
         this.state = {
             value: 25,
-            reverseValue: 8
+            reverseValue: 8,
+            currentMode: 'random',
+            modes: ['random', 'update']
         };
     }
 
@@ -38,8 +41,15 @@ class Vertical extends React.Component {
 
     render() {
         const { value, reverseValue } = this.state
+        const mode = 'random';
         return (
             <Page style={centered}>
+                <div>
+                    <Button className='button_submit-login-form' value={value} onClick={this.handleChange}>I Feel Lucky</Button>
+                </div>
+                <div>
+                    <Button value={mode} onClick={this.handleChange}>Custom</Button>
+                </div>
             <div className='slider orientation-reversed'>
                 <div className='slider-group' style={equalizerSlider}>
                     <div className='slider-vertical'>

@@ -14,7 +14,9 @@ export function isAuthenticated(ComposedClass) {
     }
 
     componentWillMount() {
-      const parsedToken = hasValidJwtToken().parsedToken;
+      // const parsedToken = hasValidJwtToken().parsedToken;
+        const parsedToken = localStorage.getItem('jwtToken') != null;
+        console.log(parsedToken)
       if (parsedToken) {
         this.setState({ isAuthenticated: true });
         if (parsedToken.is_superuser) {
@@ -48,7 +50,7 @@ export function authenticatedRoute(requireAuth = true, ComposedClass) {
       const { router: { history }, isAuthenticated } = this.props;
       if (!requireAuth && isAuthenticated) {
         // If route is meant for non authenticated user redirect to profile
-        history.push('/polls');
+        history.push('/');
       } else if (requireAuth && !isAuthenticated) {
         // If route is meant for authenticated user redirect to login page
         history.push('/login');

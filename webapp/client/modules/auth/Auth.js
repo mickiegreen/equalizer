@@ -89,7 +89,7 @@ class Login extends React.Component {
               onChange={this.handleFieldChange.bind(this)}
               value={input.email}
               floatingLabel='Email'
-              // error={this.state.errorEmail}
+              //error={this.state.errorEmail}
 
             />
             <br />
@@ -101,7 +101,7 @@ class Login extends React.Component {
               value={input.password}
               floatingLabel='Password'
               type='password'
-              // error={this.state.errorPassword}
+              //error={this.state.errorPassword}
             />
             {!isLogin ?
               <Textfield

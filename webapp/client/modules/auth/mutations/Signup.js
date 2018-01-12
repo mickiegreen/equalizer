@@ -1,4 +1,6 @@
 import { ConnectionHandler } from 'relay-runtime';
+import {hasValidJwtToken} from "modules/auth/jwtUtils";
+import { withRouter } from 'react-router';
 
 const {
   commitMutation,
@@ -29,15 +31,30 @@ const mutation = graphql`
 `;
 
 function Signup(environment, input: {email: string, password: string}) {
-  commitMutation(
-    environment,
-    {
-      mutation,
-      variables: {
-        input
-      }
-    },
-  );
+    return fetch('/resources/users', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            authorization: `Bearer ${hasValidJwtToken().token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        }, // Add authentication and other headers here
+        body: JSON.stringify({
+            email : input.email,
+            password : input.password
+        }),
+    }).then(
+        response => {
+            console.log(response);
+            if (response.ok) {
+                response.json().then(json => {
+                    if(json.rc >= 0){
+                        window.location.replace('/login');
+                    }
+                });
+            }
+        }
+    );
 }
 
 export default Signup;

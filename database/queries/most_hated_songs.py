@@ -17,5 +17,5 @@ MOST_HATED_SONGS = {
 
     'args': ['release_date'],
     'mode'  : 'select',
-    'default': random.randint(1905, 2018)
+    'default' : {"year":random.randint(1905,2018)}
 }

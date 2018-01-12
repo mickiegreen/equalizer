@@ -15,5 +15,5 @@ MOST_POPULAR_SONGS = {
                'limit 10) as a ',
     'args': ['release_date'],
     'mode'  : 'select',
-    'default' : random.randint(1905,2018)
+    'default' : {"year":random.randint(1905,2018)}
 }

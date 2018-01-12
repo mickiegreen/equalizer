@@ -26,7 +26,7 @@ RELEVANT_ARTIST_SONGS = {
                 'group by youtube_video_id '
                 'limit 10 ',
     'mode'  : 'select',
-    'default' : parseGenre()
+    'default' : {"genre":parseGenre()}
 }
 
 SELECT_GENRE = {

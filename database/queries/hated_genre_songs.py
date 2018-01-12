@@ -13,7 +13,6 @@ HATED_GENRE_SONGS = {
                 'group by video_id '
                 'Order by  rating  '
                 'limit  1) as  worst_song ',
-
     'mode': 'select'
 
 }

@@ -8,10 +8,10 @@ POPULAR_GENRE_SONGS = {
                 'Select genre , sum(views) '
                 'From join_song_video_artist '
                 'group by genre '
-                'Order by  sum(views) ASC '
+                'Order by  sum(views) DESC '
                 'Limit 1 ) as genre_table) '
                 'group by video_id '
-                'Order by  rating ASC '
+                'Order by  rating DESC '
                 'limit  1) as  loved_song ',
 
     'mode': 'select'

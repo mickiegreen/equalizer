@@ -106,6 +106,11 @@ class MostPopularSongsView(GenericView):
         """ executing login request """
         return super(MostPopularSongsView, self).get(request, query=app.MOST_POPULAR_SONGS, *args, **kwargs)
 
+class SelectGenre(GenericView) :
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(SelectGenre, self).get(request, query=app.SELECT_GENRE, *args, **kwargs)
+
 
 class PopularGenreSongsView(GenericView):
     def get(self, request, *args, **kwargs):

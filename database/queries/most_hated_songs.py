@@ -1,3 +1,5 @@
+import random
+
 MOST_HATED_SONGS = {
     'query' :
                'SELECT youtube_video_id, youtube_video_title '
@@ -10,10 +12,10 @@ MOST_HATED_SONGS = {
                'WHERE country IN(select country from song where YEAR(release_date) = "%s") ' 
                'GROUP BY id) rating_table '                
                'JOIN youtube_video  as main_table ON rating_table.id = main_table.youtube_video_id '
-               'ORDER BY rating '
+               'ORDER BY rating  '
                'limit 1 ) as a',
 
     'args': ['release_date'],
     'mode'  : 'select',
-
+    'default': random.randint(1905, 2018)
 }

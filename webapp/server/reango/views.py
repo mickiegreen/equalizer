@@ -22,6 +22,7 @@
 
 from django.views.generic import View
 from django.http import HttpResponse
+import random
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
@@ -113,6 +114,15 @@ class SelectGenreView(GenericView) :
     def get(self, request, *args, **kwargs):
         """ executing login request """
         return super(SelectGenreView, self).get(request, query=app.SELECT_GENRE, *args, **kwargs)
+
+
+class SelectFunctionRandomView(GenericView) :
+    def get(self, request, *args, **kwargs):
+        query_list=[app.MOST_POPULAR_SONGS,app.DISLIKES_SONGS,app.HATED_GENRE_SONGS,app.LONGEST_ARTIST_SONG,app.MOST_HATED_SONGS,app.POPULAR_GENRE_SONGS,app.RELEVANT_ARTIST_SONGS]
+        random.shuffle(query_list)
+        """ executing login request """
+        return super(SelectFunctionRandomView, self).get(request, query=query_list[0], *args, **kwargs)
+
 
 class LongestArtistSongView(GenericView) :
     def get(self, request, *args, **kwargs):

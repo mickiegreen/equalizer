@@ -75,6 +75,7 @@
 }*/
 a {
     text-decoration: none;
+    color : rgb(255,0,0) !important;
 }
 .account-dropdown__avatar {
     width: 20px;
@@ -85,8 +86,13 @@ a {
 .account-dropdown .dropdown__trigger {
     line-height: 20px;
 }
+
+.dropdown__content {
+    position: fixed;
+}
+
 .account-dropdown .dropdown__trigger:after {
-    content: '\25BE';
+    /*content: '\25BE';*/
     margin: 0 0 0 10px;
 }
 .account-dropdown__avatar,
@@ -98,6 +104,7 @@ a {
     border-top: rgba(0, 0, 0, 0.05) 1px solid;
     background: #ffffff;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+    margin-right: 10px !important;
 }
 .account-dropdown__quick-links,
 .account-dropdown__management-links {
@@ -112,6 +119,15 @@ a {
 .account-dropdown__link {
     margin: 5px 0;
 }
+
+.account-dropdown__link__anchor {
+    color: #1c1c1c !important;
+}
+
+.account-dropdown__identity.account-dropdown__segment {
+    color: #1c1c1c !important;
+}
+
 .code {
     border: #ebebeb 1px solid;
 }

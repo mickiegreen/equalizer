@@ -6,12 +6,13 @@ import Button from 'react-mdc-web/lib/Button/Button';
 
 const equalizerSlider = {
     display: 'inline-block',
-    width: '10%'
+    width: '20%'
 }
 
 const centered = {
     margin: 'auto',
-    width: '50%'
+    width: '100%',
+    maxWidth: '500px'
 }
 
 class Vertical extends React.Component {
@@ -43,55 +44,13 @@ class Vertical extends React.Component {
         const { value, reverseValue } = this.state
         const mode = 'random';
         return (
-            <Page style={centered}>
-                <div>
-                    <Button className='button_submit-login-form' value={value} onClick={this.handleChange}>I Feel Lucky</Button>
-                </div>
-                <div>
-                    <Button value={mode} onClick={this.handleChange}>Custom</Button>
-                </div>
+            <div style={centered}>
             <div className='slider orientation-reversed'>
                 <div className='slider-group' style={equalizerSlider}>
                     <div className='slider-vertical'>
                         <Slider
-                            min={50}
-                            max={100}
-                            value={value}
-                            orientation='vertical'
-                            onChange={this.handleChange}
-                        />
-                        <div className='value'>{value}</div>
-                    </div>
-                </div>
-                <div className='slider-group' style={equalizerSlider}>
-                    <div className='slider-vertical'>
-                        <Slider
-                            min={50}
-                            max={100}
-                            value={value}
-                            orientation='vertical'
-                            onChange={this.handleChange}
-                        />
-                        <div className='value'>{value}</div>
-                    </div>
-                </div>
-                <div className='slider-group' style={equalizerSlider}>
-                    <div className='slider-vertical'>
-                        <Slider
-                            min={50}
-                            max={100}
-                            value={value}
-                            orientation='vertical'
-                            onChange={this.handleChange}
-                        />
-                        <div className='value'>{value}</div>
-                    </div>
-                </div>
-                <div className='slider-group' style={equalizerSlider}>
-                    <div className='slider-vertical'>
-                        <Slider
-                            min={50}
-                            max={100}
+                            min={0}
+                            max={1}
                             value={value}
                             orientation='vertical'
                             onChange={this.handleChange}
@@ -103,7 +62,43 @@ class Vertical extends React.Component {
                     <div className='slider-vertical'>
                         <Slider
                             min={0}
-                            max={10}
+                            max={1}
+                            value={value}
+                            orientation='vertical'
+                            onChange={this.handleChange}
+                        />
+                        <div className='value'>{value}</div>
+                    </div>
+                </div>
+                <div className='slider-group' style={equalizerSlider}>
+                    <div className='slider-vertical'>
+                        <Slider
+                            min={0}
+                            max={1}
+                            value={value}
+                            orientation='vertical'
+                            onChange={this.handleChange}
+                        />
+                        <div className='value'>{value}</div>
+                    </div>
+                </div>
+                <div className='slider-group' style={equalizerSlider}>
+                    <div className='slider-vertical'>
+                        <Slider
+                            min={0}
+                            max={1}
+                            value={value}
+                            orientation='vertical'
+                            onChange={this.handleChange}
+                        />
+                        <div className='value'>{value}</div>
+                    </div>
+                </div>
+                <div className='slider-group' style={equalizerSlider}>
+                    <div className='slider-vertical'>
+                        <Slider
+                            min={0}
+                            max={1}
                             value={reverseValue}
                             orientation='vertical'
                             onChange={this.handleChangeReverse}
@@ -112,7 +107,7 @@ class Vertical extends React.Component {
                     </div>
                 </div>
             </div>
-            </Page>
+            </div>
         );
     }
 

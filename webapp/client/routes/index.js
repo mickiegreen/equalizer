@@ -5,6 +5,7 @@ import authRoutes from './auth';
 import pollsRoutes from './polls';
 import Profile from 'modules/auth/Profile/Profile';
 import SearchResults from "components/SearchResults/SearchResults";
+import History from "components/History/History";
 import Home from "components/Home/Home";
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
         {
             path: '/profile',
             component: Profile,
+            queries: 'queries'
+        },
+        {
+            path: '/history',
+            component: History,
             queries: 'queries'
         },
       ...authRoutes,

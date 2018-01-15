@@ -1,5 +1,9 @@
 @import '../../styles/variables.scss';
 
+img {
+  padding-right: 5px;
+}
+
 .title {
   color: $white;
   display: none

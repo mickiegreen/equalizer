@@ -1,14 +1,19 @@
 .root {
   padding: 0 10vh;
+  color: white;
+  font-family: 'GeosansLight';
+  /*background-color: rgba(0, 0, 0, 0.37);*/
 
   .heading {
     font-size: 2em;
     font-weight: normal;
     padding-left: 10px;
+    color: white;
+    font-family: 'GeosansLight';
   }
 
   .body {
-    max-width: 80%;
+    max-width: 100%;
     margin: auto;
   }
 }

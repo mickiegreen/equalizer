@@ -2,7 +2,7 @@ import { ConnectionHandler } from 'relay-runtime';
 import { setToken, setUserName } from '../jwtUtils';
 import {hasValidJwtToken} from "modules/auth/jwtUtils";
 
-const {
+/*const {
   commitMutation,
   graphql,
 } = require('react-relay');
@@ -28,7 +28,7 @@ const mutation = graphql`
                 }
         }
     }
-`;
+`;*/
 
 const tokenName = 'jwtToken';
 

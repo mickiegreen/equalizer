@@ -1,0 +1,99 @@
+body /deep/{
+    background-color: #00aced;
+}
+
+.form {
+    width: 100%;
+    display: block;
+    justify-content: center;
+    color: white;
+    font-family: 'GeosansLight';
+    background-color: rgba(0,0,0,0.37);
+    /* padding: 22px; */
+    border: 1px solid white;
+    border-radius: 6px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.root {
+    padding: inherit;
+}
+
+.formStyle {
+    padding: 0%;
+    padding-bottom: 3%;
+}
+
+.formHeader{
+    font-size: 2em;
+    font-family: 'GeosansLight';
+}
+
+.formContainer {
+    max-width: 500px;
+    width: 71%;
+    padding-bottom: 10%;
+    margin: auto;
+}
+
+.formActions {
+    float: right;
+    margin-top: 10px;
+    height: 50px
+
+}
+
+.textFields {
+    width: 100%;
+    margin: auto;
+    margin-bottom: 15px;
+    color: white;
+    font-family: 'GeosansLight';
+input {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
+    color: white;
+    font-family: 'monospace';
+    font-size: 12px;
+    font-weight: normal;
+}
+
+label {
+    color: white !important;
+    font-weight: bolder;
+}
+
+}
+
+input, textarea {
+
+    background-color : #d1d1d1;
+
+}
+
+.mdc-checkbox__background /deep/{
+    border: 2px solid #ffffff !important;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset;
+    border-radius: 0px;
+    padding: 3%;
+    height: 0px;
+}
+
+
+.mdc-textfield__label--float-above-fixed /deep/ {
+    //transform: translateY(-100%) scale(0.75, 0.75);
+    color: white;
+}
+
+
+.mdc-textfield.mdc-textfield--upgraded::after {
+    background-color: white !important;
+}
+
+*::after {
+    background-color: white !important;
+}

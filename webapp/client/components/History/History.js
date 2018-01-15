@@ -4,7 +4,7 @@ import { Player } from '../../../node_modules/video-react';
 import Page from '../Page/Page';
 /*import "../../../node_modules/video-react/styles/scss/video-react.scss";*/
 import '../../../node_modules/react-aspect-ratio/aspect-ratio.css';
-import styles from './SearchResults.css';
+import styles from './History.css';
 import AspectRatio from 'react-aspect-ratio';
 
 const frameStyle = {
@@ -29,7 +29,7 @@ const wrapperFrameStyle = {
     borderRadius: '6px'
 }
 
-class SearchResults extends React.Component {
+class History extends React.Component {
 
     constructor(props){
         super(props);
@@ -65,7 +65,7 @@ class SearchResults extends React.Component {
 
     render(){
         return (
-            <Page heading='Search Results' >
+            <Page heading='Your History' >
                 <div>
                     <h1>
                         {this.state.subtitle}
@@ -88,4 +88,4 @@ class SearchResults extends React.Component {
     }
 }
 
-export default SearchResults;
+export default History;

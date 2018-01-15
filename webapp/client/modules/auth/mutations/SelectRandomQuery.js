@@ -1,10 +1,10 @@
 import { ConnectionHandler } from 'relay-runtime';
 import { setToken, setUserName } from '../jwtUtils';
-import {hasValidJwtToken} from "modules/auth/jwtUtils";
+import {getUserName, hasValidJwtToken, getToken} from "modules/auth/jwtUtils";
 
 /*const {
-  commitMutation,
-  graphql,
+    commitMutation,
+    graphql,
 } = require('react-relay');
 
 const mutation = graphql`
@@ -32,8 +32,8 @@ const mutation = graphql`
 
 const tokenName = 'jwtToken';
 
-function Dislikesongs(environment, input: {}) {
-    return fetch(`resources/videos/dislikesongs`, {
+function SelectRandomQuery(environment, input: {}) {
+    return fetch(`resources/videos/selectrandomquery?user_id=${getToken()}`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -45,24 +45,25 @@ function Dislikesongs(environment, input: {}) {
         response => {
             if (response.ok) {
                 response.json().then(json => {
-                console.log(json);
+                    console.log(json);
+
                 });
             }
         }
     );
-  /*commitMutation(
-    environment,
-    {
-      mutation,
+    /*commitMutation(
+      environment,
+      {
+        mutation,
 
-      onCompleted: response =>
-      {setToken(response.login.authFormPayload.tokens.token); console.log(response)},
-      variables: {
-        input
+        onCompleted: response =>
+        {setToken(response.login.authFormPayload.tokens.token); console.log(response)},
+        variables: {
+          input
+        },
+          onError: error => console.log(error)
       },
-        onError: error => console.log(error)
-    },
-  );*/
+    );*/
 }
 
-export default Dislikesongs;
+export default SelectRandomQuery;

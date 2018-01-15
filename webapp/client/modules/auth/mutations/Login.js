@@ -45,8 +45,8 @@ function Login(environment, input: {email: string, password: string}) {
         response => {
             if (response.ok) {
                 response.json().then(json => {
-                    //console.log(json);
-                    if(json.content.data[0].login > 0){
+                    if(json.rc >= 0 && json.content.data[0].login > 0){
+                        //console.log(json.content.data[0].login );
                         setToken(json.content.data[0].user_id);
                         setUserName(json.content.data[0].user_name);
                     }

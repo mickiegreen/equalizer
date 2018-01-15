@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropdown, { DropdownTrigger, DropdownContent } from '../../../node_modules/react-simple-dropdown/lib/components/Dropdown.js';
-import Link from 'react-router-dom';
+import Link from 'react-router-dom'
 import styles from './AccountDropdown.css';
+import {logoutViewer} from "modules/auth/jwtUtils";
 
 class AccountDropdown extends Component {
     constructor (props) {
@@ -12,6 +13,7 @@ class AccountDropdown extends Component {
     }
 
     handleLinkClick () {
+        logoutViewer();
         this.refs.dropdown.hide();
     }
 
@@ -37,12 +39,12 @@ class AccountDropdown extends Component {
                     </div>
                     <ul className="account-dropdown__quick-links account-dropdown__segment">
                         <li className="account-dropdown__link">
-                            <a className="account-dropdown__link__anchor" href="#/profile" onClick={this.handleLinkClick}>
+                            <a className="account-dropdown__link__anchor" href="/profile" onClick={this.handleLinkClick}>
                                 Your profile
                             </a>
                         </li>
                         <li className="account-dropdown__link">
-                            <a className="account-dropdown__link__anchor" href="#/history" onClick={this.handleLinkClick}>
+                            <a className="account-dropdown__link__anchor" href="/history">
                                 Your history
                             </a>
                         </li>

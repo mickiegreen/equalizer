@@ -13,15 +13,37 @@ import Button from 'react-mdc-web/lib/Button/Button';
 import Input from 'react-mdc-web/lib/Textfield/Input';
 import Icon from 'react-mdc-web/lib/Icon/Icon';
 import styles from './Nav.scss';
-import { logoutViewer, getUserName } from 'modules/auth/jwtUtils';
+import {logoutViewer, getUserName, getToken} from 'modules/auth/jwtUtils';
 import { AcountDropdown } from '../AccountDropdown/AccountDropdown';
 import AccountDropdown from "components/AccountDropdown/AccountDropdown";
 
 type NavPropsType = { title: string, isAuthenticated: boolean, isAdmin: boolean }
 
+const iconStyle = {
+    height: '35px',
+    width: '35px',
+    background: '#fff',
+    borderRadius: '19px',
+    maxWidth: '97%',
+    maxHeight: '97%',
+    paddingRight: '0px',
+}
+
+const iconStyleSearch = {
+    height: '35px',
+    width: '35px',
+    borderRadius: '19px',
+    maxWidth: '97%',
+    maxHeight: '97%',
+    paddingRight: '0px',
+}
+
 const HomeLink = ({ title }: { title: NavPropsType.title }) =>
   <NavLink to='/' >
-    <Button >{title}</Button>
+    <Button >
+        {/*<img className="account-dropdown__avatar" src='../../../assets/admin/img/vid-btn-play-icon2.png' />*/}
+        <img className="account-dropdown__avatar" style={iconStyle} src='../../../assets/admin/img/PlayButton.png' />
+    </Button>
   </NavLink>;
 
 const AdminLink = () =>
@@ -31,8 +53,14 @@ const AdminLink = () =>
 
 type LinksPropType = { isAuthenticated: NavPropsType.isAuthenticated, isAdmin: NavPropsType.isAdmin };
 
-const user={'name' : 'michael', 'avatar_url' : 'http://localhost:8000'};
+const headerStyle = {
+    color : '#ffffff',
+    fontWeight : '650',
+    //fontWeight : 300,
+    fontFamily: 'GeosansLight'
+}
 
+const user={'name' : 'michael', 'avatar_url' : '../../../assets/admin/img/profile.png'};
 const links = (props: LinksPropType) => {
   let NavLinks;
   if (props.isAuthenticated) {
@@ -41,21 +69,15 @@ const links = (props: LinksPropType) => {
           {/*<NavLink className='button_login-link' to='/search' >
               <Button >Search Results</Button>
           </NavLink>*/}
-          <div style={{display: 'inline-block'}}>
+          <div style={{display: 'inline-block', paddingTop: '9px', paddingRight: '29px', cursor : 'pointer'}}>
               <AccountDropdown user={user}/>
           </div>
-          {/*<NavLink className='button_polls-link' >
-              <Button >{getUserName()} Profile</Button>
-        </NavLink>*/}
         {props.isAdmin ? <AdminLink /> : null}
-          {/*<NavLink className='button_signout-link' to='#' >
-          <Button onClick={() => logoutViewer()} >Sign out</Button>
-        </NavLink>*/}
       </div>;
   }
   if (!props.isAuthenticated) {
     NavLinks = () =>
-      <div>
+      <div style={{minWidth : '140px'}}>
           {/*<NavLink className='button_login-link' to='/home' >
               <Button >Home</Button>
           </NavLink>
@@ -63,10 +85,10 @@ const links = (props: LinksPropType) => {
               <Button >Equalizer</Button>
           </NavLink>*/}
         <NavLink className='button_signup-link' to='/signup' >
-          <Button >Signup</Button>
+          <Button style={headerStyle}>Signup</Button>
         </NavLink>
         <NavLink className='button_login-link' to='/login' >
-          <Button >Login</Button>
+          <Button style={headerStyle}>Login</Button>
         </NavLink>
       </div>;
   }
@@ -129,9 +151,18 @@ class Nav extends React.Component {
               <ToolbarSection >
                   <ToolbarTitle className={styles.title} >
                   </ToolbarTitle>
-                  <div><Input /></div>
+                  <div style={{display : getToken() > 0 ? 'block' : 'none' }}>
+                      <Input style={{ margin: 'auto', width: '66%', backgroundColor: 'rgb(90, 88, 88)', color : '#fff', borderRadius: '21px', padding: '8px'}}/>
+                      <Button
+                          onClick={() => {
+                              this.setState({ search: true });
+                          }}
+                      >
+                          <img className="account-dropdown__avatar" style={iconStyleSearch} src='../../../assets/admin/img/search.svg' />
+                      </Button>
+                  </div>
               </ToolbarSection>
-            <ToolbarSection align='end' >
+            <ToolbarSection align='end'> {/*style={{position: 'absolute', right: '10px'}}*/}
               <Links
                 isAuthenticated={isAuthenticated}
                 isAdmin={isAdmin}

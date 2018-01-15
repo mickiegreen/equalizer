@@ -23,6 +23,9 @@ class Profile extends React.Component {
       email,
       password: '',
     };
+    if (localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken') === undefined ){
+      window.location.replace('/');
+    }
   }
 
   handlePasswordChange = (e) => {

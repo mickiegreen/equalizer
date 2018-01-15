@@ -8,6 +8,17 @@ import LoginUserMutation from './mutations/Login';
 import SignupUserMutation from './mutations/Signup';
 import { authenticatedRoute } from './utils';
 import styles from './Auth.scss';
+import { logoutViewer, getUserName } from 'modules/auth/jwtUtils';
+
+const formButton = {
+    border: '1px solid #ffffff',
+    borderRadius: '6px',
+    color: '#fff',
+    fontFamily: 'GeosansLight',
+    fontWeight: 'bolder',
+    width: '140px',
+    backgroundColor: 'rgba(0,0,0,.37)',
+}
 
 function isLoginCheck(props) {
   return props.router.match.path === '/login';
@@ -74,23 +85,27 @@ class Login extends React.Component {
 
     return (
       <Page
-        heading={isLogin ? 'Login' : ' Sign up'}
-        style={{ display: 'flex', justifyContent: 'center' }}
+        heading={false}
+        style={{ display: 'flex', justifyContent: 'center', color : 'white', fontFamily: 'GeosansLight', padding: '0'  }}
+
       >
+        <div className={styles.formStyle}>
         <form
           id={isLogin ? 'Login' : ' Sign up'}
           onSubmit={this.submitForm}
           className={styles.form}
         >
+
           <div className={styles.formContainer} >
+              <div style={{display: 'block', height:'35px'}}>
+                  <h1 className={styles.formHeader}>{isLogin ? 'Login' : ' Sign up'}</h1>
+              </div>
             <Textfield
               id='email'
               className={styles.textFields}
               onChange={this.handleFieldChange.bind(this)}
               value={input.email}
               floatingLabel='Email'
-              //error={this.state.errorEmail}
-
             />
             <br />
 
@@ -101,7 +116,6 @@ class Login extends React.Component {
               value={input.password}
               floatingLabel='Password'
               type='password'
-              //error={this.state.errorPassword}
             />
             {!isLogin ?
               <Textfield
@@ -119,22 +133,23 @@ class Login extends React.Component {
 
             <div style={{ textAlign: 'right' }} >
 
-              <a href='#' >Forgot password</a>
+                {/*<a href='#' >Forgot password</a>*/}
               <Button
                 primary
                 className='button_submit-login-form'
+                style={formButton}
               >{isLogin ? 'Login' : 'Sign up'}</Button>
-              <br />
               { isLogin ?
                 <div>
                   <Checkbox
                     label='Remember me'
-                    style={{ textAlign: 'right' }}
+                    style={{ textAlign: 'right', border: '2px solid #ffffff' }}
                   /> <label>Remember Me</label>
                 </div> : null }
             </div>
           </div>
         </form>
+        </div>
       </Page>
     );
   }

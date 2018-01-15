@@ -5,7 +5,7 @@ import equalizer.config as app
 import random
 
 '''
-parseGenre() & parseCountry are function which returns a random genre/country from the DB.
+parseGenre() & parseCountry() are function which returns a random genre/country from the DB.
 Each function creates an array of all genres/countries in DB using a query which returns all genres/countries from DB.
 Then randomly chooses 1 of them and return it.
 '''

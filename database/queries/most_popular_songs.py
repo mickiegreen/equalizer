@@ -30,7 +30,7 @@ MOST_POPULAR_SONGS = {
 
 HARELZ_MOST_POPULAR_SONGS = {
     'query' :  '''
-    SELECT C.youtube_video_title, C.youtube_video_id
+    SELECT C.youtube_video_title, distinct C.youtube_video_id
     FROM
     (
         SELECT A.youtube_video_title, A.youtube_video_id, A.favorites,

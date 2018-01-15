@@ -30,20 +30,20 @@ MOST_POPULAR_SONGS = {
 #TODO: normlize the parameters in score calculation (comments/max_comments)
 HARELZ_MOST_POPULAR_SONGS = {
     'query' :  '''
-    SELECT C.youtube_video_title, C.youtube_video_id
+    	SELECT C.youtube_video_title, C.youtube_video_id
     FROM
     (
-        SELECT A.youtube_video_title, A.youtube_video_id, A.favorites,
+        (SELECT A.youtube_video_title, A.youtube_video_id, A.favorites,
                 A.views + 2.5 * A.comments + A.likes + A.dislikes AS score
         FROM join_song_video_artist AS A
-        ORDER BY A.score
-        LIMIT 10
+        ORDER BY score DESC
+        LIMIT 10)
         UNION (
         SELECT B.youtube_video_title, B.youtube_video_id, B.favorites,
                 0 AS score
         FROM join_song_video_artist AS B
-        WHERE B.comments = 0
-        ORDER BY B.views
+        WHERE B.comments=0 AND artist_name != 'Live'
+        ORDER BY B.views DESC
         LIMIT 5
         )
     ) AS C

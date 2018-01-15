@@ -50,6 +50,17 @@ EQUALIZER = {
     'default' :{"genre": parseGenre() , "country" : parseCountry()}
 }
 
+HARELZ_EQUALIZER = {
+    'query': '''SELECT 0.1*views + 0.2*comments + 0.3*likes + 0.2*(case when genre="%s" 1 else 0 end) + 0.2*(case when country="%s" 1 else 0 end) AS score,
+                        youtube_video_title, youtube_video_id 
+                FROM join_song_video_artist
+                ORDER BY score
+                LIMIT 10''',
+    'mode'  : 'select',
+    'default' :{"genre": parseGenre() , "country" : parseCountry()}
+}
+
+
 # a query we use to generate a random genre for the 'equalizer' query.
 SELECT_GENRE = {
     'query':

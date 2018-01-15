@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
 from views import LoginView, SignUpView,RandomQueryView, RelevantArtistView, HatedGenreSongView, \
     PopularSongsView, MostLikedSongsView, MostUnlikedSongView,EqualizerView,LongestArtistSongView,\
-    DislikeSongsView
+    DislikeSongsView,SearchHistoryView,ShowHistoryPageView
 
 urlpatterns = [
     url(r'^resources/users/login', LoginView.as_view()),
@@ -34,6 +34,10 @@ urlpatterns = [
     url(r'^resources/videos/longestartistsong', LongestArtistSongView.as_view()),
     url(r'^resources/videos/randomQuery', RandomQueryView.as_view()),
     url(r'^resources/videos/dislikesongs', DislikeSongsView.as_view()),
+
+    url(r'^resources/videos/searchhistoryview', SearchHistoryView.as_view()),
+    url(r'^resources/videos/showhistorypage', ShowHistoryPageView.as_view()),
+
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^graphql', csrf_exempt(GraphQLView.as_view(graphiql=True))),

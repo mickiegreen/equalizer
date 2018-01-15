@@ -20,7 +20,18 @@ def parseCountry () :
     random.shuffle(countries)
     return countries[0]
 
-
+'''
+This query select top 10 music videos based on a score we made using the following parameters:
+1.views
+2.comments
+3.likes
+4.genre
+5.country
+This is the user custom playlist making query, the user set a value to each parameter by it's importance. 
+The values are between 1 to 10, and the score is constructed in the following way:
+score of a row = row_views*user_views_value + row_likes*user_likes_value ...
+Then pick 10 rows who has the highest score (order it by score and limit select to only 10 rows).
+'''
 
 EQUALIZER = {
     'query' :   'SELECT 0.1*views + 0.2*comments + 0.3*likes + 0.2*genre + 0.2*country AS score, youtube_video_title, youtube_video_id '

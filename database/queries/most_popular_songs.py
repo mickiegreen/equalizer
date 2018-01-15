@@ -30,7 +30,7 @@ MOST_POPULAR_SONGS = {
 
 HARELZ_MOST_POPULAR_SONGS = {
     'query' :  '''
-    SELECT C.youtube_video_title, distinct C.youtube_video_id
+    SELECT C.youtube_video_title, C.youtube_video_id
     FROM
     (
         SELECT A.youtube_video_title, A.youtube_video_id, A.favorites,
@@ -42,6 +42,7 @@ HARELZ_MOST_POPULAR_SONGS = {
         SELECT B.youtube_video_title, B.youtube_video_id, B.favorites,
                 0 AS score
         FROM join_song_vide_artist AS B
+        WHERE B.comments = 0
         ORDER BY B.views
         LIMIT 5
         )

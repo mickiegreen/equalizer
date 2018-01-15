@@ -19,15 +19,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
 from views import LoginView, SignUpView,RandomQueryView, RelevantArtistView, HatedGenreSongView, \
-    PopularGenreSongsView, MostPopularSongsView, MostHatedSongView,EqualizerView,LongestArtistSongView,\
+    PopularSongsView, MostLikedSongsView, MostUnlikedSongView,EqualizerView,LongestArtistSongView,\
     DislikeSongsView
 
 urlpatterns = [
     url(r'^resources/users/login', LoginView.as_view()),
     url(r'^resources/users', csrf_exempt(SignUpView.as_view())),
-    url(r'^resources/videos/mostHated', MostHatedSongView.as_view()),
-    url(r'^resources/videos/mostPopular', MostPopularSongsView.as_view()),
-    url(r'^resources/videos/popularGenre', PopularGenreSongsView.as_view()),
+    url(r'^resources/videos/mostUnliked', MostUnlikedSongView.as_view()),
+    url(r'^resources/videos/mostlikedsongs', MostLikedSongsView.as_view()),
+    url(r'^resources/videos/mostpopularsongs', PopularSongsView.as_view()),
     url(r'^resources/videos/equalizer', EqualizerView.as_view()),
     url(r'^resources/videos/hatedGenre', HatedGenreSongView.as_view()),
     url(r'^resources/videos/relevantView', RelevantArtistView.as_view()),

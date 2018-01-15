@@ -94,10 +94,10 @@ class SignUpView(GenericView):
         return super(SignUpView, self).post(request, query=app.USER_SIGN_UP, *args, **kwargs)
 
 
-class MostHatedSongView(GenericView):
+class MostUnlikedSongView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(MostHatedSongView, self).get(request, query=app.MOST_HATED_SONGS, *args, **kwargs)
+        return super(MostUnlikedSongView, self).get(request, query=app.MOST_UNLIKED_SONGS, *args, **kwargs)
 
 class DislikeSongsView(GenericView):
     def get(self, request, *args, **kwargs):
@@ -105,10 +105,10 @@ class DislikeSongsView(GenericView):
         return super(DislikeSongsView, self).get(request, query=app.DISLIKES_SONGS, *args, **kwargs)
 
 
-class MostPopularSongsView(GenericView):
+class MostLikedSongsView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(MostPopularSongsView, self).get(request, query=app.MOST_POPULAR_SONGS, *args, **kwargs)
+        return super(MostLikedSongsView, self).get(request, query=app.MOST_LIKED_SONGS, *args, **kwargs)
 
 class RelevantArtistView(GenericView) :
     def get(self, request, *args, **kwargs):
@@ -140,10 +140,10 @@ class LongestArtistSongView(GenericView) :
         return super(LongestArtistSongView, self).get(request, query=app.LONGEST_ARTIST_SONG, *args, **kwargs)
 
 
-class PopularGenreSongsView(GenericView):
+class PopularSongsView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(PopularGenreSongsView, self).get(request, query=app.POPULAR_GENRE_SONGS, *args, **kwargs)
+        return super(PopularSongsView, self).get(request, query=app.MOST_POPULAR_SONGS, *args, **kwargs)
 
 
 class HatedGenreSongView(GenericView):
@@ -158,9 +158,9 @@ class RandomQueryView(GenericView):
                        'The Most Popular Songs In Genre "%s"':{'query':app.POPULAR_GENRE_SONGS,'keys':'genre'},
                        'The Songs Of The Most Verbose Artist "%s"':app.LONGEST_ARTIST_SONG,
                        'The Most Relevant Songs Of Artists From Genre "%s""':{'query':app.RELEVANT_ARTIST_SONGS,'keys':'genre'},
-                       'The Most Popular Songs In Year "%d"':{'query':app.MOST_POPULAR_SONGS,'keys':'year'},
-                       'The Most Unliked Songs':app.DISLIKES_SONGS,
-                       'The Most Hated Songs In Year "%d"':{'query':app.app.MOST_HATED_SONGS,'keys':'year'}}
+                       'The Most Liked Songs In Year "%d"':{'query':app.MOST_POPULAR_SONGS,'keys':'year'},
+                       'The Most Unliked Songs In Year "%d"':app.DISLIKES_SONGS,
+                       'The Most Hated Songs In Year "%d"':{'query':app.MOST_HATED_SONGS,'keys':'year'}}
         keys=queries_dic.keys()
         random.shuffle(keys)
         selected_query = keys[0]
@@ -168,4 +168,8 @@ class RandomQueryView(GenericView):
         if( (len(_ans.get('content',{}).get('data',{}))>0) and (len(queries_dic[selected_query].keys())>1 )):
             parm = _ans.get('content', {}).get('data', {})[0].get(queries_dic[selected_query]['keys'])
         _ans['content']['title']=selected_query % parm
+        _ans = super(RandomQueryView, self).get_resource(request, query=app.COUNT_HISTORY, *args, **kwargs)
+        if ((_ans.get('content',{}).get('data',{})[0].get('count',-1))==0) :
+            super(RandomQueryView, self).get_resource(request, query=app.INSERT_HISTORY_USER_TABLE, *args, **kwargs)
+            super(RandomQueryView, self).get_resource(request, query=app.INSERT_HISTORY_VIDEO_TABLE, *args, **kwargs)
         return HttpResponse(json.dumps(_ans), content_type='application/json')

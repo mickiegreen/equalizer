@@ -39,7 +39,7 @@ RELEVANT_ARTIST_SONGS = {
     'default' : {"genre":parseGenre()}
 }
 
-# a query we use to generate a randmo genre for the 'relevant artist' query.
+# a query we use to generate a random genre for the 'relevant artist' query.
 SELECT_GENRE = {
     'query':
         'SELECT distinct(genre) as genre '

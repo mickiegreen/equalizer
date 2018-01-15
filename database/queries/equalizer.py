@@ -4,6 +4,11 @@ from equalizer.lib.storage.mysql import MySqlEngine
 import equalizer.config as app
 import random
 
+'''
+parseGenre() & parseCountry are function which returns a random genre/country from the DB.
+Each function creates an array of all genres/countries in DB using a query which returns all genres/countries from DB.
+Then randomly chooses 1 of them and return it.
+'''
 def parseGenre () :
     engine = MySqlEngine(**app.MYSQL_INFO)
     mysql_api = MysqlApi(engine)
@@ -44,7 +49,7 @@ EQUALIZER = {
     'default' :{"genre": parseGenre() , "country" : parseCountry()}
 }
 
-
+# a query we use to generate a random genre for the 'equalizer' query.
 SELECT_GENRE = {
     'query':
         'SELECT distinct(genre) as genre '
@@ -52,7 +57,7 @@ SELECT_GENRE = {
     'mode' : 'select'
 }
 
-
+# a query we use to generate a random country for the 'equalizer' query.
 SELECT_COUNTRY = {
     'query':
         'SELECT distinct(country) as country '

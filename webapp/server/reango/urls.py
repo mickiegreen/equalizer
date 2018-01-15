@@ -18,7 +18,9 @@ from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
-from views import SelectFunctionRandomView,LoginView, SignUpView, RelevantArtistView, HatedGenreSongView, PopularGenreSongsView, MostPopularSongsView, MostHatedSongView,EqualizerView,LongestArtistSongView,DislikeSongsView
+from views import LoginView, SignUpView,RandomQueryView, RelevantArtistView, HatedGenreSongView, \
+    PopularGenreSongsView, MostPopularSongsView, MostHatedSongView,EqualizerView,LongestArtistSongView,\
+    DislikeSongsView
 
 urlpatterns = [
     url(r'^resources/users/login', LoginView.as_view()),
@@ -30,11 +32,10 @@ urlpatterns = [
     url(r'^resources/videos/hatedGenre', HatedGenreSongView.as_view()),
     url(r'^resources/videos/relevantView', RelevantArtistView.as_view()),
     url(r'^resources/videos/longestartistsong', LongestArtistSongView.as_view()),
+    url(r'^resources/videos/randomQuery', RandomQueryView.as_view()),
     url(r'^resources/videos/dislikesongs', DislikeSongsView.as_view()),
-    url(r'^resources/videos/selectrandomquery', SelectFunctionRandomView.as_view()),
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
     url(r'^admin/', admin.site.urls),
     url(r'^graphql', csrf_exempt(GraphQLView.as_view(graphiql=True))),
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
-
-]
+    ]

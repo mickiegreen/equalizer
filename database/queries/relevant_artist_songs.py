@@ -9,7 +9,7 @@ parseGenre() is a function which returns a random genre from the DB genres.
 The function creates an array of all genres in DB using a query which returns all genres.
 Then randomly chooses 1 of them and return it.
 '''
-def parseGenre () :
+"""def parseGenre () :
     engine = MySqlEngine(**app.MYSQL_INFO)
     mysql_api = MysqlApi(engine)
     response = mysql_api.execute(**SELECT_GENRE)
@@ -40,6 +40,29 @@ RELEVANT_ARTIST_SONGS = {
 }
 
 # a query we use to generate a random genre for the 'relevant artist' query.
+SELECT_GENRE = {
+    'query':
+        'SELECT distinct(genre) as genre '
+        'from song ',
+    'mode' : 'select'
+}"""
+
+RELEVANT_ARTIST_SONGS = {
+    'query' :
+                'SELECT genre, youtube_video_id, youtube_video_title '
+                'from join_song_video_artist '
+                'where artist_id in '
+                '(select artist_id '
+                'from join_song_artist '
+                'where YEAR(CURDATE())-YEAR(release_date) <= 5 '    
+                'and genre = "%s"'
+                'group by artist_id) '
+                'group by youtube_video_id '
+                'limit 10 ',
+    'mode'  : 'select',
+    'args' : ['genre']
+}
+
 SELECT_GENRE = {
     'query':
         'SELECT distinct(genre) as genre '

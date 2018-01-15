@@ -9,7 +9,7 @@ parseGenre() & parseCountry() are function which returns a random genre/country 
 Each function creates an array of all genres/countries in DB using a query which returns all genres/countries from DB.
 Then randomly chooses 1 of them and return it.
 '''
-def parseGenre () :
+"""def parseGenre () :
     engine = MySqlEngine(**app.MYSQL_INFO)
     mysql_api = MysqlApi(engine)
     response = mysql_api.execute(**SELECT_GENRE)
@@ -70,6 +70,34 @@ SELECT_GENRE = {
 }
 
 # a query we use to generate a random country for the 'equalizer' query.
+SELECT_COUNTRY = {
+    'query':
+        'SELECT distinct(country) as country '
+        'from song ',
+    'mode' : 'select'
+}"""
+
+
+EQUALIZER = {
+    'query' :   'SELECT 0.1*views + 0.2*comments + 0.3*likes + 0.2*genre + 0.2*country AS score, youtube_video_title, youtube_video_id '
+                'FROM join_song_vide_artist '
+                'WHERE genre = "%s" '
+                'AND country = "%s" '
+                'ORDER BY score '
+                'LIMIT 10',
+    'mode'  : 'select',
+    'args': ['genre','country']
+}
+
+
+SELECT_GENRE = {
+    'query':
+        'SELECT distinct(genre) as genre '
+        'from song ',
+    'mode' : 'select'
+}
+
+
 SELECT_COUNTRY = {
     'query':
         'SELECT distinct(country) as country '

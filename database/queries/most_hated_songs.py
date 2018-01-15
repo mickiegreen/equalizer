@@ -2,7 +2,7 @@ import random
 
 MOST_HATED_SONGS = {
     'query' :
-               'SELECT youtube_video_id, youtube_video_title '
+               'SELECT year, youtube_video_id, youtube_video_title '
                'FROM '
                '(SELECT youtube_video_id, youtube_video_title '
                'FROM( '

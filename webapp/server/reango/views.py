@@ -22,7 +22,6 @@
 
 from django.views.generic import View
 from django.http import HttpResponse
-import random
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
@@ -32,6 +31,7 @@ from equalizer.lib.storage.mysql import MySqlEngine
 
 import json
 from equalizer import config as app
+import random
 
 class GenericView(View):
     def params_to_dict(self, params = {}):
@@ -110,18 +110,28 @@ class MostPopularSongsView(GenericView):
         """ executing login request """
         return super(MostPopularSongsView, self).get(request, query=app.MOST_POPULAR_SONGS, *args, **kwargs)
 
-class SelectGenreView(GenericView) :
+class RelevantArtistView(GenericView) :
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(SelectGenreView, self).get(request, query=app.SELECT_GENRE, *args, **kwargs)
+        _sql_genre=super(RelevantArtistView, self).get_resource(request, query=app.SELECT_GENRE, *args, **kwargs)
+        random.shuffle(_sql_genre)
+        genre = [item['genre'] for item in _sql_genre][0]
+        request.GET['genre']=genre
+        return super(RelevantArtistView, self).get(request, query=app.RELEVANT_ARTIST_SONGS, *args, **kwargs)
 
 
-class SelectFunctionRandomView(GenericView) :
+class EqualizerView(GenericView):
     def get(self, request, *args, **kwargs):
-        query_list=[app.MOST_POPULAR_SONGS,app.DISLIKES_SONGS,app.HATED_GENRE_SONGS,app.LONGEST_ARTIST_SONG,app.MOST_HATED_SONGS,app.POPULAR_GENRE_SONGS,app.RELEVANT_ARTIST_SONGS]
-        random.shuffle(query_list)
         """ executing login request """
-        return super(SelectFunctionRandomView, self).get(request, query=query_list[0], *args, **kwargs)
+        _sql_genre = super(EqualizerView, self).get_resource(request, query=app.SELECT_GENRE, *args, **kwargs)
+        random.shuffle(_sql_genre)
+        genre = [item['genre'] for item in _sql_genre][0]
+        request.GET['genre']=genre
+        _sql_country = super(EqualizerView, self).get_resource(request, query=app.SELECT_COUNTRY, *args, **kwargs)
+        random.shuffle(_sql_country)
+        country = [item['country'] for item in _sql_genre][0]
+        request.GET['country']=country
+        return super(EqualizerView, self).get(request, query=app.EQUALIZER, *args, **kwargs)
 
 
 class LongestArtistSongView(GenericView) :
@@ -135,20 +145,27 @@ class PopularGenreSongsView(GenericView):
         """ executing login request """
         return super(PopularGenreSongsView, self).get(request, query=app.POPULAR_GENRE_SONGS, *args, **kwargs)
 
-class EqualizerView(GenericView):
-    def get(self, request, *args, **kwargs):
-        """ executing login request """
-        return super(EqualizerView, self).get(request, query=app.EQUALIZER, *args, **kwargs)
-
 
 class HatedGenreSongView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
         return super(HatedGenreSongView, self).get(request, query=app.HATED_GENRE_SONGS, *args, **kwargs)
 
-
-class RelevantArtistView(GenericView):
+class RandomQueryView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(RelevantArtistView, self).get(request, query=app.RELEVANT_ARTIST_SONGS, *args, **kwargs)
-
+        queries_dic = {'The Most Hated Songs In Genre "%s"':{'query':app.HATED_GENRE_SONGS,'keys':'genre'},
+                       'The Most Popular Songs In Genre "%s"':{'query':app.POPULAR_GENRE_SONGS,'keys':'genre'},
+                       'The Songs Of The Most Verbose Artist "%s"':app.LONGEST_ARTIST_SONG,
+                       'The Most Relevant Songs Of Artists From Genre "%s""':{'query':app.RELEVANT_ARTIST_SONGS,'keys':'genre'},
+                       'The Most Popular Songs In Year "%d"':{'query':app.MOST_POPULAR_SONGS,'keys':'year'},
+                       'The Most Unliked Songs':app.DISLIKES_SONGS,
+                       'The Most Hated Songs In Year "%d"':{'query':app.app.MOST_HATED_SONGS,'keys':'year'}}
+        keys=queries_dic.keys()
+        random.shuffle(keys)
+        selected_query = keys[0]
+        _ans = super(RandomQueryView, self).get_resource(request, query=queries_dic[selected_query]['query'], *args, **kwargs)
+        if( (len(_ans.get('content',{}).get('data',{}))>0) and (len(queries_dic[selected_query].keys())>1 )):
+            parm = _ans.get('content', {}).get('data', {})[0].get(queries_dic[selected_query]['keys'])
+        _ans['content']['title']=selected_query % parm
+        return HttpResponse(json.dumps(_ans), content_type='application/json')

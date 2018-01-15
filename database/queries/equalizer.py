@@ -38,9 +38,10 @@ score of a row = row_views*user_views_value + row_likes*user_likes_value ...
 Then pick 10 rows who has the highest score (order it by score and limit select to only 10 rows).
 '''
 
+#TODO: change all constants to real values. normalize the values (comments/max_comments)
 EQUALIZER = {
     'query' :   'SELECT 0.1*views + 0.2*comments + 0.3*likes + 0.2*genre + 0.2*country AS score, youtube_video_title, youtube_video_id '
-                'FROM join_song_vide_artist '
+                'FROM join_song_video_artist '
                 'WHERE genre = "%s" '
                 'AND country = "%s" '
                 'ORDER BY score '

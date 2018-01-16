@@ -173,10 +173,20 @@ class RandomQueryView(GenericView):
         if( (len(_ans.get('content',{}).get('data',{}))>0) and (len(queries_dic[selected_query].keys())>1 )):
             parm = _ans.get('content', {}).get('data', {})[0].get(queries_dic[selected_query]['keys'])
         _ans['content']['title']=selected_query % parm
-        _ans = super(RandomQueryView, self).get_resource(request, query=app.COUNT_HISTORY, *args, **kwargs)
+        _ans = super(RandomQueryView, self).get_resource(request, query=app.USER_HISTORY_COUNT, *args, **kwargs)
         if ((_ans.get('content',{}).get('data',{})[0].get('count',-1))==0) :
-            super(RandomQueryView, self).get_resource(request, query=app.INSERT_HISTORY_USER_TABLE, *args, **kwargs)
-            super(RandomQueryView, self).get_resource(request, query=app.INSERT_HISTORY_VIDEO_TABLE, *args, **kwargs)
-        print '_ans.content', _ans['content']['title']
-
+            super(RandomQueryView, self).get_resource(request, query=app.USER_HISTORY_INSERT, *args, **kwargs)
+            super(RandomQueryView, self).get_resource(request, query=app.MIDDLE_HISTORY_INSERT, *args, **kwargs)
         return HttpResponse(json.dumps(_ans), content_type='application/json')
+
+
+class SearchHistoryView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(SearchHistoryView, self).get(request, query=app.SEARCH_IN_HISTORY, *args, **kwargs)
+
+
+class ShowHistoryPageView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing login request """
+        return super(ShowHistoryPageView, self).get(request, query=app.SHOW_HISTORY_PAGE, *args, **kwargs)

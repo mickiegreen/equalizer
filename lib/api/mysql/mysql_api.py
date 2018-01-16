@@ -118,8 +118,6 @@ class MysqlApi(object):
 
                 # getting data
                 for row in cursor.fetchall():
-                    print row
-
                     # creating json
                     data.append(dict(zip([_desc[0] for _desc in cursor.description], row)))
 

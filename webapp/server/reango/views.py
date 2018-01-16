@@ -152,8 +152,13 @@ class EqualizerView(GenericView):
         norm = float(sum(map(lambda (x,y) : y , keys)))
 
         for k, v in keys: request.GET[k] = float(v/norm)
+
         # executing equalizer logics
-        return super(EqualizerView, self).get(request, query=app.EQUALIZER, *args, **kwargs)
+        response = self.get_resource(request, query = app.EQUALIZER, *args, **kwargs)
+
+        print response
+
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
 class LongestArtistSongView(GenericView) :
     def get(self, request, *args, **kwargs):

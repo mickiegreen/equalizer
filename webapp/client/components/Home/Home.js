@@ -152,9 +152,10 @@ class Main extends React.Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             }}).then(response => {
+                console.log(response);
                 this.props.history.push({
                     pathname : '/search',
-                    data: response
+                    data: response.json()
                 });
             });
     }
@@ -180,7 +181,6 @@ class Main extends React.Component {
         LoginUserMutation(environment, input).then( response => {
                 if (getToken() > 0) {
                     this.setState({showLoginForm: false, showSignUpForm: false});
-                    console.log('hereeee');
                 }
             }
         );

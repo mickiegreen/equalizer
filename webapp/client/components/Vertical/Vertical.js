@@ -151,7 +151,6 @@ class Vertical extends React.Component {
                             value={views}
                             orientation='vertical'
                             onChange={this.handleViewsChange}
-                            tooltip={"bla"}
                         />
                         <div className='value'>{views/100}</div>
                     </div>

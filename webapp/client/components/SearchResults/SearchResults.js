@@ -36,8 +36,10 @@ class SearchResults extends React.Component {
         console.log(localStorage.getItem('jwtToken') );
         if (localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken') === undefined ){
             // todo - ADD NEXT LINE
-            //window.location.replace('/');
+            window.location.replace('/');
+
         }
+        console.log(props.location);
         this.state = {
             mainResult: {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},
             results: [

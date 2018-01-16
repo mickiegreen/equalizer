@@ -26,8 +26,8 @@ from github as our infrastructure:
 ## screenshots
 This is the final results. For more pictures - resources/screenshots
 
-![alt text](https://github.com/mickiegreen/equalizer/tree/master/resources/screenshots/5.png)
-![alt text](https://github.com/mickiegreen/equalizer/tree/master/resources/screenshots/8.png)
+![alt text](resources/screenshots/5.png)
+![alt text](resources/screenshots/8.png)
 
 ## Pre installation
 1. Python2.7 - This project has been built and tested with Python2.7.14

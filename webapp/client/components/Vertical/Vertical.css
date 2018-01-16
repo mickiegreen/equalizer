@@ -1,0 +1,10 @@
+.rangeslider-vertical .rangeslider__fill {
+    background-color: rgba(104, 31, 206, 0.77);
+}
+
+.rangeslider-vertical {
+    margin: 20px auto;
+    height: 150px;
+    max-width: 10px;
+    background-color: #ffffffa1;
+}

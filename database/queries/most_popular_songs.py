@@ -34,4 +34,3 @@ MOST_POPULAR_SONGS = {
             LIMIT 10''',
     'mode'  : 'select',
 }
-

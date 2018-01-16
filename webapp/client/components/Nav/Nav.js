@@ -27,6 +27,8 @@ const iconStyle = {
     maxWidth: '97%',
     maxHeight: '97%',
     paddingRight: '0px',
+    position: 'absolute',
+    top: 0
 }
 
 const iconStyleSearch = {
@@ -36,6 +38,20 @@ const iconStyleSearch = {
     maxWidth: '97%',
     maxHeight: '97%',
     paddingRight: '0px',
+    position: 'absolute',
+    top: 0
+}
+
+const searchBox = {
+    background: 'url("../../../assets/admin/img/search.svg") no-repeat scroll 147px 7px',
+    //paddingLeft:'30px',
+    margin: 'auto',
+    width: '80%',
+    backgroundColor: 'rgba(193, 179, 204, 0.72)',
+    color : '#fff',
+    borderRadius: '15px',
+    padding: '8px',
+    maxWidth: '200px'
 }
 
 const HomeLink = ({ title }: { title: NavPropsType.title }) =>
@@ -69,7 +85,7 @@ const links = (props: LinksPropType) => {
           {/*<NavLink className='button_login-link' to='/search' >
               <Button >Search Results</Button>
           </NavLink>*/}
-          <div style={{display: 'inline-block', paddingTop: '9px', paddingRight: '29px', cursor : 'pointer'}}>
+          <div style={{display: 'inline-block', paddingTop: '3px', paddingRight: '63px', cursor : 'pointer'}}>
               <AccountDropdown user={user}/>
           </div>
         {props.isAdmin ? <AdminLink /> : null}
@@ -125,8 +141,21 @@ class Nav extends React.Component {
   state: { isOpen: boolean };
   props: NavPropsType;
 
+  _searchText = (e) => {
+      if (e.key === 'Enter') {
+          console.log('do validate');
+      }
+  }
+
+  _searchTextChange = (e) => {
+      this.setState({
+          searchContent : e.target.value
+      });
+      console.log(e.target.value)
+  }
+
   render() {
-    const { isAuthenticated, isAdmin, title } = this.props;
+    const { isAuthenticated, isAdmin, title, searchContent } = this.props;
     const Links = links({ isAuthenticated, isAdmin, title });
 
     return (
@@ -152,14 +181,14 @@ class Nav extends React.Component {
                   <ToolbarTitle className={styles.title} >
                   </ToolbarTitle>
                   <div style={{display : getToken() > 0 ? 'block' : 'none' }}>
-                      <Input style={{ margin: 'auto', width: '66%', backgroundColor: 'rgb(90, 88, 88)', color : '#fff', borderRadius: '21px', padding: '8px'}}/>
-                      <Button
+                      <Input value={searchContent} style={searchBox} onChange={this._searchTextChange} onKeyPress={this._searchText}/>
+                      {/*<Button
                           onClick={() => {
                               this.setState({ search: true });
                           }}
                       >
                           <img className="account-dropdown__avatar" style={iconStyleSearch} src='../../../assets/admin/img/search.svg' />
-                      </Button>
+                      </Button>*/}
                   </div>
               </ToolbarSection>
             <ToolbarSection align='end'> {/*style={{position: 'absolute', right: '10px'}}*/}

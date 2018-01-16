@@ -3,10 +3,20 @@ import Slider from 'react-rangeslider'
 import '../../styles/slider.scss'
 import Page from '../../components/Page/Page'
 import Button from 'react-mdc-web/lib/Button/Button';
+import './Vertical.css';
 
 const equalizerSlider = {
     display: 'inline-block',
-    width: '20%'
+    width: '25%'
+}
+
+const EQBtnStyleRight = {
+    margin: 'auto',
+    borderColor: '#fff',
+    border: '2px solid #fff',
+    borderRadius: '6px',
+    width: '48%',
+    maxWidth: '100px',
 }
 
 const centered = {
@@ -15,12 +25,40 @@ const centered = {
     maxWidth: '500px'
 }
 
+const ButtonFont = {
+    fontWeight:'650',
+    color: '#fff',
+    //paddingLeft: '44px'
+    textAlign: 'center',
+    margin: 'auto',
+    width: '100%',
+    fontFamily: 'GeosansLight',
+    letterSpacing: '2px',
+    backgroundColor: '#3b0e5478'
+}
+
+const ButtonFont2 = {
+    fontWeight:'600',
+    color: '#fff',
+    //paddingLeft: '44px'
+    textAlign: 'center',
+    margin: 'auto',
+    width: '100%',
+    fontFamily: 'GeosansLight',
+    letterSpacing: '2px',
+    fontSize: '20px'
+}
+
+
+
 class Vertical extends React.Component {
     constructor(props: Object) {
         super(props);
         this.state = {
-            value: 25,
-            reverseValue: 8,
+            likes: 50,
+            views: 50,
+            dislikes: 50,
+            comments: 50,
             currentMode: 'random',
             modes: ['random', 'update']
         };
@@ -28,85 +66,103 @@ class Vertical extends React.Component {
 
     state: { value: number, reverseValue: number };
 
-    handleChange = (value) => {
+    handleLikesChange = (value) => {
         this.setState({
-            value: value
+            likes: value
         })
     }
 
-    handleChangeReverse = (value) => {
+    handleDisikesChange = (value) => {
         this.setState({
-            reverseValue: value
+            dislikes: value
         })
+    }
+
+    handleViewsChange = (value) => {
+        this.setState({
+            views: value
+        })
+    }
+
+    handleCommentsChange = (value) => {
+        this.setState({
+            comments: value
+        })
+    }
+
+    handleClicked = (value) => {
+        console.log("handleClicked");
     }
 
     render() {
-        const { value, reverseValue } = this.state
+        const { likes, dislikes, views, comments } = this.state
         const mode = 'random';
         return (
             <div style={centered}>
             <div className='slider orientation-reversed'>
                 <div className='slider-group' style={equalizerSlider}>
                     <div className='slider-vertical'>
+                        <h1 style={ButtonFont2}>likes</h1>
                         <Slider
                             min={0}
-                            max={1}
-                            value={value}
+                            max={100}
+                            value={likes}
                             orientation='vertical'
-                            onChange={this.handleChange}
+                            onChange={this.handleLikesChange}
                         />
-                        <div className='value'>{value}</div>
+                        <div className='value'>{likes/100}</div>
                     </div>
                 </div>
                 <div className='slider-group' style={equalizerSlider}>
                     <div className='slider-vertical'>
+                        <h1 style={ButtonFont2}>dislikes</h1>
                         <Slider
                             min={0}
-                            max={1}
-                            value={value}
+                            max={100}
+                            value={dislikes}
                             orientation='vertical'
-                            onChange={this.handleChange}
+                            onChange={this.handleDisikesChange}
                         />
-                        <div className='value'>{value}</div>
+                        <div className='value'>{dislikes/100}</div>
                     </div>
                 </div>
                 <div className='slider-group' style={equalizerSlider}>
                     <div className='slider-vertical'>
+                        <h1 style={ButtonFont2}>views</h1>
                         <Slider
                             min={0}
-                            max={1}
-                            value={value}
+                            max={100}
+                            value={views}
                             orientation='vertical'
-                            onChange={this.handleChange}
+                            onChange={this.handleViewsChange}
+                            tooltip={"bla"}
                         />
-                        <div className='value'>{value}</div>
+                        <div className='value'>{views/100}</div>
                     </div>
                 </div>
                 <div className='slider-group' style={equalizerSlider}>
                     <div className='slider-vertical'>
+                        <h1 style={ButtonFont2}>comments</h1>
                         <Slider
                             min={0}
-                            max={1}
-                            value={value}
+                            max={100}
+                            value={comments}
                             orientation='vertical'
-                            onChange={this.handleChange}
+                            onChange={this.handleCommentsChange}
                         />
-                        <div className='value'>{value}</div>
-                    </div>
-                </div>
-                <div className='slider-group' style={equalizerSlider}>
-                    <div className='slider-vertical'>
-                        <Slider
-                            min={0}
-                            max={1}
-                            value={reverseValue}
-                            orientation='vertical'
-                            onChange={this.handleChangeReverse}
-                        />
-                        <div className='value'>{reverseValue}</div>
+                        <div className='value'>{comments/100}</div>
                     </div>
                 </div>
             </div>
+                <div style={EQBtnStyleRight}>
+                    <Button
+                        primary
+                        className='button_submit-login-form'
+                        onClick={this.handleClicked}
+                        display={'inline-block'}
+                        style={ButtonFont}
+                    >Submit</Button>
+                </div>
             </div>
         );
     }

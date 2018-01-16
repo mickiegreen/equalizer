@@ -1,6 +1,6 @@
 import { ConnectionHandler } from 'relay-runtime';
 import { setToken, setUserName } from '../jwtUtils';
-import {hasValidJwtToken} from "modules/auth/jwtUtils";
+import {getToken, hasValidJwtToken} from "modules/auth/jwtUtils";
 
 /*const {
   commitMutation,
@@ -32,8 +32,8 @@ const mutation = graphql`
 
 const tokenName = 'jwtToken';
 
-function PopularSongs(environment, input: {release_date:string}) {
-    return fetch(`/resources/videos/randomQuery?user_id=${encodeURIComponent(input.release_date)}`, {
+function RandomQuery(environment, input: {release_date:string}) {
+    return fetch(`/resources/videos/randomQuery?user_id=${encodeURIComponent(getToken())}`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {
@@ -41,15 +41,7 @@ function PopularSongs(environment, input: {release_date:string}) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-    }).then(
-        response => {
-            if (response.ok) {
-                response.json().then(json => {
-                    console.log(json);
-                });
-            }
-        }
-    );
+    });
     /*commitMutation(
       environment,
       {
@@ -65,4 +57,4 @@ function PopularSongs(environment, input: {release_date:string}) {
     );*/
 }
 
-export default PopularSongs;
+export default RandomQuery;

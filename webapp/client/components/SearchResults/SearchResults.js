@@ -52,10 +52,10 @@ class SearchResults extends React.Component {
         //const i = 0;
         for (let i = 0; i < this.state.results.length; i++) {
             this.searchResults.push(
-                <div style={{width:'25%', margin : 'auto', display: 'inline-block'}}>
+                <div style={{width:'25%', margin : 'auto', display: 'inline-block'}} key={i}>
                 <AspectRatio ratio="16/9" style={{maxWidth: '84%', margin: 'auto'}}>
                     <iframe src="http://www.youtube.com/embed/W7qWa52k-nE" style={{width:'100%', margin: 'auto'}}
-                            frameBorder="0"  key={i} allowFullScreen>
+                            frameBorder="0" allowFullScreen>
                     </iframe>
                 </AspectRatio>
                 </div>

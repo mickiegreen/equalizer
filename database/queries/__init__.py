@@ -4,8 +4,8 @@ from most_popular_songs import MOST_POPULAR_SONGS
 from most_unliked_songs import MOST_UNLIKED_SONGS
 from most_liked_songs import MOST_LIKED_SONGS
 from hated_genre_songs import HATED_GENRE_SONGS
-from relevant_artist_songs import RELEVANT_ARTIST_SONGS
-from equalizer import EQUALIZER
+from relevant_artist_songs import RELEVANT_ARTIST_SONGS, SELECT_GENRE
+from equalizer import EQUALIZER, SELECT_COUNTRY
 from dislike_songs import DISLIKES_SONGS
 from longest_artist_songs import LONGEST_ARTIST_SONG
 from random_search import RANDOM_SEARCH

@@ -75,16 +75,28 @@
 }*/
 a {
     text-decoration: none;
-    color : rgb(255,0,0) !important;
+    color : #fff !important;
 }
+img.account-dropdown__avatar {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px 0 0;
+    border-radius: 3px;
+    position: absolute;
+    right: 12px;
+    top: 12px;
+}
+
 .account-dropdown__avatar {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     margin: 0 5px 0 0;
     border-radius: 3px;
 }
+
 .account-dropdown .dropdown__trigger {
     line-height: 20px;
+    padding-right: 40px;
 }
 
 .dropdown__content {

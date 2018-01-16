@@ -12,7 +12,7 @@ LONGEST_ARTIST_SONG = {
             HAVING count(*)>= 3
             ) AS ARTI
         WHERE TOT.artist_id = ARTI.artist_id
-        AND TOT.artist_id IN (	SELECT distinct Z.artist_id
+        AND TOT.artist_id IN ( SELECT distinct Z.artist_id
                                 FROM join_song_video_artist AS Z
                                 WHERE (SELECT avg(S.duration)
                                 FROM song AS S) <=  ALL(SELECT duration
@@ -24,5 +24,3 @@ LONGEST_ARTIST_SONG = {
         LIMIT 10''',
         'mode': 'select'
 }
-
-

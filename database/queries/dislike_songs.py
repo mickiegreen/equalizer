@@ -12,5 +12,6 @@ DISLIKES_SONGS = {
             (SELECT     sum(dislikes) FROM join_song_video_artist GROUP BY (artist_id) HAVING sum(likes)>10000 ORDER BY sum(dislikes) DESC LIMIT 1) 
             LIMIT       10 
             ) AS a ''',
+
     'mode'  : 'select'
 }

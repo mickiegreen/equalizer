@@ -28,4 +28,3 @@ SELECT_GENRE = {
         'from song ',
     'mode' : 'select'
 }
-

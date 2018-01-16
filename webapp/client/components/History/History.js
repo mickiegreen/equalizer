@@ -6,6 +6,7 @@ import Page from '../Page/Page';
 import '../../../node_modules/react-aspect-ratio/aspect-ratio.css';
 import styles from './History.css';
 import AspectRatio from 'react-aspect-ratio';
+import '../../modules/auth/mutations/RandomQuery';
 
 const frameStyle = {
     margin: 'auto',
@@ -36,7 +37,9 @@ class History extends React.Component {
         console.log(localStorage.getItem('jwtToken') );
         if (localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken') === undefined ){
             // todo - ADD NEXT LINE
-            //window.location.replace('/');
+            window.location.replace('/');
+            console.log(localStorage.getItem('jwtToken'));
+            console.log(localStorage.getItem('jwtToken') === undefined );
         }
         this.state = {
             mainResult: {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},
@@ -52,14 +55,14 @@ class History extends React.Component {
         //const i = 0;
         for (let i = 0; i < this.state.results.length; i++) {
             this.searchResults.push(
-                <div style={{width:'25%', margin : 'auto', display: 'inline-block'}}>
+                <div style={{width:'25%', margin : 'auto', display: 'inline-block'}} key={i + 100}>
                 <AspectRatio ratio="16/9" style={{maxWidth: '84%', margin: 'auto'}}>
                     <iframe src="http://www.youtube.com/embed/W7qWa52k-nE" style={{width:'100%', margin: 'auto'}}
-                            frameBorder="0"  key={i} allowFullScreen>
+                            frameBorder="0"  allowFullScreen>
                     </iframe>
                 </AspectRatio>
                 </div>
-            ); console.log(i);
+            );
         }
     }
 

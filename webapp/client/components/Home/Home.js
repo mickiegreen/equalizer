@@ -35,19 +35,6 @@ const formButton = {
     backgroundColor: 'rgba(0,0,0,.37)',
 }
 
-const FormStyle = {
-    'display'   : 'inline-block !important',
-    'width'     : '20%',
-}
-
-const LoginStyle = {
-    'float'     : 'left'
-}
-
-const SignUpStyle = {
-    'float'     : 'right'
-}
-
 const EQStyle = {
     width: '100%',
     height: '30px',
@@ -70,7 +57,8 @@ const EQBtnStyleRight = {
     border: '2px solid #fff',
     borderRadius: '6px',
     width: '48%',
-    maxWidth: '150px'
+    maxWidth: '150px',
+    backgroundColor: '#3b0e5478'
 }
 
 const AFont = {
@@ -80,8 +68,9 @@ const AFont = {
     margin: 'auto',
     width: '100%',
     fontFamily: 'GeosansLight',
-    letterSpacing: '2px'
+    letterSpacing: '2px',
     //paddingLeft: '23px'
+    backgroundColor: '#3b0e5478'
 }
 
 const ButtonFont = {

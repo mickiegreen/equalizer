@@ -4,6 +4,7 @@ import '../../styles/slider.scss'
 import Page from '../../components/Page/Page'
 import Button from 'react-mdc-web/lib/Button/Button';
 import './Vertical.css';
+import {hasValidJwtToken, getToken} from "modules/auth/jwtUtils";
 
 const equalizerSlider = {
     display: 'inline-block',
@@ -54,6 +55,7 @@ const ButtonFont2 = {
 class Vertical extends React.Component {
     constructor(props: Object) {
         super(props);
+        console.log(props.history);
         this.state = {
             likes: 50,
             views: 50,
@@ -92,6 +94,20 @@ class Vertical extends React.Component {
 
     handleClicked = (value) => {
         console.log("handleClicked");
+        console.log("randomQuery");
+        fetch(`/resources/videos/customQuery?user_id=${encodeURIComponent(getToken())}&likes=${encodeURIComponent(this.state.likes)}&dislikes=${encodeURIComponent(this.state.dislikes)}&comments=${encodeURIComponent(this.state.comments)}&views=${encodeURIComponent(this.state.views)}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                authorization: `Bearer ${hasValidJwtToken().token}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }}).then(response => {
+                this.props.history.push({
+                    pathname : '/search',
+                    data: response.content
+                });
+        });
     }
 
     render() {

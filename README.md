@@ -22,6 +22,13 @@ from github as our infrastructure:
    This infra has been adapted to our needs.
 2. all other libraries are listed in requirements.txt
 
+
+## screenshots
+This is the final results. For more pictures - resources/screenshots
+
+![alt text](https://github.com/mickiegreen/equalizer/tree/master/resources/screenshots/5.png)
+![alt text](https://github.com/mickiegreen/equalizer/tree/master/resources/screenshots/8.png)
+
 ## Pre installation
 1. Python2.7 - This project has been built and tested with Python2.7.14
 3. pip
@@ -75,12 +82,6 @@ track_name # itunes
 artist_name # itunes
 video_title # youtube
 ```
-
-# TODOs
-1. build htmls
-2. develop request handlers
-3. css design
-4. docs
 
 ## University servers
 ```

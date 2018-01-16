@@ -73,7 +73,18 @@ const headerStyle = {
     color : '#ffffff',
     fontWeight : '650',
     //fontWeight : 300,
-    fontFamily: 'GeosansLight'
+    fontFamily: 'GeosansLight',
+    position: 'absolute',
+    right: '12px'
+}
+
+const headerStyle2 = {
+    color : '#ffffff',
+    fontWeight : '650',
+    //fontWeight : 300,
+    fontFamily: 'GeosansLight',
+    position: 'absolute',
+    right: '80px'
 }
 
 const user={'name' : 'michael', 'avatar_url' : '../../../assets/admin/img/profile.png'};
@@ -101,7 +112,7 @@ const links = (props: LinksPropType) => {
               <Button >Equalizer</Button>
           </NavLink>*/}
         <NavLink className='button_signup-link' to='/signup' >
-          <Button style={headerStyle}>Signup</Button>
+          <Button style={headerStyle2}>Signup</Button>
         </NavLink>
         <NavLink className='button_login-link' to='/login' >
           <Button style={headerStyle}>Login</Button>

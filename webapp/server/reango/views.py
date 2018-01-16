@@ -16,7 +16,7 @@
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
@@ -158,26 +158,20 @@ class HatedGenreSongView(GenericView):
 class RandomQueryView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        print 'RandomQueryView'
         queries_dic = {'The Most Hated Songs In Genre "%s"':{'query':app.HATED_GENRE_SONGS,'keys':'genre'},
-                       'The Most Popular Songs In Genre "%s"':{'query':app.POPULAR_GENRE_SONGS,'keys':'genre'},
+                       'The Most Popular Songs In Genre "%s"':{'query':app.MOST_POPULAR_SONGS,'keys':'genre'},
                        'The Songs Of The Most Verbose Artist "%s"':app.LONGEST_ARTIST_SONG,
                        #'The Most Relevant Songs Of Artists From Genre "%s""':{'query':app.RELEVANT_ARTIST_SONGS,'keys':'genre'},
                        'The Most Popular Songs In Year "%d"':{'query':app.MOST_LIKED_SONGS,'keys':'year'},
                        'The Most Unliked Songs':app.DISLIKES_SONGS,
-                       'The Most Hated Songs In Year "%d"':{'query':app.MOST_HATED_SONGS,'keys':'year'}}
+                       'The Most Hated Songs In Year "%d"':{'query':app.MOST_UNLIKED_SONGS,'keys':'year'}}
         keys=queries_dic.keys()
-        print 'keys', keys
         random.shuffle(keys)
         selected_query = keys[0]
-        print 'selected_query', selected_query
-        print queries_dic[selected_query]['query']
         _ans = super(RandomQueryView, self).get_resource(request, query=queries_dic[selected_query]['query'], *args, **kwargs)
-        print 'ans', _ans
         parm = ()
         if( (len(_ans.get('content',{}).get('data',{}))>0) and (len(queries_dic[selected_query].keys())>1 )):
             parm = _ans.get('content', {}).get('data', {})[0].get(queries_dic[selected_query]['keys'])
-            print 'parm', parm
         _ans['content']['title']=selected_query % parm
         _ans = super(RandomQueryView, self).get_resource(request, query=app.COUNT_HISTORY, *args, **kwargs)
         if ((_ans.get('content',{}).get('data',{})[0].get('count',-1))==0) :

@@ -1,12 +1,12 @@
 EQUALIZER = {
     'query' :   'SELECT %.2f*views + %.2f*comments + %.2f*likes + %.2f*dislikes AS score, youtube_video_title, youtube_video_id '
-                'FROM join_song_vide_artist '
+                'FROM join_song_video_artist '
                 'WHERE genre = "%s" '
                 'AND country = "%s" '
                 'ORDER BY score '
                 'LIMIT 10',
     'mode'  : 'select',
-    'args': ['views','comments', 'likes', 'dislikes']
+    'args': ['views','comments', 'likes', 'dislikes', 'genre', 'country']
 }
 
 

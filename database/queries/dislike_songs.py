@@ -1,4 +1,11 @@
-
+'''
+This is a query which selects top 10 disliked music videos.
+This query returns music videos by an artist who has total of dislikes
+in all of his music videos combined bigger then the minimum sum of dislikes by an artist
+who has total of more than 1000 likes, yet less then the maximum sum of dislikes by an artist
+who has total of more then 10000 likes.
+Then return 10 music videos one by each artist.
+'''
 DISLIKES_SONGS = {
     'query': '''
             SELECT      youtube_video_id, youtube_video_title 

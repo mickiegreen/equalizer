@@ -1,6 +1,10 @@
 '''
 This is a query which selects top 10 most 'digging' music videos.
-
+The query first filtering the music videos by their artist.
+Only artist with at least 3 music videos can be accounted as 'digging'.
+Then caculate the average duration of the artist songs.
+Finally filtering by demanding all this artist songs to be longer or equal to the average of all songs in our DB.
+We finally select the music video song duration, then by the artist average.
 '''
 LONGEST_ARTIST_SONG = {
         'query':'''

@@ -1,3 +1,7 @@
+'''
+A query to make the search through the history available.
+This is the query we execute when we search in history on Equalizer.
+'''
 SEARCH_IN_HISTORY = {
      'query': '''
             SELECT youtube_video_id 

@@ -1,3 +1,8 @@
+'''
+A query to count all music videos in history of a specific user.
+&
+2 queries to insert a search to specific user history.
+'''
 USER_HISTORY_COUNT= {
      'query': '''
             SELECT count(*) as count
@@ -20,7 +25,6 @@ USER_HISTORY_INSERT = {
         'mode': 'insert',
         'args': ['user_id']
 }
-
 
 MIDDLE_HISTORY_INSERT = {
      'query': '''

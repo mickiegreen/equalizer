@@ -60,6 +60,7 @@ class MysqlApi(object):
         # building query
         try:
             query = self.build_query(query, args, params)
+            print query
         except KeyError as e:
             return {
                 'rc' : -1,

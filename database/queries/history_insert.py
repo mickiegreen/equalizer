@@ -3,10 +3,9 @@ USER_HISTORY_COUNT= {
             SELECT count(*) as count
             FROM history_results
             WHERE  user_id= '%d'
-            GROUP BY video_id
-            HAVING video_id = (select video_id 
+            AND video_id IN (select video_id 
             FROM  youtube_video
-            WHERE youtube_video.youtube_video_id= '%s')
+            WHERE youtube_video.youtube_video_id="%s")
         ''',
         'mode': 'select',
         'args': ['user_id','youtube_video_id']
@@ -21,13 +20,12 @@ USER_HISTORY_INSERT = {
         'args': ['user_id']
 }
 
-
 MIDDLE_HISTORY_INSERT = {
      'query': '''
             INSERT INTO history_result 
-            VALUES(0, '%d',(select video_id 
+            VALUES(0, %d,(select video_id 
             FROM  youtube_video
-            WHERE youtube_video.youtube_video_id= '%d'))
+            WHERE youtube_video.youtube_video_id="%s"))
         ''',
         'mode': 'insert',
         'args': ['history_id','youtube_video_id']

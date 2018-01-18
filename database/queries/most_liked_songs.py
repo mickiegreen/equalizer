@@ -1,5 +1,3 @@
-import random
-
 MOST_LIKED_SONGS = {
     'query': '''SELECT `year`, youtube_video_id, youtube_video_title 
                FROM 
@@ -15,5 +13,11 @@ MOST_LIKED_SONGS = {
                limit 10) as a ''',
     'args': ['year'],
     'mode'  : 'select',
-    'default' : {"year":random.randint(1905,2018)}
+}
+
+SELECT_YEAR = {
+    'query' : '''
+                SELECT DISTINCT(YEAR(release_date)) as `year` FROM song
+              ''',
+    'mode'  : 'select'
 }

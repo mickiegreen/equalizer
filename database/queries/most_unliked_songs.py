@@ -1,5 +1,3 @@
-import random
-
 MOST_UNLIKED_SONGS = {
     'query': '''
                SELECT `year`, youtube_video_id, youtube_video_title 
@@ -14,8 +12,6 @@ MOST_UNLIKED_SONGS = {
                JOIN youtube_video  as main_table ON rating_table.id = main_table.youtube_video_id 
                ORDER BY rating  
                limit 10 ) as a ''',
-
     'args': ['year'],
     'mode'  : 'select',
-    'default' : {"year":random.randint(1905,2018)}
 }

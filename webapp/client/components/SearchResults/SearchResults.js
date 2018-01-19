@@ -2,7 +2,7 @@
 import React from 'react';
 import Page from '../Page/Page';
 import '../../../node_modules/react-aspect-ratio/aspect-ratio.css';
-import styles from './SearchResults.css';
+import './SearchResults.css';
 import AspectRatio from 'react-aspect-ratio';
 
 const subtitleStyle = {

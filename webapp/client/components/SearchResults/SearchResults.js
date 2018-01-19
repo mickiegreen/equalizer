@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react';
-import { Player } from '../../../node_modules/video-react';
 import Page from '../Page/Page';
-/*import "../../../node_modules/video-react/styles/scss/video-react.scss";*/
 import '../../../node_modules/react-aspect-ratio/aspect-ratio.css';
 import styles from './SearchResults.css';
 import AspectRatio from 'react-aspect-ratio';
@@ -35,12 +33,13 @@ class SearchResults extends React.Component {
 
             const data = content.content.data;
             const subtitle = content.title;
+            const limit = data.length % 2 === 1 ? parseInt(data.length / 2) : parseInt((data.length-1)/2)*-1;
 
             console.log(data);
 
             this.state = {
                 mainResult: data[0],
-                results: data.slice(1, 5),
+                results: data.slice(1, parseInt((data.length-1)/2)*2+1),
                 subtitle: subtitle === undefined ? '' : subtitle,
             };
 
@@ -51,12 +50,11 @@ class SearchResults extends React.Component {
         }
 
         this.searchResults = [];
-        //const i = 0;
 
         for (let i = 0; i < this.state.results.length; i++) {
             this.searchResults.push(
-                <div style={{width: (100/this.state.results.length).toString() + '%', margin : 'auto', display: 'inline-block', minWidth: '300px'}} key={i}>
-                <AspectRatio ratio="16/9" style={{maxWidth: '84%', margin: 'auto'}}>
+                <div style={{width: (50).toString() + '%', margin : 'auto', display: 'inline-block', minWidth: '300px'}} key={i}>
+                <AspectRatio ratio="16/9" style={{width: '90%', margin: 'auto', minWidth: '300px'}}>
                     <iframe src={"http://www.youtube.com/embed/" + this.state.results[i].youtube_video_id} style={{width:'100%', margin: 'auto'}}
                             frameBorder="0" allowFullScreen>
                     </iframe>
@@ -78,7 +76,7 @@ class SearchResults extends React.Component {
                     </h1>
                 </div>
                 <div>
-                    <AspectRatio ratio="16/9" style={{maxWidth: '1000px', minWidth: '100%'}}>
+                    <AspectRatio ratio="16/9" style={{maxWidth: '1000px', minWidth: '300px'}}>
                         <iframe
                             src={"http://www.youtube.com/embed/" + this.state.mainResult.youtube_video_id}
                             frameBorder="0" allowFullScreen

@@ -1,3 +1,7 @@
+'''
+A query to show a specific user history search.
+Going through his history and bringing back the last 5 searched videos.
+'''
 SHOW_HISTORY_PAGE = {
     'query': '''
             SELECT youtube_video_id 

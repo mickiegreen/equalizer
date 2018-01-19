@@ -35,11 +35,13 @@ SSH_PASSWORD = ''
 #             MySQL            #
 #                              #
 #******************************#
-MYSQL_HOST = 'localhost'
+MYSQL_HOST = 'mysqlsrv.cs.tau.ac.il'
 MYSQL_PORT = 3306
-MYSQL_SCHEMA = ''
-MYSQL_USER = ''
-MYSQL_PASSWORD = ''
+MYSQL_SCHEMA = 'DbMysql18'
+MYSQL_USER = 'DbMysql18'
+MYSQL_PASSWORD = 'DbMysql18'
+
+MYSQL_USE_TUNNEL = False
 
 MYSQL_INFO = {
     'host'          : MYSQL_HOST,
@@ -67,6 +69,7 @@ from app_loggers import LOGGER
 
 try:
     from config_local import *
+    print MYSQL_INFO
 except:
     pass
 

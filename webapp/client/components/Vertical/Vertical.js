@@ -4,7 +4,7 @@ import '../../styles/slider.scss'
 import Page from '../../components/Page/Page'
 import Button from 'react-mdc-web/lib/Button/Button';
 import './Vertical.css';
-import {hasValidJwtToken, getToken} from "modules/auth/jwtUtils";
+import {hasValidJwtToken, getToken, setToken, setUserName} from "modules/auth/jwtUtils";
 
 const equalizerSlider = {
     display: 'inline-block',
@@ -55,7 +55,7 @@ const ButtonFont2 = {
 class Vertical extends React.Component {
     constructor(props: Object) {
         super(props);
-        console.log(props.history);
+        console.log(props);
         this.state = {
             likes: 50,
             views: 50,
@@ -95,7 +95,7 @@ class Vertical extends React.Component {
     handleClicked = (value) => {
         console.log("handleClicked");
         console.log("randomQuery");
-        fetch(`/resources/videos/customQuery?user_id=${encodeURIComponent(getToken())}&likes=${encodeURIComponent(this.state.likes)}&dislikes=${encodeURIComponent(this.state.dislikes)}&comments=${encodeURIComponent(this.state.comments)}&views=${encodeURIComponent(this.state.views)}`, {
+        fetch(`/resources/videos/equalizer?user_id=${encodeURIComponent(getToken())}&likes=${encodeURIComponent(this.state.likes)}&dislikes=${encodeURIComponent(this.state.dislikes)}&comments=${encodeURIComponent(this.state.comments)}&views=${encodeURIComponent(this.state.views)}`, {
             method: 'GET',
             credentials: 'same-origin',
             headers: {
@@ -103,11 +103,27 @@ class Vertical extends React.Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             }}).then(response => {
-                this.props.history.push({
-                    pathname : '/search',
-                    data: response.content
-                });
-        });
+                if (response.ok) {
+                    response.json().then(json => {
+                        console.log(json);
+                        if(json.rc >= 0){
+                            localStorage.setItem('eqSearchResults', JSON.stringify(json));
+                            /*this.props.history.push({
+                                pathname : '/search',
+                                props: this.props
+                            });
+                            console.log(this)*/
+                        }
+                    }).then(
+                        () => {
+                            this.props.history.push({
+                                pathname : '/search',
+                                props: this.props
+                            });
+                        }
+                    );
+                }
+        })
     }
 
     render() {

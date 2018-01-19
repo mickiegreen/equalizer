@@ -6,19 +6,14 @@ import Button from 'react-mdc-web/lib/Button';
 import Checkbox from 'react-mdc-web/lib/Checkbox';
 import LoginUserMutation from '../../modules/auth/mutations/Login';
 import SignupUserMutation from '../../modules/auth/mutations/Signup';
-//import getToken from '../../modules/auth/jwtUtils';
-import { authenticatedRoute } from '../../modules/auth/utils';
 import { SelectRandomQuery } from '../../modules/auth/mutations/SelectRandomQuery';
-//import styles from '../../modules/auth/Auth.scss';
 import "../../../node_modules/video-react/styles/scss/video-react.scss";
 import styles from './Home.scss';
-import fontStyles from '../../../static/admin/fonts/font.css';
 import Vertical from '../Vertical/Vertical';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import {hasValidJwtToken} from "modules/auth/jwtUtils";
 import SearchResults from "components/SearchResults/SearchResults";
-
-//export const history = createHashHistory();
+import fontStyles from '../../../static/admin/fonts/font.css';
 
 function isLoginCheck(props) {
     console.log("isLogin :: " + props.router.match.path === '/login');
@@ -99,14 +94,11 @@ function getToken() {
 class Main extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props.history);
+
         const initialInput = {
             email: '',
             password: '',
         };
-        /*if (!isLoginCheck(props)) {
-            initialInput.passwordConfirmation = '';
-        }*/
 
         this.state = {
             custom: false,
@@ -153,7 +145,7 @@ class Main extends React.Component {
                 'Content-Type': 'application/json',
             }}).then(response => {
                 console.log(response);
-                this.props.history.push({
+                history.push({
                     pathname : '/search',
                     data: response.json()
                 });
@@ -200,7 +192,7 @@ class Main extends React.Component {
 
     render() {
         const { input, passwordConfirmation, isEmailValid, isPasswordsMatching } = this.state;
-        const isLogin = getToken() == null ? false : (getToken() > 0 ? true : false);
+        const isLogin = getToken() === null || getToken() === undefined ? false : (getToken() > 0 ? true : false);
         const { custom, random } = this.state;
 
         return(
@@ -353,7 +345,7 @@ class Home extends React.Component {
     randomQuery = () => {
         console.log("randomQuery");
         results = SelectRandomQuery();
-        this.props.history.push({
+        history.push({
                 pathname: "/random",
                 data: SelectRandomQuery()
             }
@@ -413,21 +405,16 @@ class Home extends React.Component {
     };*/
 
     render() {
-        {/*const { input, passwordConfirmation, isEmailValid, isPasswordsMatching } = this.state;
-        const isLogin = getToken() == null ? false : (getToken() > 0 ? true : false);
-        const { custom, random } = this.state;*/}
-
         return(
             <Page heading={false}>
-                <Router>
+                <Router history={this.props.history}>
                     <div>
                         <Route exact path="/" component={Main} />
-                        <Route exact path="/search" component={SearchResults} />
+                        <Route path="/search" component={SearchResults} />
                     </div>
                 </Router>
             </Page>
         );
-
     }
 }
 

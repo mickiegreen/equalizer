@@ -55,7 +55,7 @@ const searchBox = {
 }
 
 const HomeLink = ({ title }: { title: NavPropsType.title }) =>
-  <NavLink to='/' >
+  <NavLink to='/'>
     <Button >
         {/*<img className="account-dropdown__avatar" src='../../../assets/admin/img/vid-btn-play-icon2.png' />*/}
         <img className="account-dropdown__avatar" style={iconStyle} src='../../../assets/admin/img/PlayButton.png' />

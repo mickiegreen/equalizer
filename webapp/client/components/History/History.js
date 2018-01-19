@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/href-no-hash */
 import React from 'react';
-import { Player } from '../../../node_modules/video-react';
 import Page from '../Page/Page';
 /*import "../../../node_modules/video-react/styles/scss/video-react.scss";*/
 import '../../../node_modules/react-aspect-ratio/aspect-ratio.css';
@@ -34,12 +33,8 @@ class History extends React.Component {
 
     constructor(props){
         super(props);
-        console.log(localStorage.getItem('jwtToken') );
         if (localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken') === undefined ){
-            // todo - ADD NEXT LINE
             window.location.replace('/');
-            console.log(localStorage.getItem('jwtToken'));
-            console.log(localStorage.getItem('jwtToken') === undefined );
         }
         this.state = {
             mainResult: {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},

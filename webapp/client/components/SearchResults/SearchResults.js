@@ -7,83 +7,89 @@ import '../../../node_modules/react-aspect-ratio/aspect-ratio.css';
 import styles from './SearchResults.css';
 import AspectRatio from 'react-aspect-ratio';
 
-const frameStyle = {
-    margin: 'auto',
-    padding: '10px',
-    borderColor: 'rgb(0, 0, 0)',
-    borderWidth: '10px',
-    width: '100%',
+const subtitleStyle = {
+    color: '#fff',
+    fontFamily: 'GeosansLight',
+    fontWeight: '300',
+    fontSize: '20px'
 }
 
-const mainFrameStyle = {
-    margin: 'auto',
-    display: 'block',
-    padding: '4%',
-    backgroundColor: 'rgba(0,0,0,.37)',
-    border: '2px solid #ffffff',
-    borderRadius: '6px'
-}
-
-const wrapperFrameStyle = {
-    border: '2px solid #ffffff',
-    borderRadius: '6px'
+const smallFrames = {
+    width:'100%',
+    margin: 'auto'
 }
 
 class SearchResults extends React.Component {
-
     constructor(props){
         super(props);
-        console.log(localStorage.getItem('jwtToken') );
-        if (localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken') === undefined ){
-            // todo - ADD NEXT LINE
-            window.location.replace('/');
 
+        const content = JSON.parse(localStorage.getItem('eqSearchResults'));
+
+        if (localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken') === undefined ){
+            window.location.replace('/');
         }
-        console.log(props.location);
-        this.state = {
-            mainResult: {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},
-            results: [
-                {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},
-                {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},
-                {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},
-                {videoTitle: 'Blas', youtube_video_id: 'RAsN9OVI-vQ'},
-            ],
-            subtitle: props.randomResults === undefined ? '' : 'You got ' + props.randomResults,
+
+        console.log(content);
+
+        if( content !== undefined && content !== null ) {
+
+            const data = content.content.data;
+            const subtitle = content.title;
+
+            console.log(data);
+
+            this.state = {
+                mainResult: data[0],
+                results: data.slice(1, 5),
+                subtitle: subtitle === undefined ? '' : subtitle,
+            };
+
+            console.log('here2');
+
+        } else {
+            this.search.results = [];
         }
+
         this.searchResults = [];
         //const i = 0;
+
         for (let i = 0; i < this.state.results.length; i++) {
             this.searchResults.push(
-                <div style={{width:'25%', margin : 'auto', display: 'inline-block'}} key={i}>
+                <div style={{width: (100/this.state.results.length).toString() + '%', margin : 'auto', display: 'inline-block', minWidth: '300px'}} key={i}>
                 <AspectRatio ratio="16/9" style={{maxWidth: '84%', margin: 'auto'}}>
-                    <iframe src="http://www.youtube.com/embed/W7qWa52k-nE" style={{width:'100%', margin: 'auto'}}
+                    <iframe src={"http://www.youtube.com/embed/" + this.state.results[i].youtube_video_id} style={{width:'100%', margin: 'auto'}}
                             frameBorder="0" allowFullScreen>
                     </iframe>
-                </AspectRatio>
+                </AspectRatio><br/>
                 </div>
             ); console.log(i);
         }
+
+        console.log(this.state);
     }
 
     render(){
         return (
             <Page heading='Search Results' >
+                <div style={{maxWidth: '1000px', margin: 'auto', width: '98%', minWidth:'300px'}}>
                 <div>
-                    <h1>
+                    <h1 style={subtitleStyle}>
                         {this.state.subtitle}
                     </h1>
                 </div>
                 <div>
-                    <AspectRatio ratio="16/9" style={{maxWidth: '1000px', minWidth:'100%'}}>
+                    <AspectRatio ratio="16/9" style={{maxWidth: '1000px', minWidth: '100%'}}>
                         <iframe
-                            src="http://www.youtube.com/embed/W7qWa52k-nE"
+                            src={"http://www.youtube.com/embed/" + this.state.mainResult.youtube_video_id}
                             frameBorder="0" allowFullScreen
                             key={'main'}>
                         </iframe>
                     </AspectRatio>
-                </div><br/><br/>
-                <div style={{width: '100%', margin : 'auto'}} >
+                </div>
+                <br/><br/>
+                <div style={{width: '100%', margin: 'auto'}}>
                     {this.searchResults}
+                </div>
                 </div>
             </Page>
         );

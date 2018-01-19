@@ -2,18 +2,17 @@ import Auth from '../modules/auth/Auth';
 import Vertical from "components/Vertical/Vertical";
 import Landing from "components/Landing/Landing";
 import SearchResults from "components/SearchResults/SearchResults";
-//import Equalizer from "components/Equalizer/Equalizer";
-
+import History from "components/History/History";
 
 const authRoutes = [
-  {
-    path: '/signup',
-    component: Auth,
-  },
-  {
-    path: '/login',
-    component: Auth,
-  },
+    {
+        path: '/signup',
+        component: Auth,
+    },
+    {
+        path: '/login',
+        component: Auth,
+    },
     {
         path: '/home',
         component: Landing,
@@ -25,6 +24,10 @@ const authRoutes = [
     {
         path: '/search',
         component: SearchResults,
+    },
+    {
+        path: '/history',
+        component: History,
     },
 ];
 

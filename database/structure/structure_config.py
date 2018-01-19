@@ -73,6 +73,22 @@ YOUTUBE_VIDEO_REMOVE_ALL_REFERENCES_QUERY = {
     "keys"  : ["video_id"]
 }
 
+YOUTUBE_VIDEO_FK_TABLE = "youtube_video_fk"
+YOUTUBE_VIDEO_FK_TABLE_PK = "video_id"
+YOUTUBE_VIDEO_FK_EXISTS_QUERY = {
+    "query" : "SELECT * FROM youtube_video_fk WHERE youtube_video_id=%s",
+    "keys"  : ["youtube_video_id"]
+}
+
+YOUTUBE_VIDEO_FK_REMOVE_ALL_REFERENCES_QUERY = {
+    "query" : \
+        "DELETE v, sav " + \
+        "FROM youtube_video v " + \
+        "INNER JOIN artist_song_video AS sav " + \
+        "WHERE v.video_id=sav.video_id AND v.video_id=%s",
+    "keys"  : ["video_id"]
+}
+
 USER_TABLE = "user"
 USER_TABLE_PK = "user_id"
 USER_EXISTS_QUERY = {

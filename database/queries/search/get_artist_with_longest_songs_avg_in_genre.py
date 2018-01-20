@@ -13,7 +13,7 @@ ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE = {
                 WHERE song_id = ANY(
                     SELECT song_id
                     FROM song
-                    WHERE genre="%s"
+                    WHERE genre='%s'
                 )
                 GROUP BY artist_id
                 HAVING COUNT(artist_id) > 1 
@@ -23,7 +23,7 @@ ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE = {
                     WHERE song_id = ANY(
                         SELECT song_id
                         FROM song
-                        WHERE genre="%s"
+                        WHERE genre='%s'
                     )
                     GROUP BY artist_id
                     HAVING COUNT(artist_id) > 1 

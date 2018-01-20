@@ -70,20 +70,77 @@ class GenericView(View):
 
         return mysql_api.execute(params=params, **query)
 
+    def get_random_data(self, key, request):
+        rand_data = {
+            'year'          : self.get_random_year,
+            'genre'         : self.get_random_genre,
+            'country'       : self.get_random_country,
+            'artist'        : self.get_random_artist,
+            'years_range'   : self.get_random_years_range
+        }
+
+        return rand_data[key](request)
+
     def get_random_genre(self, request, *args, **kwargs):
-        genres = self.get_resource(request, query=app.SELECT_GENRE, *args, **kwargs).get('content', {}).get('data', [])
-        random.shuffle(genres)
-        return genres[0]['genre']
+        genres = self.get_resource(request, query=app.SELECT_RANDOM_GENRE, *args, **kwargs).get('content', {}).get('data', [])
+        return {'genre' : genres[0]['genre']}
 
     def get_random_year(self, request, *args, **kwargs):
-        years = self.get_resource(request, query=app.SELECT_YEAR, *args, **kwargs).get('content', {}).get('data', [])
-        random.shuffle(years)
-        return years[0]['year']
+        years = self.get_resource(request, query=app.SELECT_RANDOM_YEAR, *args, **kwargs).get('content', {}).get('data', [])
+        return {'year' : int(years[0]['year'])}
+
+    def get_random_years_range(self, request, *args, **kwargs):
+        year1 = self.get_random_year(request)['year']
+        year2 = self.get_random_year(request)['year']
+
+        year1, year2 = sorted([year1, year2])
+
+        return {'year1': year1,'year2' : year2, 'years_range' : str(year1) + ' - ' + str(year2)}
 
     def get_random_country(self, request, *args, **kwargs):
-        countries = self.get_resource(request, query=app.SELECT_COUNTRY, *args, **kwargs).get('content', {}).get('data', [])
-        random.shuffle(countries)
-        return countries[0]['country']
+        countries = self.get_resource(request, query=app.SELECT_RANDOM_COUNTRY, *args, **kwargs).get('content', {}).get('data', [])
+        return {'country' : countries[0]['country']}
+
+    def get_random_artist(self, request, *args, **kwargs):
+        artists = self.get_resource(request, query=app.SELECT_RANDOM_ARTIST, *args, **kwargs).get('content', {}).get('data', [])
+        return {'artist_id' : artists[0]['artist_id'], 'artist_name' : str(artists[0]['artist_name'])}
+
+    def post_user_results(self, data, user_id):
+        # prepare storage engine
+        engine = MySqlEngine(**app.MYSQL_INFO)
+
+        # execute query
+        mysql_api = MysqlApi(engine=engine)
+
+        return mysql_api.execute(params={'data' : data, 'user_id' : int(user_id)}, **app.INSERT_NEW_SEARCH_RESULTS)
+
+    def update_user_history(self, user_id, response):
+        if len(response.get('content', {}).get('data', [])) == 0: return
+
+        user_results = ','.join([str(int(video['video_id'])) for video in response.get('content', {}).get('data', [])])
+
+        self.post_user_results(user_results, user_id)
+        self.remove_user_old_search_results(user_id)
+
+    def remove_user_old_search_results(self, user_id):
+
+        # prepare storage engine
+        engine = MySqlEngine(**app.MYSQL_INFO)
+
+        # execute query
+        mysql_api = MysqlApi(engine=engine)
+
+        results_count = mysql_api.execute(params={'user_id': int(user_id)}, **app.GET_USER_RESULTS_COUNT) \
+            .get('content', {}).get('data', [])[0]['resultsCount']
+
+        if int(results_count) > 20:
+            recent_history = mysql_api.execute(params={'user_id': int(user_id)}, **app.GET_USER_RECENT_RESULTS) \
+                .get('content', {}).get('data', [])
+
+            result_ids = [repr(int(row['result_id'])) for row in recent_history]
+            result_ids = ','.join(result_ids)
+
+            mysql_api.execute(params={'user_id': int(user_id), 'result_ids' : result_ids}, **app.REMOVE_USER_OLD_HISTORY)
 
     def req_to_mutable(self, request):
         # making params mutable
@@ -104,49 +161,12 @@ class GenericView(View):
 class LoginView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(LoginView, self).get(request, query=app.USER_LOGIN, *args, **kwargs)
+        return super(LoginView, self).get(request, query=app.LOGIN_AUTH, *args, **kwargs)
 
 class SignUpView(GenericView):
     def post(self, request, *args, **kwargs):
         """ executing sign up request """
-        return super(SignUpView, self).post(request, query=app.USER_SIGN_UP, *args, **kwargs)
-
-class MostUnlikedSongView(GenericView):
-    def get(self, request, *args, **kwargs):
-        """ return most unliked songs in genre from db """
-        self.req_to_mutable(request)
-
-        # getting random year
-        request.GET['year'] = self.get_random_year(request)
-
-        return super(MostUnlikedSongView, self).get(request, query=app.MOST_UNLIKED_SONGS, *args, **kwargs)
-
-class DislikeSongsView(GenericView):
-    def get(self, request, *args, **kwargs):
-        """ return most hated songs in year """
-        return super(DislikeSongsView, self).get(request, query=app.DISLIKES_SONGS, *args, **kwargs)
-
-class MostLikedSongsView(GenericView):
-    def get(self, request, *args, **kwargs):
-        """ return most liked songs """
-
-        self.req_to_mutable(request)
-
-        # getting random year
-        request.GET['year'] = self.get_random_year(request)
-
-        return super(MostLikedSongsView, self).get(request, query=app.MOST_LIKED_SONGS, *args, **kwargs)
-
-class RelevantArtistView(GenericView) :
-    def get(self, request, *args, **kwargs):
-        """ executing login request """
-        self.req_to_mutable(request)
-
-        # setting random genre
-        request.GET['genre'] = self.get_random_genre(request, *args, **kwargs)
-
-        # return http response
-        return super(RelevantArtistView, self).get_resource(request, query=app.RELEVANT_ARTIST_SONGS, *args, **kwargs)
+        return super(SignUpView, self).post(request, query=app.SIGN_USER, *args, **kwargs)
 
 class EqualizerView(GenericView):
     def get(self, request, *args, **kwargs):
@@ -155,10 +175,10 @@ class EqualizerView(GenericView):
         self.req_to_mutable(request)
 
         # getting random genre
-        request.GET['genre'] = self.get_random_genre(request, *args, **kwargs)
+        request.GET['genre'] = self.get_random_genre(request, *args, **kwargs)['genre']
 
         # getting random country
-        request.GET['country'] = self.get_random_country(request, *args, **kwargs)
+        request.GET['country'] = self.get_random_country(request, *args, **kwargs)['country']
 
         # prepare equalizer user params
         keys = ['likes', 'dislikes', 'views', 'comments']
@@ -171,107 +191,111 @@ class EqualizerView(GenericView):
         for k, v in keys: request.GET[k] = float(v/norm)
 
         # executing equalizer logics
-        response = self.get_resource(request, query = app.EQUALIZER, *args, **kwargs)
+        response = self.get_resource(request, query = app.VIDEOS_CUSTOM_STATISTICS, *args, **kwargs)
         response['title'] = "Custom search : %.2f likes, %.2f dislikes, %.2f views, %.2f comments " %tuple(request.GET[k] for k,v in keys)
 
+        # updating user history
+        self.update_user_history(request.GET['user_id'], response)
+
         return HttpResponse(json.dumps(response), content_type='application/json')
-
-class LongestArtistSongView(GenericView) :
-    def get(self, request, *args, **kwargs):
-        """ return artist with longest songs average """
-        return super(LongestArtistSongView, self).get(request, query=app.LONGEST_ARTIST_SONG, *args, **kwargs)
-
-class PopularSongsView(GenericView):
-    def get(self, request, *args, **kwargs):
-        """ return most popular songs """
-        return super(PopularSongsView, self).get(request, query=app.MOST_POPULAR_SONGS, *args, **kwargs)
-
-class HatedGenreSongView(GenericView):
-    def get(self, request, *args, **kwargs):
-        """ return most hated song in year """
-        self.req_to_mutable(request)
-
-        # getting random year
-        request.GET['year'] = self.get_random_year(request)
-
-        return super(HatedGenreSongView, self).get(request, query=app.HATED_GENRE_SONGS, *args, **kwargs)
 
 class RandomQueryView(GenericView):
     def get(self, request, *args, **kwargs):
         """ return random query """
-        title, query, keys = self.get_random_query()
-
-        print title, query, keys
+        title, query, keys, rand_data = self.get_random_query()
 
         self.req_to_mutable(request)
 
         # get required keys
-        request.GET['genre'] = self.get_random_genre(request)
-        request.GET['country'] = self.get_random_country(request)
-        request.GET['year'] = self.get_random_year(request)
+        for data in rand_data:
+            request.GET.update(self.get_random_data(data, request))
 
         # execute query
-        res = self.get_resource(request, query = query, *args, **kwargs)
+        response = self.get_resource(request, query = query, *args, **kwargs)
 
         # add title
-        res['title'] = title %request.GET[keys] if keys != None else title
+        response['title'] = title %repr(request.GET[keys]) if keys != None else title
 
         # add search results to history
-        if ((res.get('content',{}).get('data',{})[0].get('count',-1)) >= 0) :
-            super(RandomQueryView, self).get_resource(request, query=app.USER_HISTORY_COUNT, *args, **kwargs)
-            super(RandomQueryView, self).get_resource(request, query=app.USER_HISTORY_INSERT, *args, **kwargs)
-            super(RandomQueryView, self).get_resource(request, query=app.MIDDLE_HISTORY_INSERT, *args, **kwargs)
+        self.update_user_history(int(request.GET['user_id']), response)
 
-        return HttpResponse(json.dumps(res), content_type='application/json')
+        return HttpResponse(json.dumps(response), content_type='application/json')
 
     def get_random_query(self):
         """ get random query """
 
         queries_dic = {
-                        'The Most Hated Songs In Genre "%s"': {
-                            'query':app.HATED_GENRE_SONGS,
-                            'keys':'genre'
+                        'Most ambivalent songs of artist "%s"': {
+                            'query' : app.MOST_AMBIVALENT_SONGS_OF_ARTIST,
+                            'keys'  :'artist_name',
+                            'rand_data': ['artist']
                         },
 
-                        'The Most Popular Songs In Genre "%s"':{
-                            'query':app.MOST_POPULAR_SONGS,
-                            'keys':'genre'
+                        'Most hated artists between %s': {
+                            'query': app.MOST_HATED_ARTISTS_OF_YEAR_RANGE,
+                            'keys': 'years_range',
+                            'rand_data': ['years_range']
                         },
 
-                        'The Songs Of The Most Verbose Artist "%s"':{
-                            'query':  app.LONGEST_ARTIST_SONG,
+                        'Songs of artist with longest songs average in genre "%s"':{
+                            'query':  app.ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE,
+                            'keys' : 'genre',
+                            'rand_data': ['genre']
                         },
 
-                        'The Most Relevant Songs Of Artists From Genre "%s""':{
-                            'query':app.RELEVANT_ARTIST_SONGS,
-                            'keys':'genre'
+                        'Songs of most relevant artist in genre "%s""':{
+                            'query':app.MOST_RELEVANT_ARTISTS_GENRE_SONGS,
+                            'keys':'genre',
+                            'rand_data' : ['genre']
                         },
 
-                        'The Most Popular Songs In Year "%d"':{
-                            'query':app.MOST_LIKED_SONGS,'keys':'year'
+                        'List from country "%s" which are of the most common genre ':{
+                            'query':app.MOST_COMMON_GENRE_IN_COUNTRY,
+                            'keys':'country',
+                            'rand_data': ['country']
                         },
 
-                        'The Most Unliked Songs': {
-                            'query': app.DISLIKES_SONGS,
+                        'Songs of most hated pair of artists in genre "%s"': {
+                            'query': app.MOST_HATED_PAIR_FROM_GENRE,
+                            'keys' : 'genre',
+                            'rand_data': ['genre']
                         },
 
-                        'The Most Hated Songs In Year "%d"':{
-                            'query':app.MOST_UNLIKED_SONGS,
-                            'keys':'year'
-                        }
+                        'List of most and least popular songs': {
+                            'query': app.MOST_POPULAR_SONGS,
+                        },
+
+                        'List of most hated songs of %s ': {
+                            'query': app.MOST_HATED_SONGS_OF_YEAR,
+                            'keys': 'year',
+                            'rand_data': ['year']
+                        },
+
+                        'Songs from most hated genre': {
+                            'query': app.MOST_HATED_GENRE_SONGS,
+                        },
                     }
 
         keys = queries_dic.keys()
         random.shuffle(keys)
-        return (keys[0], queries_dic[keys[0]]['query'], queries_dic[keys[0]].get('keys', None))
 
-class SearchHistoryView(GenericView):
+        print (keys[0], queries_dic[keys[0]]['query'], queries_dic[keys[0]].get('keys', None), queries_dic[keys[0]].get('rand_data', []))
+
+        return (keys[0], queries_dic[keys[0]]['query'], queries_dic[keys[0]].get('keys', None), queries_dic[keys[0]].get('rand_data', []))
+
+class UserSearchHistoryView(GenericView):
+    def get(self, request, *args, **kwargs):
+        """ executing search history fulltext string request """
+        self.req_to_mutable(request)
+        request.GET['user_id'] = int(request.GET.get('user_id', -1))
+
+        return super(UserSearchHistoryView, self).get(request, query=app.FULLTEXT_SEARCH_IN_HISTORY, *args, **kwargs)
+
+class UserRecentHistoryView(GenericView):
     def get(self, request, *args, **kwargs):
         """ executing login request """
-        return super(SearchHistoryView, self).get(request, query=app.SEARCH_IN_HISTORY, *args, **kwargs)
 
+        self.req_to_mutable(request)
+        request.GET['user_id'] = int(request.GET.get('user_id', -1))
 
-class ShowHistoryPageView(GenericView):
-    def get(self, request, *args, **kwargs):
-        """ executing login request """
-        return super(ShowHistoryPageView, self).get(request, query=app.SHOW_HISTORY_PAGE, *args, **kwargs)
+        return super(UserRecentHistoryView, self).get(request, query=app.GET_USER_RECENT_HISTORY, *args, **kwargs)

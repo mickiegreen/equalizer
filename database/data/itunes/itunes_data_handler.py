@@ -116,8 +116,6 @@ class ItunesDataHandler(AbstractDataHandler):
             except Exception as e:
                 print(e)
 
-        print 'data', len(itunes_data)
-
     @overrides
     def update(self, data):
         """ update existing data """

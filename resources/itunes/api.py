@@ -9,7 +9,6 @@ ENTITY='musicTrack'
 
 URL='https://itunes.apple.com/search?term=%s&limit=%d&country=%s&entity=%s&releaseYearTerm=%s&attribute=artistTerm' %(T,LIMIT,country,ENTITY,TERM)
 res = requests.get(URL)
-print(res.json())
 res2=json.loads(res.text)
 with open('songUS.text', 'w') as outfile:
     json.dump(res2, outfile)

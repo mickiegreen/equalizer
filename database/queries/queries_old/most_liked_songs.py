@@ -10,7 +10,7 @@ MOST_LIKED_SONGS = {
                    FROM( 
                        SELECT youtube_video_title as title,youtube_video_id as id , YEAR(release_date) AS `year`, 
                         sum(0.3*views+0.5*likes+0.2*comments) AS rating 
-                       FROM join_song_video_artist 
+                       FROM artist_song_video_view 
                        WHERE country IN(select country from song where YEAR(release_date) = "%s") 
                        GROUP BY id) rating_table 
                    JOIN youtube_video  as main_table ON rating_table.id = main_table.youtube_video_id 
@@ -18,11 +18,4 @@ MOST_LIKED_SONGS = {
                    limit 10) as a ''',
     'args': ['year'],
     'mode'  : 'select',
-}
-
-SELECT_YEAR = {
-    'query' : '''
-                SELECT DISTINCT(YEAR(release_date)) as `year` FROM song
-              ''',
-    'mode'  : 'select'
 }

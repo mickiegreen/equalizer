@@ -30,7 +30,6 @@ from equalizer.lib.storage.mysql.attributes import IntegerAttribute, \
 from equalizer_view_entity import EqualizerViewEntity as Entity
 import structure_config as app
 
-# TODO handle as a view not regular entity
 class JoinSongArtistNoVideo(Entity):
     """ Join song video artist view entity """
     def __init__(self, song_id = 0, song_title = None, itunes_song_id = None,

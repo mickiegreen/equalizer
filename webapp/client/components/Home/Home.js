@@ -13,6 +13,7 @@ import Vertical from '../Vertical/Vertical';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import {hasValidJwtToken} from "modules/auth/jwtUtils";
 import SearchResults from "components/SearchResults/SearchResults";
+import History from "components/History/History";
 import fontStyles from '../../../static/admin/fonts/font.css';
 
 function isLoginCheck(props) {
@@ -136,7 +137,33 @@ class Main extends React.Component {
 
     randomQuery = () => {
         console.log("randomQuery");
-        fetch(`/resources/videos/randomQuery?user_id=${encodeURIComponent(getToken())}`, {
+        fetch(`/resources/videos/random?user_id=${encodeURIComponent(getToken())}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                authorization: `Bearer ${hasValidJwtToken().token}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }}).then(response => {
+            if (response.ok) {
+                response.json().then(json => {
+                    console.log(json);
+                    if(json.rc >= 0){
+                        localStorage.setItem('eqSearchResults', JSON.stringify(json));
+                    }
+                }).then(
+                    () => {
+                        this.props.history.push({
+                            pathname : '/search',
+                            props: this.props
+                        });
+                    }
+                );
+            }
+        });
+
+
+        /*fetch(`/resources/videos/randomQuery?user_id=${encodeURIComponent(getToken())}`, {
             method: 'GET',
             credentials: 'same-origin',
             headers: {
@@ -149,7 +176,7 @@ class Main extends React.Component {
                     pathname : '/search',
                     data: response.json()
                 });
-            });
+            });*/
     }
 
     showLogin = () => {
@@ -304,9 +331,6 @@ class Home extends React.Component {
             email: '',
             password: '',
         };
-        /*if (!isLoginCheck(props)) {
-            initialInput.passwordConfirmation = '';
-        }*/
 
         this.state = {
             custom: false,
@@ -321,89 +345,6 @@ class Home extends React.Component {
         };
     }
 
-    checkLogin = () => {
-
-    }
-
-    /*setFormErrors = () => {
-        const { isEmailValid, isPasswordPresent } = this.state;
-        // If not valid!
-        if (!isEmailValid) {
-            this.setState({ errorEmail: "Email isn't valid" });
-        }
-        if (!isPasswordPresent) {
-            this.setState({ errorPassword: 'Passwords is blank' });
-        }
-    };
-
-    customQuery = () => {
-        console.log("customQuery");
-        this.setState({custom: !this.state.custom});
-        console.log(this.state.custom);
-    }
-
-    randomQuery = () => {
-        console.log("randomQuery");
-        results = SelectRandomQuery();
-        history.push({
-                pathname: "/random",
-                data: SelectRandomQuery()
-            }
-        );
-
-        fetch(`/resources/videos/randomQuery?user_id=${encodeURIComponent(getToken())}`, {
-            method: 'GET',
-            credentials: 'same-origin',
-            headers: {
-                authorization: `Bearer ${hasValidJwtToken().token}`,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            }.then(response => {
-                window.location.replace()
-            })
-        })
-    }
-
-    showLogin = () => {
-        console.log("showLogin");
-        this.setState({showLoginForm: !this.state.showLoginForm, showSignUpForm : false});
-    }
-
-    showSignUp = () => {
-        console.log("showSignUp");
-        this.setState({showSignUpForm: !this.state.showSignUpForm, showLoginForm : false});
-    }
-
-    handleFieldChange(e) {
-        const input = this.state.input;
-        const inputName = e.target.id;
-        input[inputName] = e.target.value;
-        this.setState({ input });
-    }
-
-    loginUser = (environment, input) => {
-        LoginUserMutation(environment, input).then( response => {
-                if (getToken() > 0) {
-                    this.setState({showLoginForm: false, showSignUpForm: false});
-                    console.log('hereeee');
-                }
-            }
-        );
-        //console.log(mutation);
-    };
-    signupUser = (environment, input) => {
-        const mutation = SignupUserMutation(environment, input);
-    };
-
-    submitForm = (form) => {
-        form.preventDefault();
-        //const isLogin = isLoginCheck(this.props);
-        const { input, isEmailValid, isPasswordPresent } = this.state;
-        const { environment } = this.props;
-
-        this.state.showLoginForm ? this.loginUser(environment, input) : this.signupUser(environment, input);
-    };*/
-
     render() {
         return(
             <Page heading={false}>
@@ -411,6 +352,7 @@ class Home extends React.Component {
                     <div>
                         <Route exact path="/" component={Main} />
                         <Route path="/search" component={SearchResults} />
+                        <Route path="/history" component={History} />
                     </div>
                 </Router>
             </Page>

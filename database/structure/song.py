@@ -23,7 +23,7 @@
 from equalizer.lib.storage.mysql.attributes import PrimaryKey, DatetimeAttribute, \
     TimedeltaAttribute, VarcharAttribute
 
-from equalizer_view_entity import EqualizerViewEntity as Entity
+from equalizer_abstract_entity import EqualizerAbstractEntity as Entity
 import structure_config as app
 
 class Song(Entity):

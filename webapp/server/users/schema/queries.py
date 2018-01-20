@@ -14,7 +14,6 @@ class UserQueries(AbstractType):
         try:
             token_user_id = get_token_user_id(args, context)
             user = get_user_model().objects.get(id=token_user_id)
-            print(user)
             return Viewer(
                 id=0,
                 user=user

@@ -46,7 +46,10 @@ class SearchResults extends React.Component {
             console.log('here2');
 
         } else {
-            this.search.results = [];
+            this.state = {
+                results : [],
+                mainResult: ''
+            };
         }
 
         this.searchResults = [];
@@ -69,14 +72,14 @@ class SearchResults extends React.Component {
     render(){
         return (
             <Page heading='Search Results' >
-                <div style={{maxWidth: '1000px', margin: 'auto', width: '98%', minWidth:'300px'}}>
+                <div style={{maxWidth: '800px', margin: 'auto', width: '98%', minWidth:'300px'}}>
                 <div>
                     <h1 style={subtitleStyle}>
                         {this.state.subtitle}
                     </h1>
                 </div>
                 <div>
-                    <AspectRatio ratio="16/9" style={{maxWidth: '1000px', minWidth: '300px'}}>
+                    <AspectRatio ratio="16/9" style={{maxWidth: '800px', minWidth: '300px'}}>
                         <iframe
                             src={"http://www.youtube.com/embed/" + this.state.mainResult.youtube_video_id}
                             frameBorder="0" allowFullScreen

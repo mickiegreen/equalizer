@@ -27,7 +27,6 @@ class VideoDetailsApi(BasicApi):
                 details['videoId'] = video['id']
 
         except Exception as e:
-            # TODO handle error
             print(e)
 
         return details

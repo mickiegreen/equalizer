@@ -7,12 +7,12 @@ The genre is randomly chosen each time the query is executed.
 RELEVANT_ARTIST_SONGS = {
     'query': '''
                SELECT youtube_video_id, youtube_video_title 
-               FROM join_song_video_artist 
+               FROM artist_song_video_view 
                WHERE artist_id in 
                (SELECT artist_id 
                FROM(
                SELECT artist_id ,sum(song_id) as sum 
-               FROM join_song_artist 
+               FROM artist_song_view 
                WHERE YEAR(CURDATE())-YEAR(release_date) <= 5    
                AND genre = "%s" 
                GROUP BY artist_id
@@ -21,13 +21,4 @@ RELEVANT_ARTIST_SONGS = {
                LIMIT 10 ''',
     'mode'  : 'select',
     'args' : ['genre']
-}
-
-# a query we use to generate a random genre for the 'relevant artist' query.
-
-SELECT_GENRE = {
-    'query':
-        'SELECT distinct(genre) as genre '
-        'from song ',
-    'mode' : 'select'
 }

@@ -73,19 +73,18 @@ YOUTUBE_VIDEO_REMOVE_ALL_REFERENCES_QUERY = {
     "keys"  : ["video_id"]
 }
 
-YOUTUBE_VIDEO_FK_TABLE = "youtube_video_fk"
-YOUTUBE_VIDEO_FK_TABLE_PK = "video_id"
-YOUTUBE_VIDEO_FK_EXISTS_QUERY = {
-    "query" : "SELECT * FROM youtube_video_fk WHERE youtube_video_id=%s",
+YOUTUBE_VIDEO_FULLTEXT_TABLE = "youtube_video_fulltext"
+YOUTUBE_VIDEO_FULLTEXT_TABLE_PK = "youtube_video_id"
+YOUTUBE_VIDEO_FULLTEXT_EXISTS_QUERY = {
+    "query" : "SELECT * FROM youtube_video_fulltext WHERE youtube_video_id=%s",
     "keys"  : ["youtube_video_id"]
 }
 
-YOUTUBE_VIDEO_FK_REMOVE_ALL_REFERENCES_QUERY = {
+YOUTUBE_VIDEO_FULLTEXT_REMOVE_ALL_REFERENCES_QUERY = {
     "query" : \
-        "DELETE v, sav " + \
-        "FROM youtube_video v " + \
-        "INNER JOIN artist_song_video AS sav " + \
-        "WHERE v.video_id=sav.video_id AND v.video_id=%s",
+        "DELETE " + \
+        "FROM youtube_video_fulltext v " + \
+        "WHERE v.youtube_video_id=%s",
     "keys"  : ["video_id"]
 }
 
@@ -105,36 +104,29 @@ USER_REMOVE_ALL_REFERENCES_QUERY = {
     "keys"  : ["user_id"]
 }
 
-USER_SEARCH_HISTORY_TABLE = "user_search_history"
-USER_SEARCH_HISTORY_TABLE_PK = "history_id"
-USER_SEARCH_HISTORY_EXISTS_QUERY = {
-    "query" : "SELECT * FROM user_search_history WHERE history_id=%s",
-    "keys"  : ["history_id"]
-}
-
-JOIN_SONG_VIDEO_ARTIST_VIEW = "join_song_video_artist"
+JOIN_SONG_VIDEO_ARTIST_VIEW = "artist_song_video_view"
 JOIN_SONG_VIDEO_ARTIST_VIEW_PK = ["video_id", "artist_id", "song_id"]
 JOIN_SONG_VIDEO_ARTIST_EXISTS_QUERY = {
-    "query" : "SELECT * FROM join_song_video_artist WHERE youtube_video_id=%s " + \
+    "query" : "SELECT * FROM artist_song_video_view WHERE youtube_video_id=%s " + \
               "AND itunes_artist_id=%s AND itunes_song_id=%s",
     "keys"  : ["youtube_video_id", "itunes_artist_id", "itunes_song_id"]
 }
 JOIN_SONG_VIDEO_ARTIST_ENTITIES = [SONG_TABLE, ARTIST_TABLE, ARTIST_SONG_TABLE,
                              ARTIST_SONG_VIDEO_TABLE, YOUTUBE_VIDEO_TABLE]
 
-JOIN_SONG_ARTIST_VIEW = "join_song_artist"
+JOIN_SONG_ARTIST_VIEW = "artist_song_view"
 JOIN_SONG_ARTIST_VIEW_PK = ["artist_id", "song_id"]
 JOIN_SONG_ARTIST_EXISTS_QUERY = {
-    "query" : "SELECT * FROM join_song_artist WHERE itunes_artist_id=%s AND itunes_song_id=%s",
+    "query" : "SELECT * FROM artist_song_view WHERE itunes_artist_id=%s AND itunes_song_id=%s",
     "keys"  : ["itunes_artist_id", "itunes_song_id"]
 }
 JOIN_SONG_ARTIST_ENTITIES = [SONG_TABLE, ARTIST_TABLE, ARTIST_SONG_TABLE]
 
 
-JOIN_SONG_ARTIST_NO_VIDEO_VIEW = "join_song_artist_no_videos"
+JOIN_SONG_ARTIST_NO_VIDEO_VIEW = "artist_song_no_videos_view"
 JOIN_SONG_ARTIST_NO_VIDEO_VIEW_PK = ["itunes_artist_id", "itunes_song_id"]
 JOIN_SONG_ARTIST_NO_VIDEO_EXISTS_QUERY = {
-    "query" : "SELECT * FROM join_song_artist_no_video WHERE itunes_artist_id=%s AND itunes_song_id=%s",
+    "query" : "SELECT * FROM artist_song_no_videos_view WHERE itunes_artist_id=%s AND itunes_song_id=%s",
     "keys"  : ["itunes_artist_id", "itunes_song_id"]
 }
 

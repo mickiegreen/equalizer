@@ -69,7 +69,6 @@ from app_loggers import LOGGER
 
 try:
     from config_local import *
-    print MYSQL_INFO
 except:
     pass
 

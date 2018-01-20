@@ -1,10 +1,10 @@
 '''
 This is a query to handle the login process.
-We select 3 attributes - login, user_id and user_name.
+It requires three arguments - login, user_id and user_name.
 login is 1 if the inserted details are correct, 0 otherwise.
 user_id and user_name are attributes in "user" table.
 '''
-USER_LOGIN = {
+LOGIN_AUTH = {
     'query' : 'SELECT (COUNT(*) > 0) AS login, user_id, user_name '
               'FROM ('
               'SELECT user_id, user_name '

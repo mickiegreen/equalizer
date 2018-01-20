@@ -1,15 +1,14 @@
-from login import USER_LOGIN
-from sign_up import USER_SIGN_UP
-from most_popular_songs import MOST_POPULAR_SONGS
-from most_unliked_songs import MOST_UNLIKED_SONGS
-from most_liked_songs import MOST_LIKED_SONGS
-from hated_genre_songs import HATED_GENRE_SONGS
-from relevant_artist_songs import RELEVANT_ARTIST_SONGS, SELECT_GENRE
-from equalizer import EQUALIZER, SELECT_COUNTRY
-from dislike_songs import DISLIKES_SONGS
-from longest_artist_songs import LONGEST_ARTIST_SONG
-from random_search import RANDOM_SEARCH
-from show_history_page import SHOW_HISTORY_PAGE
-from search_in_history import SEARCH_IN_HISTORY
-from history_insert import MIDDLE_HISTORY_INSERT,USER_HISTORY_INSERT,USER_HISTORY_COUNT
-from most_liked_songs import SELECT_YEAR
+from auth import LOGIN_AUTH, SIGN_USER
+
+from user import REMOVE_USER_OLD_HISTORY, INSERT_NEW_SEARCH_RESULTS, \
+    FULLTEXT_SEARCH_IN_HISTORY, GET_USER_RECENT_HISTORY, GET_USER_RECENT_RESULTS, \
+    GET_USER_RESULTS_COUNT
+
+from utils import SELECT_RANDOM_YEAR, SELECT_RANDOM_GENRE, SELECT_RANDOM_COUNTRY, \
+    SELECT_RANDOM_ARTIST
+
+from search import MOST_HATED_PAIR_FROM_GENRE, \
+    MOST_COMMON_GENRE_IN_COUNTRY, MOST_RELEVANT_ARTISTS_GENRE_SONGS, \
+    VIDEOS_CUSTOM_STATISTICS, MOST_HATED_ARTISTS_OF_YEAR_RANGE, \
+    ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE, MOST_AMBIVALENT_SONGS_OF_ARTIST, \
+    MOST_HATED_GENRE_SONGS, MOST_HATED_SONGS_OF_YEAR, MOST_POPULAR_SONGS

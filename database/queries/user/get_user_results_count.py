@@ -1,0 +1,11 @@
+'''
+A query to show a specific user history search.
+Going through his history and bringing back the last 10 searched videos.
+'''
+GET_USER_RESULTS_COUNT = {
+    'query':    'SELECT COUNT(*) AS resultsCount '
+                'FROM results_history r '
+                'WHERE r.user_id=%d ',
+    'args': ['user_id'],
+    'mode'  : 'select'
+}

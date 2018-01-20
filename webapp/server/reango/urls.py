@@ -18,25 +18,16 @@ from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from graphene_django.views import GraphQLView
-from views import LoginView, SignUpView,RandomQueryView, RelevantArtistView, HatedGenreSongView, \
-    PopularSongsView, MostLikedSongsView, MostUnlikedSongView,EqualizerView,LongestArtistSongView,\
-    DislikeSongsView,SearchHistoryView,ShowHistoryPageView
+from views import LoginView, SignUpView, RandomQueryView, EqualizerView, \
+    UserSearchHistoryView, UserRecentHistoryView
 
 urlpatterns = [
+    url(r'^resources/users/history/search', UserSearchHistoryView.as_view()),
+    url(r'^resources/users/history', UserRecentHistoryView.as_view()),
     url(r'^resources/users/login', LoginView.as_view()),
     url(r'^resources/users', csrf_exempt(SignUpView.as_view())),
-    url(r'^resources/videos/mostUnliked', MostUnlikedSongView.as_view()),
-    url(r'^resources/videos/mostlikedsongs', MostLikedSongsView.as_view()),
-    url(r'^resources/videos/mostpopularsongs', PopularSongsView.as_view()),
     url(r'^resources/videos/equalizer', EqualizerView.as_view()),
-    url(r'^resources/videos/hatedGenre', HatedGenreSongView.as_view()),
-    url(r'^resources/videos/relevantView', RelevantArtistView.as_view()),
-    url(r'^resources/videos/longestartistsong', LongestArtistSongView.as_view()),
-    url(r'^resources/videos/randomQuery', RandomQueryView.as_view()),
-    url(r'^resources/videos/dislikesongs', DislikeSongsView.as_view()),
-
-    url(r'^resources/videos/searchhistoryview', SearchHistoryView.as_view()),
-    url(r'^resources/videos/showhistorypage', ShowHistoryPageView.as_view()),
+    url(r'^resources/videos/random', RandomQueryView.as_view()),
 
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='home'),
     url(r'^admin/', admin.site.urls),

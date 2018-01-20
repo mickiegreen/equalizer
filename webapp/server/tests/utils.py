@@ -21,7 +21,6 @@ def make_query(query, jwt_token=None):
 
 
 def get_token(login_response):
-    print(login_response)
     token = login_response['data']['login']['authFormPayload']['tokens'][
         'token']
     return token

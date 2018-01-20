@@ -93,8 +93,6 @@ class Vertical extends React.Component {
     }
 
     handleClicked = (value) => {
-        console.log("handleClicked");
-        console.log("randomQuery");
         fetch(`/resources/videos/equalizer?user_id=${encodeURIComponent(getToken())}&likes=${encodeURIComponent(this.state.likes)}&dislikes=${encodeURIComponent(this.state.dislikes)}&comments=${encodeURIComponent(this.state.comments)}&views=${encodeURIComponent(this.state.views)}`, {
             method: 'GET',
             credentials: 'same-origin',
@@ -108,11 +106,6 @@ class Vertical extends React.Component {
                         console.log(json);
                         if(json.rc >= 0){
                             localStorage.setItem('eqSearchResults', JSON.stringify(json));
-                            /*this.props.history.push({
-                                pathname : '/search',
-                                props: this.props
-                            });
-                            console.log(this)*/
                         }
                     }).then(
                         () => {
@@ -123,7 +116,7 @@ class Vertical extends React.Component {
                         }
                     );
                 }
-        })
+        });
     }
 
     render() {

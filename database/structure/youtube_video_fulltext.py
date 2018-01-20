@@ -20,22 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from equalizer.lib.storage.mysql.attributes import PrimaryKey, IntegerAttribute, VarcharAttribute
+from equalizer.lib.storage.mysql.attributes import VarcharAttribute
 
 from equalizer_abstract_entity import EqualizerAbstractEntity as Entity
 import structure_config as app
 
-class YoutubeVideoFk(Entity):
-    """ youtube video table entity """
+class YoutubeVideoFulltext(Entity):
+    """ youtube video fulltext table entity """
 
-    def __init__(self, video_id = 0, likes = None, comments = None,
-            views = None, favorites = None, dislikes = None,
-            youtube_video_id = 0, youtube_video_title = None, **kwargs):
-        super(YoutubeVideoFk, self).__init__(
-            table=app.YOUTUBE_VIDEO_FK_TABLE,
-            primary_key=app.YOUTUBE_VIDEO_FK_TABLE_PK,
-            select_query=app.YOUTUBE_VIDEO_FK_EXISTS_QUERY,
-            remove_all_references = app.YOUTUBE_VIDEO_FK_REMOVE_ALL_REFERENCES_QUERY
+    def __init__(self, youtube_video_id = 0, youtube_video_title = None, **kwargs):
+        super(YoutubeVideoFulltext, self).__init__(
+            table=app.YOUTUBE_VIDEO_FULLTEXT_TABLE,
+            primary_key=app.YOUTUBE_VIDEO_FULLTEXT_TABLE_PK,
+            select_query=app.YOUTUBE_VIDEO_FULLTEXT_EXISTS_QUERY,
+            remove_all_references = app.YOUTUBE_VIDEO_FULLTEXT_REMOVE_ALL_REFERENCES_QUERY
         )
-        self.video_id = PrimaryKey('video_id', video_id)
         self.youtube_video_id = VarcharAttribute('youtube_video_id', youtube_video_id)
+        self.youtube_video_title = VarcharAttribute('youtube_video_title', youtube_video_title)

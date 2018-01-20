@@ -1,0 +1,6 @@
+from fulltext_search_in_user_history import FULLTEXT_SEARCH_IN_HISTORY
+from get_user_recent_history import GET_USER_RECENT_HISTORY
+from get_user_recent_results import GET_USER_RECENT_RESULTS
+from get_user_results_count import GET_USER_RESULTS_COUNT
+from insert_new_search_results import INSERT_NEW_SEARCH_RESULTS
+from remove_old_search_results import REMOVE_USER_OLD_HISTORY

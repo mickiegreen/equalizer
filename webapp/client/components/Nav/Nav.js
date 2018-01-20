@@ -1,5 +1,6 @@
 import React from 'react';
 import NavLink from 'react-router-dom/es/NavLink';
+import Link from 'react-router'
 import Navigation from 'react-mdc-web/lib/Drawer/Navigation';
 import Drawer from 'react-mdc-web/lib/Drawer/Drawer';
 import DrawerHeader from 'react-mdc-web/lib/Drawer/DrawerHeader';
@@ -13,9 +14,10 @@ import Button from 'react-mdc-web/lib/Button/Button';
 import Input from 'react-mdc-web/lib/Textfield/Input';
 import Icon from 'react-mdc-web/lib/Icon/Icon';
 import styles from './Nav.scss';
-import {logoutViewer, getUserName, getToken} from 'modules/auth/jwtUtils';
+import {logoutViewer, getUserName, getToken, hasValidJwtToken} from 'modules/auth/jwtUtils';
 import { AcountDropdown } from '../AccountDropdown/AccountDropdown';
 import AccountDropdown from "components/AccountDropdown/AccountDropdown";
+import { HashRouter as Router, Route } from 'react-router-dom';
 
 type NavPropsType = { title: string, isAuthenticated: boolean, isAdmin: boolean }
 
@@ -154,7 +156,31 @@ class Nav extends React.Component {
 
   _searchText = (e) => {
       if (e.key === 'Enter') {
-          console.log('do validate');
+          console.log(this.state);
+          console.log(this.props);
+          fetch(`/resources/users/history/search?user_id=${encodeURIComponent(getToken())}&search_string=${encodeURIComponent(this.state.searchContent)}`, {
+              method: 'GET',
+              credentials: 'same-origin',
+              headers: {
+                  authorization: `Bearer ${hasValidJwtToken().token}`,
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+              }}).then(response => {
+
+                  console.log(response);
+              if (response.ok) {
+                  response.json().then(json => {
+                      console.log(json);
+                      if(json.rc >= 0){
+                          localStorage.setItem('eqHistoryResults', JSON.stringify(json));
+                      }
+                  }).then(
+                      () => {
+                          this.refs.searchRef.click();
+                      }
+                  );
+              }
+          });
       }
   }
 
@@ -162,7 +188,6 @@ class Nav extends React.Component {
       this.setState({
           searchContent : e.target.value
       });
-      console.log(e.target.value)
   }
 
   render() {
@@ -192,17 +217,11 @@ class Nav extends React.Component {
                   <ToolbarTitle className={styles.title} >
                   </ToolbarTitle>
                   <div style={{display : getToken() > 0 ? 'block' : 'none' }}>
-                      <Input value={searchContent} style={searchBox} onChange={this._searchTextChange} onKeyPress={this._searchText}/>
-                      {/*<Button
-                          onClick={() => {
-                              this.setState({ search: true });
-                          }}
-                      >
-                          <img className="account-dropdown__avatar" style={iconStyleSearch} src='../../../assets/admin/img/search.svg' />
-                      </Button>*/}
+                      <Input placeholder={"search history"} value={searchContent} style={searchBox} onChange={this._searchTextChange} onKeyPress={this._searchText}/>
+                      <a ref='searchRef' style={{display:'none'}} href='#/history'></a>
                   </div>
               </ToolbarSection>
-            <ToolbarSection align='end'> {/*style={{position: 'absolute', right: '10px'}}*/}
+            <ToolbarSection align='end'>
               <Links
                 isAuthenticated={isAuthenticated}
                 isAdmin={isAdmin}

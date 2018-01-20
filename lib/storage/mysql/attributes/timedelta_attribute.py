@@ -32,7 +32,6 @@ class TimedeltaAttribute(AbstractAttribute):
     def __init__(self, key, value):
         if not isinstance(value, datetime.timedelta) \
                 and not isinstance(value, datetime.time) and value != None:
-            print value
             raise TypeError("TimedeltaAttribute value must be of type timedelta or time")
 
         super(TimedeltaAttribute, self).__init__(key, value)

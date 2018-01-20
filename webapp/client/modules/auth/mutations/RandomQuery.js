@@ -33,7 +33,7 @@ const mutation = graphql`
 const tokenName = 'jwtToken';
 
 function RandomQuery(environment, input: {release_date:string}) {
-    return fetch(`/resources/videos/randomQuery?user_id=${encodeURIComponent(getToken())}`, {
+    return fetch(`/resources/videos/random?user_id=${encodeURIComponent(getToken())}`, {
         method: 'GET',
         credentials: 'same-origin',
         headers: {

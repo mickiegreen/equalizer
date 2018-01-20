@@ -60,7 +60,7 @@ class MysqlApi(object):
         # building query
         try:
             query = self.build_query(query, args, params)
-            print query
+
         except KeyError as e:
             return {
                 'rc' : -1,
@@ -70,6 +70,8 @@ class MysqlApi(object):
             }
         except Exception as e:
             print e
+            print 'following query unsuccessful\n'
+            print query
 
         # executing according to mode
         if mode == 'insert': return self.insert(query)
@@ -105,8 +107,6 @@ class MysqlApi(object):
         """
         return list of jsons from select
         """
-
-        print query
 
         content = { 'data': [] }
 

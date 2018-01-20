@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import Dropdown, { DropdownTrigger, DropdownContent } from '../../../node_modules/react-simple-dropdown/lib/components/Dropdown.js';
 import Link from 'react-router-dom'
 import styles from './AccountDropdown.css';
-import {logoutViewer} from "modules/auth/jwtUtils";
+import {getToken, hasValidJwtToken, logoutViewer} from "modules/auth/jwtUtils";
 
 class AccountDropdown extends Component {
     constructor (props) {
         super(props);
 
         this.handleLinkClick = this.handleLinkClick.bind(this);
+        this.handleHistoryClick = this.handleHistoryClick.bind(this);
     }
 
     handleLinkClick () {
@@ -18,7 +19,29 @@ class AccountDropdown extends Component {
     }
 
     handleHistoryClick () {
-        this.refs.dropdown.hide();
+        console.log(this.state);
+        console.log(this.props);
+        fetch(`/resources/users/history?user_id=${encodeURIComponent(getToken())}`, {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
+                authorization: `Bearer ${hasValidJwtToken().token}`,
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }}).then(response => {
+            if (response.ok) {
+                response.json().then(json => {
+                    console.log(json);
+                    if(json.rc >= 0){
+                        localStorage.setItem('eqHistoryResults', JSON.stringify(json));
+                    }
+                }).then(
+                    () => {
+                        this.refs.searchHistory.click();
+                    }
+                );
+            }
+        });
     }
 
     handleProfileClick () {
@@ -44,8 +67,11 @@ class AccountDropdown extends Component {
                             </a>
                         </li>*/}
                         <li className="account-dropdown__link">
-                            <a className="account-dropdown__link__anchor" href="/history">
+                            <a className="account-dropdown__link__anchor" onClick={this.handleHistoryClick}>
                                 Your history
+                            </a>
+                            <a ref="searchHistory" style={{display: 'none'}} className="account-dropdown__link__anchor" href="#/history">
+
                             </a>
                         </li>
                         {/*<li className="account-dropdown__link">

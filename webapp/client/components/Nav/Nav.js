@@ -92,7 +92,7 @@ const headerStyle2 = {
     right: '80px'
 }
 
-const user={'name' : 'michael', 'avatar_url' : '../../../assets/admin/img/profile.png'};
+const user={'name' : '', 'avatar_url' : '../../../assets/admin/img/profile.png'};
 const links = (props: LinksPropType) => {
   let NavLinks;
   if (props.isAuthenticated) {

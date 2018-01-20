@@ -5,7 +5,7 @@ SELECT_RANDOM_GENRE = {
         FROM (
             SELECT DISTINCT(genre) AS genre
             FROM song
-            ORDER BY rand()
+            ORDER BY RAND()
         ) AS rand_genres 
         LIMIT 1
         """,

@@ -27,6 +27,8 @@ class SearchResults extends React.Component {
             window.location.replace('/');
         }
 
+        this.searchResults = [];
+
         console.log(content);
 
         if( content !== undefined && content !== null ) {
@@ -43,7 +45,17 @@ class SearchResults extends React.Component {
                 subtitle: subtitle === undefined ? '' : subtitle,
             };
 
-            console.log('here2');
+            for (let i = 0; i < this.state.results.length; i++) {
+                this.searchResults.push(
+                    <div style={{width: (50).toString() + '%', margin : 'auto', display: 'inline-block', minWidth: '300px'}} key={i}>
+                        <AspectRatio ratio="16/9" style={{width: '90%', margin: 'auto', minWidth: '300px'}}>
+                            <iframe src={"http://www.youtube.com/embed/" + this.state.results[i].youtube_video_id} style={{width:'100%', margin: 'auto'}}
+                                    frameBorder="0" allowFullScreen>
+                            </iframe>
+                        </AspectRatio><br/>
+                    </div>
+                ); console.log(i);
+            }
 
         } else {
             this.state = {
@@ -51,22 +63,6 @@ class SearchResults extends React.Component {
                 mainResult: ''
             };
         }
-
-        this.searchResults = [];
-
-        for (let i = 0; i < this.state.results.length; i++) {
-            this.searchResults.push(
-                <div style={{width: (50).toString() + '%', margin : 'auto', display: 'inline-block', minWidth: '300px'}} key={i}>
-                <AspectRatio ratio="16/9" style={{width: '90%', margin: 'auto', minWidth: '300px'}}>
-                    <iframe src={"http://www.youtube.com/embed/" + this.state.results[i].youtube_video_id} style={{width:'100%', margin: 'auto'}}
-                            frameBorder="0" allowFullScreen>
-                    </iframe>
-                </AspectRatio><br/>
-                </div>
-            ); console.log(i);
-        }
-
-        console.log(this.state);
     }
 
     render(){
@@ -81,7 +77,7 @@ class SearchResults extends React.Component {
                 <div>
                     <AspectRatio ratio="16/9" style={{maxWidth: '800px', minWidth: '300px'}}>
                         <iframe
-                            src={"http://www.youtube.com/embed/" + this.state.mainResult.youtube_video_id}
+                            src={this.state.mainResult !== undefined ? "http://www.youtube.com/embed/" + this.state.mainResult.youtube_video_id : null}
                             frameBorder="0" allowFullScreen
                             key={'main'}>
                         </iframe>

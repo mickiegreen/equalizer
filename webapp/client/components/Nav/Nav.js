@@ -48,12 +48,15 @@ const searchBox = {
     background: 'url("../../../assets/admin/img/search.svg") no-repeat scroll 147px 7px',
     //paddingLeft:'30px',
     margin: 'auto',
-    width: '80%',
+    width: '90%',
     backgroundColor: 'rgba(193, 179, 204, 0.72)',
     color : '#fff',
     borderRadius: '15px',
-    padding: '8px',
-    maxWidth: '200px'
+    paddingTop: '8px',
+    paddingBottom: '8px',
+    paddingRight: '8px',
+    maxWidth: '200px',
+    textAlign: 'center'
 }
 
 const HomeLink = ({ title }: { title: NavPropsType.title }) =>
@@ -217,7 +220,7 @@ class Nav extends React.Component {
                   <ToolbarTitle className={styles.title} >
                   </ToolbarTitle>
                   <div style={{display : getToken() > 0 ? 'block' : 'none' }}>
-                      <Input placeholder={"search history"} value={searchContent} style={searchBox} onChange={this._searchTextChange} onKeyPress={this._searchText}/>
+                      <Input placeholder={"Search history"} value={searchContent} style={searchBox} onChange={this._searchTextChange} onKeyPress={this._searchText}/>
                       <a ref='searchRef' style={{display:'none'}} href='#/history'></a>
                   </div>
               </ToolbarSection>

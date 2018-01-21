@@ -238,60 +238,53 @@ class RandomQueryView(GenericView):
                             'index': 1
                         },
 
-                        'Most hated artists between %s': {
-                            'query': app.MOST_HATED_ARTISTS_OF_YEAR_RANGE,
-                            'keys': 'years_range',
-                            'rand_data': ['years_range'],
-                            'index': 2
-                        },
-
                         'Songs of artist with longest songs average in genre "%s"':{
                             'query':  app.ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE,
                             'keys' : 'genre',
                             'rand_data': ['genre'],
-                            'index': 3
+                            'index': 2
                         },
 
                         'Songs of most relevant artist in genre "%s""':{
                             'query':app.MOST_RELEVANT_ARTISTS_GENRE_SONGS,
                             'keys':'genre',
                             'rand_data' : ['genre'],
-                            'index': 4
+                            'index': 3
                         },
 
                         'List from country "%s" which are of the most common genre ':{
                             'query':app.MOST_COMMON_GENRE_IN_COUNTRY,
                             'keys':'country',
                             'rand_data': ['country'],
-                            'index': 5
+                            'index': 4
                         },
 
                         'Songs of most hated pair of artists in genre "%s"': {
                             'query': app.MOST_HATED_PAIR_FROM_GENRE,
                             'keys' : 'genre',
                             'rand_data': ['genre'],
-                            'index': 6
+                            'index': 5
                         },
 
                         'List of most and least popular songs': {
                             'query': app.MOST_POPULAR_SONGS,
-                            'index': 7
+                            'index': 6
                         },
 
                         'List of most hated songs of %s ': {
                             'query': app.MOST_HATED_SONGS_OF_YEAR,
                             'keys': 'year',
                             'rand_data': ['year'],
-                            'index': 8
+                            'index': 7
                         },
 
                         'Songs from most hated genre': {
                             'query': app.MOST_HATED_GENRE_SONGS,
-                            'index': 9
+                            'index': 8
                         },
                     }
 
-        if index <= 0 or index > 9:
+        if index <= 0 or index > 8:
             keys = queries_dic.keys()
             random.shuffle(keys)
             query = keys[0]

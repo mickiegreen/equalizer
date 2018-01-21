@@ -19,7 +19,9 @@ VIDEOS_CUSTOM_STATISTICS = {
                   youtube_video_title, youtube_video_id, video_id 
                 FROM artist_song_video_view  
                 GROUP BY video_id
-                ORDER BY score DESC
+                ORDER BY (%.2f*views + %.2f*comments + %.2f*likes + %.2f*dislikes + 
+                  0.1*(CASE WHEN genre = "%s" THEN 1 ELSE 0 END) + 
+                  0.1*(CASE WHEN country = "%s" THEN 1 ELSE 0 END)) DESC
                 LIMIT 10
                 ''',
     'mode'  : 'select',

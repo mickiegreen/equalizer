@@ -62,7 +62,7 @@ if (process.env.NODE_ENV === 'production') {
     'webpack/hot/only-dev-server',
     './client/index.js'
     ];
-    publicPath = `/assets/bundles/`; // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
+    publicPath = `http://localhost:${devServerPort}/assets/bundles/`; // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
     devtool = 'eval';
     plugins = [
         stats,

@@ -58,7 +58,7 @@ class AccountDropdown extends Component {
                 </DropdownTrigger>
                 <DropdownContent>
                     <div className="account-dropdown__identity account-dropdown__segment">
-                        Signed in as <strong>{user.name}</strong>
+                        Signed in as <strong>a member</strong>
                     </div>
                     <ul className="account-dropdown__quick-links account-dropdown__segment">
                         {/*<li className="account-dropdown__link">

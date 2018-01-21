@@ -21,13 +21,13 @@ class SearchResults extends React.Component {
     constructor(props){
         super(props);
 
+        this.searchResults = [];
+
         const content = JSON.parse(localStorage.getItem('eqSearchResults'));
 
         if (localStorage.getItem('jwtToken') === null || localStorage.getItem('jwtToken') === undefined ){
             window.location.replace('/');
         }
-
-        this.searchResults = [];
 
         console.log(content);
 
@@ -63,6 +63,8 @@ class SearchResults extends React.Component {
                 mainResult: ''
             };
         }
+
+        console.log(this.state);
     }
 
     render(){

@@ -1,6 +1,5 @@
 '''
-Following query returns songs of artist with longest duration average, who has
-at list one song in specified genre.
+Following query returns songs of artist with longest duration average.
 First it fetches the duration average of each artist (nested query), then filter
 videos by the artist ids that remained
 '''

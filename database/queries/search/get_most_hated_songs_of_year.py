@@ -10,7 +10,7 @@ MOST_HATED_SONGS_OF_YEAR = {
                 FROM artist_song_video_view 
                 WHERE country IN(
                   SELECT DISTINCT country FROM song
-                  WHERE YEAR(release_date) = %d
+                  WHERE YEAR(release_date) > %d
                 ) 
                 GROUP BY youtube_video_id) 
               AS rating_table 

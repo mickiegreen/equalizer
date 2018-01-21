@@ -16,8 +16,7 @@ ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE = {
                     WHERE genre='%s'
                 )
                 GROUP BY artist_id
-                HAVING COUNT(artist_id) > 1 
-                AND duration_avg >= ALL (
+                HAVING duration_avg >= ALL (
                     SELECT AVG(duration) AS duration_avg
                     FROM artist_song_view
                     WHERE song_id = ANY(
@@ -26,7 +25,6 @@ ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE = {
                         WHERE genre='%s'
                     )
                     GROUP BY artist_id
-                    HAVING COUNT(artist_id) > 1 
                 )
             ) AS artist_duration, artist_song_video_view
             WHERE artist_duration.artist_id=artist_song_video_view.artist_id

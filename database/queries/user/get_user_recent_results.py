@@ -7,7 +7,7 @@ GET_USER_RECENT_RESULTS = {
                 'FROM results_history r '
                 'WHERE r.user_id=%d '
                 'ORDER BY r.last_update DESC '
-                'LIMIT 20',
+                'LIMIT 50',
     'args': ['user_id'],
     'mode'  : 'select'
 }

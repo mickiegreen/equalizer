@@ -133,7 +133,7 @@ class GenericView(View):
         results_count = mysql_api.execute(params={'user_id': int(user_id)}, **app.GET_USER_RESULTS_COUNT) \
             .get('content', {}).get('data', [])[0]['resultsCount']
 
-        if int(results_count) > 20:
+        if int(results_count) > 50:
             recent_history = mysql_api.execute(params={'user_id': int(user_id)}, **app.GET_USER_RECENT_RESULTS) \
                 .get('content', {}).get('data', [])
 
@@ -202,9 +202,13 @@ class EqualizerView(GenericView):
 class RandomQueryView(GenericView):
     def get(self, request, *args, **kwargs):
         """ return random query """
-        title, query, keys, rand_data = self.get_random_query()
-
         self.req_to_mutable(request)
+
+        print request.GET.get('index')
+
+        title, query, keys, rand_data = self.get_random_query(int(request.GET.get('index', -1)))
+
+        print title, query, keys, rand_data
 
         # get required keys
         for data in rand_data:
@@ -221,67 +225,85 @@ class RandomQueryView(GenericView):
 
         return HttpResponse(json.dumps(response), content_type='application/json')
 
-    def get_random_query(self):
+    def get_random_query(self, index = -1):
         """ get random query """
+
+        print index
 
         queries_dic = {
                         'Most ambivalent songs of artist "%s"': {
                             'query' : app.MOST_AMBIVALENT_SONGS_OF_ARTIST,
                             'keys'  :'artist_name',
-                            'rand_data': ['artist']
+                            'rand_data': ['artist'],
+                            'index': 1
                         },
 
                         'Most hated artists between %s': {
                             'query': app.MOST_HATED_ARTISTS_OF_YEAR_RANGE,
                             'keys': 'years_range',
-                            'rand_data': ['years_range']
+                            'rand_data': ['years_range'],
+                            'index': 2
                         },
 
                         'Songs of artist with longest songs average in genre "%s"':{
                             'query':  app.ARTIST_WITH_LONGEST_SONGS_AVG_IN_GENRE,
                             'keys' : 'genre',
-                            'rand_data': ['genre']
+                            'rand_data': ['genre'],
+                            'index': 3
                         },
 
                         'Songs of most relevant artist in genre "%s""':{
                             'query':app.MOST_RELEVANT_ARTISTS_GENRE_SONGS,
                             'keys':'genre',
-                            'rand_data' : ['genre']
+                            'rand_data' : ['genre'],
+                            'index': 4
                         },
 
                         'List from country "%s" which are of the most common genre ':{
                             'query':app.MOST_COMMON_GENRE_IN_COUNTRY,
                             'keys':'country',
-                            'rand_data': ['country']
+                            'rand_data': ['country'],
+                            'index': 5
                         },
 
                         'Songs of most hated pair of artists in genre "%s"': {
                             'query': app.MOST_HATED_PAIR_FROM_GENRE,
                             'keys' : 'genre',
-                            'rand_data': ['genre']
+                            'rand_data': ['genre'],
+                            'index': 6
                         },
 
                         'List of most and least popular songs': {
                             'query': app.MOST_POPULAR_SONGS,
+                            'index': 7
                         },
 
                         'List of most hated songs of %s ': {
                             'query': app.MOST_HATED_SONGS_OF_YEAR,
                             'keys': 'year',
-                            'rand_data': ['year']
+                            'rand_data': ['year'],
+                            'index': 8
                         },
 
                         'Songs from most hated genre': {
                             'query': app.MOST_HATED_GENRE_SONGS,
+                            'index': 9
                         },
                     }
 
-        keys = queries_dic.keys()
-        random.shuffle(keys)
+        if index <= 0 or index > 9:
+            keys = queries_dic.keys()
+            random.shuffle(keys)
+            query = keys[0]
 
-        print (keys[0], queries_dic[keys[0]]['query'], queries_dic[keys[0]].get('keys', None), queries_dic[keys[0]].get('rand_data', []))
+        else:
+            print 'here'
+            for k, v in queries_dic.iteritems():
+                if v['index'] == index:
+                    query = k
+                    break
 
-        return (keys[0], queries_dic[keys[0]]['query'], queries_dic[keys[0]].get('keys', None), queries_dic[keys[0]].get('rand_data', []))
+        return (query, queries_dic[query]['query'], queries_dic[query].get('keys', None), queries_dic[query].get('rand_data', []))
 
 class UserSearchHistoryView(GenericView):
     def get(self, request, *args, **kwargs):

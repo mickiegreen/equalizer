@@ -73,6 +73,8 @@ class MysqlApi(object):
             print 'following query unsuccessful\n'
             print query
 
+        print query
+
         # executing according to mode
         if mode == 'insert': return self.insert(query)
 

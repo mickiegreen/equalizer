@@ -103,7 +103,7 @@ class AbstractEntity(EntityInterface):
         cols = [k for k in self.keys()]
         vals = [v for v in self.values()]
 
-        return app.INSERT_QUERY %(self.table(), ','.join(cols), ','.join(vals))
+        return self._insert_query %(self.table(), ','.join(cols), ','.join(vals))
 
     @overrides
     def select_query(self):
@@ -124,12 +124,12 @@ class AbstractEntity(EntityInterface):
         vals = ','.join([ k + '=' + repr(getattr(self, k)) for k, v in self ])
 
         # final query
-        return app.UPDATE_QUERY %(self.table(), vals, self._primary_key, self.primary_key())
+        return self._update_query %(self.table(), vals, self._primary_key, self.primary_key())
 
     @overrides
     def remove_query(self):
         """ build remove query"""
-        return app.REMOVE_QUERY %(self.table(), repr(getattr(self, self._primary_key)), self.primary_key())
+        return self._remove_query %(self.table(), repr(getattr(self, self._primary_key)), self.primary_key())
 
     @overrides
     def remove_all_references_query(self):
@@ -149,7 +149,7 @@ class AbstractEntity(EntityInterface):
     @overrides
     def select_all_query(self):
         """ build select * from table query """
-        return app.SELECT_ALL_QUERY %(self.table())
+        return self._select_all_query %(self.table())
 
     @overrides
     def is_view(self):

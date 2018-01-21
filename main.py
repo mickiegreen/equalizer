@@ -28,13 +28,35 @@ from equalizer.database.structure import \
 from database.data import ItunesDataHandler
 from database.data import YoutubeDataHandler
 
-from equalizer import config as app
+from equalizer.database.data import data_config as app
+from equalizer.config import MYSQL_INFO
 
 def get_storage_engine():
     """
     :return MysqlEngine object adapter to handle mysql data:
     """
-    return MySqlEngine(**app.MYSQL_INFO)
+    return MySqlEngine(**MYSQL_INFO)
+
+def get_more_youtube_data():
+    """
+    getting more videos from youtube
+    """
+    engine = get_storage_engine()
+
+    youtube_keys = app.YOUTUBE_TO_MYSQL
+
+    youtube_handler = YoutubeDataHandler(
+        engine=engine,
+        token=app.YOUTUBE_TOKEN,
+        youtube_keys=youtube_keys
+    )
+
+    youtube_handler.get_more_data(
+        output_dir=app.YOUTUBE_OUTPUT_FOLDER,
+        limit=app.YOUTUBE_VIDEO_LIMIT,
+        itunes_keys=app.ITUNES_TO_MYSQL,
+        update=app.YOUTUBE_UPDATE_ENTRIES
+    )
 
 def remove_all_data():
     """ truncate database """
@@ -158,4 +180,8 @@ if __name__ == '__main__':
 
     # remove_all_data()
     # init_itunes_data()
+    # update_existing_data()
     complete_existing_song_data()
+    # get_more_youtube_data()
+
+

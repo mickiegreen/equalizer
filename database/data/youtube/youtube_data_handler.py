@@ -30,7 +30,7 @@ from overrides import overrides
 from .. import AbstractDataHandler
 from equalizer.database.structure import ArtistSong, \
     ArtistSongVideo, YoutubeVideo, JoinSongVideoArtist, \
-    JoinSongArtistNoVideo
+    JoinSongArtistNoVideo, JoinSongArtist
 
 from equalizer.lib.api import youtube
 from equalizer.lib.utils import generate_random_str
@@ -148,7 +148,11 @@ class YoutubeDataHandler(AbstractDataHandler):
         data = self.engine.fetch_all_like_entry(YoutubeVideo())
 
         # update each
-        for row in data: self.update(row)
+        for row in data:
+            try:
+                self.update(row)
+            except ValueError:
+                pass
 
     def complete_storage_data(self, song_data, update = True, limit = 3):
         """
@@ -156,8 +160,8 @@ class YoutubeDataHandler(AbstractDataHandler):
         :param limit - max entries for search
         """
 
-        if not isinstance(song_data, JoinSongArtistNoVideo):
-            raise TypeError("data must be of type JoinSongArtistNoVideo")
+        if not isinstance(song_data, JoinSongArtistNoVideo) and not isinstance(song_data, JoinSongArtist):
+            raise TypeError("data must be of type JoinSongArtistNoVideo or JoinSongArtist")
 
         # getting videos according to data
         videos = self._get_videos(song_data, limit=limit)
@@ -247,13 +251,36 @@ class YoutubeDataHandler(AbstractDataHandler):
         """ return True if data is up-to-date else False """
         raise NotImplementedError
 
-    def get_more_data(self, params = {}, limit = 2000):
+    def get_more_data(self, params = {}, update = True, limit = 2000, itunes_keys = {}, chunk_size = 100, output_dir = ''):
         """
         add new entries to database
         @limit - max num of records to add
         @params - search query
         """
-        raise NotImplementedError
+
+        # getting itunes data from table where no youtube data found
+        data = self.engine.fetch_all_like_entry(JoinSongArtist())
+
+        results = []
+
+        # for each entry in data with no video - get more videos and add if not exist
+        for row in data:
+            row_data = row.copy()
+
+            # convert itunes data to youtube
+            self._parse_itunes(row_data, itunes_keys = itunes_keys)
+
+            # searching results and updating database
+            results.extend(self.complete_storage_data(row_data, limit = limit, update = update))
+
+            # writing to file if chuck size has reached
+            if len(results) >= chunk_size:
+                self._write_results_to_file(output_dir, results)
+
+                results = []
+
+        # write final results to output file
+        self._write_results_to_file(output_dir, results)
 
     def validate(self, data):
         """

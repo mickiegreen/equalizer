@@ -26,14 +26,22 @@ from overrides import overrides
 class ViewEntity(AbstractEntity):
     """ MySQL view entity adapter """
 
-    def __init__(self, view, primary_key, select_query, tables_entities,
+    def __init__(self, view, primary_key, select_query,
+                 insert_query, remove_query, update_query,
+                 select_all_query, tables_entities = [],
                  remove_all_references = None, **kwargs):
         if not hasattr(primary_key, '__iter__'):
             raise ValueError("view entity primary key must be iterable")
 
         super(ViewEntity, self).__init__(
-            view, primary_key,
-            select_query, remove_all_references
+            table=view,
+            primary_key=primary_key,
+            select_query=select_query,
+            remove_all_references=remove_all_references,
+            update_query=update_query,
+            select_all_query=select_all_query,
+            remove_query=remove_query,
+            insert_query=insert_query,
         )
 
         self._primary_key = primary_key

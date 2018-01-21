@@ -4,7 +4,7 @@
 #                              #
 #******************************#
 
-from lib.parsers import ItunesDatetimeParser, \
+from equalizer.lib.parsers import ItunesDatetimeParser, \
     DurationParser, IntegerParser, IdentityParser
 
 # youtube

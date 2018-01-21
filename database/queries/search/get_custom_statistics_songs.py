@@ -12,8 +12,7 @@ Then pick 10 rows who has the highest score (order it by score and limit select 
 '''
 VIDEOS_CUSTOM_STATISTICS = {
     'query' :   '''
-                SELECT FORMAT(
-                  0, 0) AS score,
+                SELECT 0 AS score,
                   youtube_video_title, youtube_video_id, video_id 
                 FROM artist_song_video_view  
                 GROUP BY video_id
